@@ -6,6 +6,7 @@ namespace Common
     {
         protected virtual string StartInfo => "Write input data...";
         protected virtual string ResultInfo => "Result:";
+        protected virtual bool MakePause => false;
 
         public void StartHandle()
         {
@@ -13,7 +14,7 @@ namespace Common
             {
                 WriteLine(StartInfo);
 
-                var data = ReadLine();
+                var data = ReadData();
                 try
                 {
                     string resultHadnle = HandleData(data);
@@ -28,16 +29,27 @@ namespace Common
                 finally
                 {
                     WriteLine();
+
+                    if (MakePause)
+                        Pause();
                 }
             }
         }
+
+        protected virtual string ReadData() => ReadLine();
+
+        protected abstract string HandleData(string data);
 
         private string ReadLine() => Console.ReadLine();
 
         private void WriteLine(string data) => Console.WriteLine(data);
 
-        private void WriteLine() => this.WriteLine("");
+        private void WriteLine() => WriteLine("");
 
-        protected abstract string HandleData(string data);
+        private void Pause()
+        {
+            WriteLine("Press any key to continue...");
+            ReadLine();
+        }
     }
 }
