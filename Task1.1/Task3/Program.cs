@@ -6,8 +6,8 @@ namespace Task3
     {
         static void Main(string[] args)
         {
-            Handler handler = new CentralPiramidHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<CentralPiramidHandler>()
+                   .StartHandle();
         }
     }
 }

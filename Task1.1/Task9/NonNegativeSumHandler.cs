@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Common;
 
 namespace Task9
@@ -19,7 +18,7 @@ namespace Task9
             _rnd = new Random();
         }
 
-        protected override string StartInfo => "Generating array with 10 elements and calculating summ non negative elements..."; 
+        protected override string StartInfo => "Generating array with 10 elements and calculating non negative elements sum..."; 
 
         protected override string ReadData() => null;
 
@@ -30,8 +29,10 @@ namespace Task9
             var result = new StringBuilder();
 
             result.Append($"Generated collection:{ Environment.NewLine }");
-            ICollection<int> collection = CollectionsGenerator.
-                GenerateCollection(DefaultLength, () => _rnd.Next(ValueDownLimit, ValueUpLimit));
+            var collection = (from int element in ArraysHandler
+                                .GenerateArray(new[] { DefaultLength }, () => _rnd.Next(ValueDownLimit, ValueUpLimit))
+                              select element)
+                             .ToList();
 
             foreach (var element in collection)
                 result.Append($"{ element } ");

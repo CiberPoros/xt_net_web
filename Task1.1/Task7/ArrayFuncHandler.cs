@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common;
@@ -23,7 +22,7 @@ namespace Task7
         protected override string HandleData(string data)
         {
             int length = DefaultLength;
-            if (data != string.Empty)
+            if (!string.IsNullOrWhiteSpace(data))
                 if (!int.TryParse(data, out length))
                     throw new ArgumentException($"parse \"{ data }\" failed", nameof(data));
 
@@ -32,19 +31,21 @@ namespace Task7
                 StringBuilder result = new StringBuilder();
 
                 result.Append($"Inicializing collection:{ Environment.NewLine }");
-                List<int> collection = CollectionsGenerator.GenerateCollection(length, () => _rnd.Next(ValueUpLimit)).ToList();
-                collection.ForEach(element => result.Append($"{ element } "));
+                var elements = (from int val in ArraysHandler.GenerateArray(new[] { length }, () => _rnd.Next(ValueUpLimit))
+                                select val)
+                                .ToList();
+                elements.ForEach(element => result.Append($"{ element } "));
                 result.Append(Environment.NewLine);
 
-                var max = HeaviestElementUtil.GetHeaviestElement(collection, (a, b) => a.CompareTo(b));
+                var max = HeaviestElementUtil.GetHeaviestElement(elements, (a, b) => a.CompareTo(b));
                 result.Append($"Max element searching:{ Environment.NewLine }max = { max }{ Environment.NewLine }");
 
-                var min = HeaviestElementUtil.GetHeaviestElement(collection, (a, b) => b.CompareTo(a));
+                var min = HeaviestElementUtil.GetHeaviestElement(elements, (a, b) => b.CompareTo(a));
                 result.Append($"Mix element searching:{ Environment.NewLine }min = { min }{ Environment.NewLine }");
 
                 result.Append($"Sorting collection:{ Environment.NewLine }");
-                SortUtil.Sort(collection);
-                collection.ForEach(element => result.Append($"{ element } "));
+                SortUtil.Sort(elements);
+                elements.ForEach(element => result.Append($"{ element } "));
                 result.Append(Environment.NewLine);
 
                 return result.ToString();

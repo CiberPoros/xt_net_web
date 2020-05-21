@@ -6,8 +6,8 @@ namespace Task4
     {
         static void Main(string[] args)
         {
-            Handler handler = new XMasTreeHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<XMasTreeHandler>()
+                   .StartHandle();
         }
     }
 }

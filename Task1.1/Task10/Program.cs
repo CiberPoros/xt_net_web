@@ -1,12 +1,12 @@
 ﻿using Common;
 
-namespace Task7
+namespace Task10
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Handler.CreateInstance<ArrayFuncHandler>()
+            Handler.CreateInstance<EvenElementsArrayHandler>()
                    .StartHandle();
         }
     }

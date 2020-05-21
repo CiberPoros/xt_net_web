@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Common;
 
 namespace Task8
@@ -18,7 +15,7 @@ namespace Task8
             _rnd = new Random();
         }
 
-        private readonly int[] _degrees = { 2, 5, 5 };
+        private readonly int[] _degreesLengths = { 2, 5, 5 };
 
         protected override string StartInfo => "Generating array 2 x 5 x 5 and replace positive values...";
 
@@ -31,27 +28,21 @@ namespace Task8
             StringBuilder result = new StringBuilder();
 
             result.Append($"Inicializing array:{ Environment.NewLine }");
-            var array = CubicArraysGenerator.Generate(_degrees[0], _degrees[1], _degrees[2], () => _rnd.Next(ValueDownLimit, ValueUpLimit + 1));
-            AddArrayToStringBilder(result, array);
+            var array = ArraysHandler.GenerateArray(_degreesLengths, () => _rnd.Next(ValueDownLimit, ValueUpLimit + 1));
+            AddCubicArrayToStringBilder(result, array);
 
             result.Append($"Replacement values:{ Environment.NewLine }");
-            ReplaceElementsInCubicArray(array, val => val > 0, 0);
-            AddArrayToStringBilder(result, array);
+            ArraysHandler.ReplaceElements(array, val => val > 0, 0);
+            AddCubicArrayToStringBilder(result, array);
 
             return result.ToString();
         }
 
-        private void ReplaceElementsInCubicArray<T>(T[,,] array, Predicate<T> isRepacable, T newValue)
+        private void AddCubicArrayToStringBilder(StringBuilder stringBuilder, Array array)
         {
-            for (int i = 0; i < array.GetLength(0); i++)
-                for (int j = 0; j < array.GetLength(1); j++)
-                    for (int k = 0; k < array.GetLength(2); k++)
-                        if (isRepacable(array[i, j, k]))
-                            array[i, j, k] = newValue;
-        }
+            if (array.Rank != 3)
+                throw new ArgumentException($"{ array } must have rank = 3", nameof(array));
 
-        private void AddArrayToStringBilder<T>(StringBuilder stringBuilder, T[,,] array)
-        {
             for (int i = 0; i < array.GetLength(0); i++)
             {
                 for (int j = 0; j < array.GetLength(1); j++)
@@ -59,8 +50,8 @@ namespace Task8
                     for (int k = 0; k < array.GetLength(2); k++)
                     {
                         stringBuilder.Append
-                            (String.Format($"{{0,{ Math.Max(ValueDownLimit.ToString().Length, ValueUpLimit.ToString().Length) }}}",
-                                           $"{ array[i, j, k] } "));
+                            (string.Format($"{{0,{ Math.Max(ValueDownLimit.ToString().Length, ValueUpLimit.ToString().Length) }}}",
+                                           $"{ array.GetValue(i, j, k) } "));
                     }
 
                     stringBuilder.Append(Environment.NewLine);

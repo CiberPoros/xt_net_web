@@ -15,7 +15,7 @@ namespace Task5
         protected override string HandleData(string data)
         {
             int limit = Limit;
-            if (data != string.Empty)     
+            if (!string.IsNullOrWhiteSpace(data))     
                 if (!int.TryParse(data, out limit))
                     throw new ArgumentException($"parse \"{ data }\" failed", nameof(data));
 

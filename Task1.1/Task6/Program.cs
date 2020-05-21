@@ -6,8 +6,8 @@ namespace Task6
     {
         static void Main(string[] args)
         {
-            Handler handler = new ChangeFontHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<ChangeFontHandler>()
+                   .StartHandle();
         }
     }
 }

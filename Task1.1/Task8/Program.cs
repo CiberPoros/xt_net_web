@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
+﻿using Common;
 
 namespace Task8
 {
@@ -11,8 +6,8 @@ namespace Task8
     {
         static void Main(string[] args)
         {
-            Handler handler = new PositiveNumbersChangeHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<PositiveNumbersChangeHandler>()
+                   .StartHandle();
         }
     }
 }

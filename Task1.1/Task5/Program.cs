@@ -6,8 +6,8 @@ namespace Task5
     {
         static void Main(string[] args)
         {
-            Handler handler = new ResuidesSumHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<ResuidesSumHandler>()
+                   .StartHandle();
         }
     }
 }

@@ -6,8 +6,8 @@ namespace Task2
     {
         static void Main(string[] args)
         {
-            Handler handler = new ShiftedLeftPiramidHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<ShiftedLeftPiramidHandler>()
+                   .StartHandle();
         }
     }
 }

@@ -8,6 +8,8 @@ namespace Common
         protected virtual string ResultInfo => "Result:";
         protected virtual bool MakePause => false;
 
+        public static Handler CreateInstance<T>() where T : Handler, new() => new T();
+
         public void StartHandle()
         {
             for (; ; )

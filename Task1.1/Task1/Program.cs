@@ -6,8 +6,8 @@ namespace Task1
     {
         static void Main(string[] args)
         {
-            Handler handler = new RectangleAreaHandler();
-            handler.StartHandle();
+            Handler.CreateInstance<RectangleAreaHandler>()
+                   .StartHandle();
         }
     }
 }
