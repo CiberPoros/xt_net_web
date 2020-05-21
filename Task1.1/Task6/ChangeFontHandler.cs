@@ -33,7 +33,7 @@ namespace Task6
                 {
                     var font = GetFontByInputOption(inputOption);
                     ChangeFont(font);
-                    return FontMaskToString(_fontMask);
+                    return _fontMask.ToString();
                 }
                 catch
                 {
@@ -42,19 +42,6 @@ namespace Task6
             }
             else
                 throw new ArgumentException($"parse \"{ data }\" failed", nameof(data));
-        }
-
-        private string FontMaskToString(Font fontMask)
-        {
-            if (fontMask == 0)
-                return Font.None.ToString();
-
-            string result = string.Empty;
-            foreach (var f in Enum.GetValues(typeof(Font)))
-                if (((Font)f & fontMask) > 0)
-                    result += $"{ f }, ";
-
-            return result.TrimEnd(' ', ',');
         }
 
         private void ChangeFont(Font font) => _fontMask ^= font;
