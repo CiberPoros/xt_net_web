@@ -8,7 +8,7 @@ namespace Common
 {
     public abstract class StringHandler : Handler
     {
-        protected override string StartInfo => "Enter some string...";
+        protected override string StartInfo => "Enter a string...";
 
         protected char[] Separators { get; set; } = new char[] { '\n', '\r', ' ', ',', '.', '?', '!', ':', ';', '\'', '"', '(', ')', '-', '{', '}', '[', ']', '\\', '/' };
 

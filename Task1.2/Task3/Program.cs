@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
+﻿using Common;
 
 namespace Task3
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Handler.CreateInstance<LowerCasesHandler>()
                    .StartHandle();

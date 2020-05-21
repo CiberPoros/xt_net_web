@@ -4,7 +4,7 @@ namespace Task9
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Handler handler = new NonNegativeSumHandler();
             handler.StartHandle();

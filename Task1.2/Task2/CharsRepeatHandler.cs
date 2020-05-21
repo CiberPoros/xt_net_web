@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Common;
 
@@ -7,7 +6,7 @@ namespace Task2
 {
     internal class CharsRepeatHandler : StringHandler
     {
-        protected override string StartInfo => "Enter two some strings separated by enter-click...";
+        protected override string StartInfo => "Enter two strings separated by enter-click...";
 
         protected override string ReadData() => $"{ ReadLine() }{ '\n' }{ ReadLine() }";
 

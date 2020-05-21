@@ -4,7 +4,7 @@ namespace Task2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Handler.CreateInstance<ShiftedLeftPiramidHandler>()
                    .StartHandle();
