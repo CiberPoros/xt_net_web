@@ -15,7 +15,7 @@ namespace Common
         /// <returns></returns>
         public static Array GenerateArray<T>(int[] degreesLengths, Func<T> generator)
         {
-            if (degreesLengths.Length == 1)
+            if (degreesLengths.Length == 0)
                 throw new ArgumentException($"{ nameof(degreesLengths) } must have at least one element", nameof(degreesLengths));
             if (degreesLengths.Any(val => val <= 0))
                 throw new ArgumentException($"{ nameof(degreesLengths) } must contains only positive elements", nameof(degreesLengths));

@@ -50,7 +50,7 @@ namespace Task8
                     for (int k = 0; k < array.GetLength(2); k++)
                     {
                         stringBuilder.Append
-                            (string.Format($"{{0,{ Math.Max(ValueDownLimit.ToString().Length, ValueUpLimit.ToString().Length) }}}",
+                            (string.Format($"{{0,{ Math.Max(ValueDownLimit.ToString().Length, ValueUpLimit.ToString().Length) + 1 }}}",
                                            $"{ array.GetValue(i, j, k) } "));
                     }
 

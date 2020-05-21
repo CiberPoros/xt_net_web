@@ -58,7 +58,7 @@ namespace Task10
             {
                 for (int j = 0; j < array.GetLength(1); j++)
                 {
-                    stringBuilder.Append((string.Format($"{{0,{ Math.Max(ValueDownLimit.ToString().Length, ValueUpLimit.ToString().Length) }}}",
+                    stringBuilder.Append((string.Format($"{{0,{ Math.Max(ValueDownLimit.ToString().Length, ValueUpLimit.ToString().Length) + 1 }}}",
                                            $"{ array.GetValue(i, j) } ")));
                 }
 
