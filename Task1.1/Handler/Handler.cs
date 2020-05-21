@@ -42,16 +42,22 @@ namespace Common
 
         protected abstract string HandleData(string data);
 
-        private string ReadLine() => Console.ReadLine();
+        protected string ReadLine() => Console.ReadLine();
 
-        private void WriteLine(string data) => Console.WriteLine(data);
+        private void WaitKeyPress()
+        {
+            Console.ReadKey();
+            WriteLine();
+        }
 
-        private void WriteLine() => WriteLine("");
+        protected void WriteLine(string data) => Console.WriteLine(data);
+
+        protected void WriteLine() => WriteLine("");
 
         private void Pause()
         {
             WriteLine("Press any key to continue...");
-            ReadLine();
+            WaitKeyPress();
         }
     }
 }

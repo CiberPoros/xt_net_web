@@ -31,7 +31,7 @@ namespace Task7
                 StringBuilder result = new StringBuilder();
 
                 result.Append($"Inicializing collection:{ Environment.NewLine }");
-                var elements = (from int val in ArraysHandler.GenerateArray(new[] { length }, () => _rnd.Next(ValueUpLimit))
+                var elements = (from int val in ArraysUtils.GenerateArray(new[] { length }, () => _rnd.Next(ValueUpLimit))
                                 select val)
                                 .ToList();
                 elements.ForEach(element => result.Append($"{ element } "));

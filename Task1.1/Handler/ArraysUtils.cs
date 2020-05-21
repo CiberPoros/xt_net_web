@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Common
 {
-    public static class ArraysHandler
+    public static class ArraysUtils
     {
         /// <summary>
         /// Генерирует массив с заданным количеством измерений и заполняет его елементами, получаемыми с помощью заданного генератора
@@ -24,8 +24,8 @@ namespace Common
             var array = Array.CreateInstance(typeof(T), degreesLengths);
 
             int[] currentIndexes = new int[rank];
-            for (; ; ) // тут мб и стоило сделать рекурсивно, т.к. итеративный подход тут менее очевиден
-            { // а глубина рекурсии всё равно была бы не больше количества измерений массива...
+            for (; ; )  // тут мб и стоило сделать рекурсивно, т.к. итеративный подход тут менее очевиден
+            {           // а глубина рекурсии всё равно была бы не больше количества измерений массива...
                 array.SetValue(generator(), currentIndexes);
 
                 for (int k = rank - 1; ; k--)

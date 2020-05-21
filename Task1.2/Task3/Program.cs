@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 
-namespace Task1
+namespace Task3
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Handler.CreateInstance<AverageLengthHandler>()
+            Handler.CreateInstance<LowerCasesHandler>()
                    .StartHandle();
         }
     }

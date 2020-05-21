@@ -28,11 +28,11 @@ namespace Task8
             StringBuilder result = new StringBuilder();
 
             result.Append($"Inicializing array:{ Environment.NewLine }");
-            var array = ArraysHandler.GenerateArray(_degreesLengths, () => _rnd.Next(ValueDownLimit, ValueUpLimit + 1));
+            var array = ArraysUtils.GenerateArray(_degreesLengths, () => _rnd.Next(ValueDownLimit, ValueUpLimit + 1));
             AddCubicArrayToStringBilder(result, array);
 
             result.Append($"Replacement values:{ Environment.NewLine }");
-            ArraysHandler.ReplaceElements(array, val => val > 0, 0);
+            ArraysUtils.ReplaceElements(array, val => val > 0, 0);
             AddCubicArrayToStringBilder(result, array);
 
             return result.ToString();

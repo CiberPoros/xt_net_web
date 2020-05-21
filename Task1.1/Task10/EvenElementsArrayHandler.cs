@@ -40,7 +40,7 @@ namespace Task10
             StringBuilder result = new StringBuilder();
 
             result.Append($"Generated array:{ Environment.NewLine }");
-            var array = ArraysHandler.GenerateArray(new[] { width, height }, () => _rnd.Next(ValueDownLimit, ValueUpLimit));
+            var array = ArraysUtils.GenerateArray(new[] { width, height }, () => _rnd.Next(ValueDownLimit, ValueUpLimit));
             Add2DArrayToStringBilder(result, array);
 
             result.Append($"Sum even elements:{ Environment.NewLine }");

@@ -20,16 +20,16 @@ namespace Task9
 
         protected override string StartInfo => "Generating array with 10 elements and calculating non negative elements sum..."; 
 
-        protected override string ReadData() => null;
-
         protected override bool MakePause => true;
+
+        protected override string ReadData() => null;
 
         protected override string HandleData(string data)
         {
             var result = new StringBuilder();
 
             result.Append($"Generated collection:{ Environment.NewLine }");
-            var collection = (from int element in ArraysHandler
+            var collection = (from int element in ArraysUtils
                                 .GenerateArray(new[] { DefaultLength }, () => _rnd.Next(ValueDownLimit, ValueUpLimit))
                               select element)
                              .ToList();
