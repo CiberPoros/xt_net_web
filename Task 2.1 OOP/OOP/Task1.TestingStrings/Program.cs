@@ -235,7 +235,9 @@ namespace Task1.TestingStrings
             Console.WriteLine($"{nameof(str)} = CreateInstance(\"{str}\")");
 
             Console.WriteLine($"str.RemoveByPredicate(c => char.IsUpper(c)) => {str.RemoveByPredicate(c => char.IsUpper(c))}");
+            Console.WriteLine($"str.RemoveByPredicate(c => c == 'L') => {str.RemoveByPredicate(c => c == 'L')}");
             Console.WriteLine($"str.ReplaceByDelegate(c => char.ToLower(c)) => {str.ReplaceByDelegate(c => char.ToLower(c))}");
+            Console.WriteLine($"str.ReplaceByDelegate(c => char.ToLower(c) == 'l' ? '1' : c)) => {str.ReplaceByDelegate(c => char.ToLower(c) == 'l' ? '1' : c)}");
 
             WriteSeparatorStringsAndAwaitMessage();
         }
