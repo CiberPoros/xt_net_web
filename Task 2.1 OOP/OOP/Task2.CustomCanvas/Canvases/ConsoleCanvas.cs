@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using CustomCanvas.Figures;
 
@@ -45,6 +46,37 @@ namespace CustomCanvas.Canvases
             stringBuilder.Append(Environment.NewLine);
 
             return stringBuilder.ToString();
+        }
+
+        public override string[] ToStringArray()
+        {
+            List<string> result = new List<string>();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < Width + 2; i++)
+                stringBuilder.Append(WallSymbol);
+
+            result.Add(stringBuilder.ToString());
+
+            for (int i = Height - 1; i >= 0; i--)
+            {
+                stringBuilder.Clear();
+                stringBuilder.Append(WallSymbol);
+                for (int j = 0; j < Width; j++)
+                {
+                    stringBuilder.Append(_points[j, i]);
+                }
+                stringBuilder.Append(WallSymbol);
+
+                result.Add(stringBuilder.ToString());
+            }
+
+            stringBuilder.Clear();
+            for (int i = 0; i < Width + 2; i++)
+                stringBuilder.Append(WallSymbol);
+
+            result.Add(stringBuilder.ToString());
+            return result.ToArray();
         }
 
         public override void Reset()

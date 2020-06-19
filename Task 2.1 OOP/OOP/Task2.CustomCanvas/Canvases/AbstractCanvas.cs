@@ -26,6 +26,7 @@ namespace CustomCanvas.Canvases
         public int Height { get; }
 
         public abstract void Reset();
+        public abstract string[] ToStringArray();
 
         public void Clear()
         {
