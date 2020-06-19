@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1.String", "Task1.Strin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1.TestingStrings", "Task1.TestingStrings\Task1.TestingStrings.csproj", "{CE42591D-DCA7-49CB-88A1-86DC0700254F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2.CustomPaint", "Task2.CustomPaint\Task2.CustomPaint.csproj", "{1A2979F5-8882-465C-8658-0E4E7AEB20B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2.CustomCanvas", "Task2.CustomCanvas\Task2.CustomCanvas.csproj", "{67507938-21AF-4DD3-B72E-D7C6C94F7520}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{CE42591D-DCA7-49CB-88A1-86DC0700254F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE42591D-DCA7-49CB-88A1-86DC0700254F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE42591D-DCA7-49CB-88A1-86DC0700254F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A2979F5-8882-465C-8658-0E4E7AEB20B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A2979F5-8882-465C-8658-0E4E7AEB20B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A2979F5-8882-465C-8658-0E4E7AEB20B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A2979F5-8882-465C-8658-0E4E7AEB20B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

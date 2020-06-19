@@ -478,15 +478,15 @@ namespace CString
         /// <summary>
         /// Returns a new string with replaced chars by delegate.
         /// </summary>
-        /// <param name="func">The predicate for replacement chars.</param>
+        /// <param name="toReplace">The predicate for replacement chars.</param>
         /// <returns>The new string with replaced chars by delegate.</returns>
-        public CustomString ReplaceByDelegate(Func<char, char> func)
+        public CustomString ReplaceByDelegate(Func<char, char> toReplace)
         {
             char[] value = new char[Length];
 
             for (int i = 0; i < Length; i++)
             {
-                value[i] = func(this[i]);
+                value[i] = toReplace(this[i]);
             }
 
             return CreateInstance(value);
