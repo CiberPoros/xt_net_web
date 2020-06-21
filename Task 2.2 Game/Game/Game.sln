@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2.CustomCanvas", "..\..\Task 2.1 OOP\OOP\Task2.CustomCanvas\Task2.CustomCanvas.csproj", "{67507938-21AF-4DD3-B72E-D7C6C94F7520}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameInterface", "GameInterface\GameInterface.csproj", "{B4C6AC55-28CB-491E-A848-8E6BD75C147C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67507938-21AF-4DD3-B72E-D7C6C94F7520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4C6AC55-28CB-491E-A848-8E6BD75C147C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4C6AC55-28CB-491E-A848-8E6BD75C147C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4C6AC55-28CB-491E-A848-8E6BD75C147C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4C6AC55-28CB-491E-A848-8E6BD75C147C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

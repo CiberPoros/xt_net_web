@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace CustomCanvas.Figures
 {
@@ -60,6 +62,23 @@ namespace CustomCanvas.Figures
             OnUpdate();
         }
 
+        public virtual bool IsInterceptedWith(AbstractFigure other)
+        {
+            if (_definingPoints.Intersect(other._definingPoints).Count() != 0)
+                return true;
+
+            foreach (var point in _definingPoints)
+                if (other.IsFillerPoint(point))
+                    return true;
+
+            // 2-th cicle nesesarry because _definingPoints don't contains all points of a figure
+            foreach (var point in other._definingPoints)
+                if (IsFillerPoint(point))
+                    return true;
+
+            return false;
+        }
+
         public virtual LinkedList<Point> GetFillerPoints()
         {
             LinkedList<Point> result = new LinkedList<Point>();
@@ -85,6 +104,67 @@ namespace CustomCanvas.Figures
             }
 
             return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            AbstractFigure other = obj as AbstractFigure;
+            if (other == null)
+                return false;
+
+            if (GetType() != other.GetType())
+                return false;
+
+            if (_definingPoints.Count != other._definingPoints.Count)
+                return false;
+
+            int length = _definingPoints.Count;
+            bool result = false;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (_definingPoints[i] == other._definingPoints[0]) // For the lack of reference to the position in the _definingPoints list
+                {
+                    result = true;
+
+                    for (int j = 0, k = i; j < length; j++, k++)
+                    {
+                        if (k >= length)
+                            k = 0;
+
+                        if (_definingPoints[k] != other._definingPoints[j])
+                            return false;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public override int GetHashCode()
+        {
+            int result = 0;
+
+            foreach (var point in _definingPoints)
+                result ^= point.GetHashCode();
+
+            return result;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+
+            foreach (var point in _definingPoints)
+            {
+                result.Append(point.ToString());
+                result.Append(' ');
+            }
+
+            return result.ToString();
         }
     }
 }
