@@ -3,43 +3,37 @@ using System.Text;
 using GameInterface;
 using TetrisGame;
 using TanksGame;
+using GameStarter.GameStarters;
 
 namespace GameStarter
 {
     class Starter
     {
         private static readonly string baseInfoMessage =
-            $"Горячие клавиши:{Environment.NewLine}" +
-            $"1. Левая стрелка - смещение фигуры влево,{Environment.NewLine}" +
-            $"2. Левая стрелка - смещение фигуры вправо,{Environment.NewLine}" +
-            $"3. Стрелка вверх - поворот фигуры,{Environment.NewLine}" +
-            $"4. Стрелка вниз  - ускорение фигуры;{Environment.NewLine}" +
-            $"Нажмите любую клавишу для старта...";
+            $"1. Тетрис (полная играбельная версия),{Environment.NewLine}" +
+            $"2. Танчики (базовый функционал);{Environment.NewLine}";
 
         static void Main()
         {
             Console.OutputEncoding = Encoding.Unicode;
 
-            //int w = 12;
-            int w = 30;
-            int h = 10;
-            Console.SetWindowSize(5 * w + 3, 5 * h + 6);
-
-            Console.WriteLine(baseInfoMessage);
-
             while (true)
             {
-                Console.ReadKey();
+                Console.WriteLine(baseInfoMessage);
 
-                // AbstractGame game = new Tetris(w * 5, h * 5);
-                AbstractGame game = new Tanks(w * 5, h * 5);
-                game.Start();
+                var keyInfo = Console.ReadKey();
+
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.D1:
+                        AbstractGameStarter.CreateInstance(GameType.Tetris).Start();
+                        break;
+                    case ConsoleKey.D2:
+                        AbstractGameStarter.CreateInstance(GameType.Tanks).Start();
+                        break;
+                }
 
                 Console.Clear();
-                Console.SetCursorPosition(0, 0);
-
-                Console.WriteLine($"Игра окончена. Ваш счет: {game.Score}");
-                Console.WriteLine("Нажмите любою клавишу для старта...");
             }
         }
     }

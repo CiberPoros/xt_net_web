@@ -43,8 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameStarters\TetrisGameStarter.cs" />
+    <Compile Include="GameType.cs" />
     <Compile Include="Starter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GameStarters\AbstractGameStarter.cs" />
+    <Compile Include="GameStarters\TanksGameStarter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
