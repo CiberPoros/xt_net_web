@@ -15,7 +15,7 @@ namespace TetrisGame.FallingObjects
             _figures.Add(new Rectangle(center.Shift(0, CellSize * 2), CellSize, CellSize));
             _figures.Add(new Rectangle(center.Shift(0, CellSize), CellSize, CellSize));
             _figures.Add(new Rectangle(center.Shift(0, 0), CellSize, CellSize));
-            _figures.Add(new Rectangle(center.Shift(-CellSize, 0), CellSize, CellSize));
+            _figures.Add(new Rectangle(center.Shift(-CellSize, CellSize), CellSize, CellSize));
         }
     }
 }

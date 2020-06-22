@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Text;
-using GameInterface;
-using TetrisGame;
-using TanksGame;
 using GameStarter.GameStarters;
 
 namespace GameStarter
