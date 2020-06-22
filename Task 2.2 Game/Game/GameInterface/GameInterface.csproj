@@ -47,7 +47,7 @@
     <Compile Include="IProcessable.cs" />
     <Compile Include="KeyPressedHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Вшкусешщт.cs" />
+    <Compile Include="Direction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Task 2.1 OOP\OOP\Task2.CustomCanvas\Task2.CustomCanvas.csproj">
