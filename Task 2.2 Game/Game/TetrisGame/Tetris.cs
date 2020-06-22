@@ -11,7 +11,6 @@ namespace TetrisGame
     public class Tetris : AbstractGame
     {
         private static readonly AutoResetEvent updateStateWaitHandler = new AutoResetEvent(true);
-        private static readonly AutoResetEvent updateConsoleWaitHandler = new AutoResetEvent(true);
 
         public const int TetrisPriorityLimit = 2;
         public const int CellSize = 5;
@@ -114,16 +113,6 @@ namespace TetrisGame
             UpdateFullLines(heightsMas.ToArray());
 
             CreateNewFallingObject();
-        }
-
-        private void UpdateConsole()
-        {
-            updateConsoleWaitHandler.WaitOne();
-
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine(_canvas);
-
-            updateConsoleWaitHandler.Set();
         }
 
         private void CreateNewFallingObject()

@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Direction.cs" />
     <Compile Include="FalledObject.cs" />
     <Compile Include="FallingObjects\AbstractFallingObject.cs" />
     <Compile Include="FallingObjects\CrookedStick.cs" />

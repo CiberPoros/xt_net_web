@@ -2,6 +2,7 @@
 using System.Text;
 using GameInterface;
 using TetrisGame;
+using TanksGame;
 
 namespace GameStarter
 {
@@ -19,9 +20,10 @@ namespace GameStarter
         {
             Console.OutputEncoding = Encoding.Unicode;
 
-            int w = 12;
+            //int w = 12;
+            int w = 30;
             int h = 10;
-            Console.SetWindowSize(5 * w + 3, 5 * h + 5);
+            Console.SetWindowSize(5 * w + 3, 5 * h + 6);
 
             Console.WriteLine(baseInfoMessage);
 
@@ -29,7 +31,8 @@ namespace GameStarter
             {
                 Console.ReadKey();
 
-                AbstractGame game = new Tetris(w * 5, h * 5);
+                // AbstractGame game = new Tetris(w * 5, h * 5);
+                AbstractGame game = new Tanks(w * 5, h * 5);
                 game.Start();
 
                 Console.Clear();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CustomCanvas;
 using CustomCanvas.Figures;
 
@@ -28,6 +29,21 @@ namespace GameInterface
             }
 
             Center = Center.Shift(dx, dy);
+        }
+
+        public virtual void Shift(Direction direction)
+        {
+            var point = direction switch
+            {
+                Direction.None => new Point(0, 0),
+                Direction.Letf => new Point(-1, 0),
+                Direction.Right => new Point(1, 0),
+                Direction.Up => new Point(0, 1),
+                Direction.Down => new Point(0, -1),
+                _ => throw new ArgumentOutOfRangeException(nameof(direction), $"Invalid value of {direction}."),
+            };
+
+            Shift(point.X, point.Y);
         }
 
         public virtual void RotateAroundCenter(double angle)

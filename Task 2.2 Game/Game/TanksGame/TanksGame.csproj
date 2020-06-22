@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{53FCBAFD-F2D0-47FF-81D4-6FBBF92644A4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>GameStarter</RootNamespace>
-    <AssemblyName>GameStarter</AssemblyName>
+    <ProjectGuid>{6C27B8B0-333A-40BB-9424-F01A30DD9462}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TanksGame</RootNamespace>
+    <AssemblyName>TanksGame</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,24 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Starter.cs" />
+    <Compile Include="Bullet.cs" />
+    <Compile Include="EnemyTank.cs" />
+    <Compile Include="Hero.cs" />
+    <Compile Include="Tanks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TanksGameObject.cs" />
+    <Compile Include="TanksGameObjectType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\..\..\Task 2.1 OOP\OOP\Task2.CustomCanvas\Task2.CustomCanvas.csproj">
+      <Project>{67507938-21af-4dd3-b72e-d7c6c94f7520}</Project>
+      <Name>Task2.CustomCanvas</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameInterface\GameInterface.csproj">
       <Project>{b4c6ac55-28cb-491e-a848-8e6bd75c147c}</Project>
       <Name>GameInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TanksGame\TanksGame.csproj">
-      <Project>{6c27b8b0-333a-40bb-9424-f01a30dd9462}</Project>
-      <Name>TanksGame</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TetrisGame\TetrisGame.csproj">
-      <Project>{4b711974-973e-4dde-99eb-89b3e85a4991}</Project>
-      <Name>TetrisGame</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

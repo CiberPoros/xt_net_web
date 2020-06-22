@@ -8,10 +8,12 @@ namespace GameInterface
 {
     public abstract class AbstractGame
     {
+        private static readonly AutoResetEvent updateConsoleWaitHandler = new AutoResetEvent(true);
+
         protected readonly AbstractCanvas _canvas;
         protected readonly KeyPressedHandler _keyPressedHandler;
 
-        private readonly List<List<AbstractGameObject>> _gameObjectsByPriority;
+        protected readonly List<List<AbstractGameObject>> _gameObjectsByPriority;
 
         public AbstractGame(int width, int height, int priorityLimit)
         {
@@ -60,6 +62,7 @@ namespace GameInterface
 
         public virtual void Start()
         {
+            Console.Clear();
             Console.CursorVisible = false;
             Init();
 
@@ -84,7 +87,41 @@ namespace GameInterface
             return _gameObjectsByPriority[priority];
         }
 
+        public virtual void AddGameObject(AbstractGameObject gameObject)
+        {
+            foreach (var figure in gameObject.Figures)
+                _canvas.AddFigure(figure);
+
+            if (gameObject is IProcessable)
+                _gameObjectsByPriority[(gameObject as IProcessable).Proirity].Add(gameObject);
+            else
+                _gameObjectsByPriority[0].Add(gameObject);
+        }
+
+        public virtual void RemoveGameObject(AbstractGameObject gameObject)
+        {
+            foreach (var figure in gameObject.Figures)
+                _canvas.RemoveFigure(figure);
+
+            if (gameObject is IProcessable)
+                _gameObjectsByPriority[(gameObject as IProcessable).Proirity].Remove(gameObject);
+            else
+                _gameObjectsByPriority[0].Remove(gameObject);
+        }
+
         protected abstract List<ConsoleKey> InitHandledKeys();
+
+        protected virtual void UpdateConsole()
+        {
+            updateConsoleWaitHandler.WaitOne();
+
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine($"Ваш текущий счет: {Score}!");
+            Console.WriteLine();
+            Console.WriteLine(_canvas);
+
+            updateConsoleWaitHandler.Set();
+        }
 
         // for create start objects
         protected virtual void Init() { }
@@ -101,29 +138,7 @@ namespace GameInterface
                     }
                 }
             }
-        }
-
-        protected virtual void AddGameObject(AbstractGameObject gameObject)
-        {
-            foreach (var figure in gameObject.Figures)
-                _canvas.AddFigure(figure);
-
-            if (gameObject is IProcessable)
-                _gameObjectsByPriority[(gameObject as IProcessable).Proirity].Add(gameObject);
-            else
-                _gameObjectsByPriority[0].Add(gameObject);
-        }
-
-        protected virtual void RemoveGameObject(AbstractGameObject gameObject)
-        {
-            foreach (var figure in gameObject.Figures)
-                _canvas.RemoveFigure(figure);
-
-            if (gameObject is IProcessable)
-                _gameObjectsByPriority[(gameObject as IProcessable).Proirity].Remove(gameObject);
-            else
-                _gameObjectsByPriority[0].Remove(gameObject);
-        }
+        } 
 
         private void ProcessHandle()
         {
