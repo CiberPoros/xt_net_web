@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4D5AA72-A0E2-4D7B-8B08-871356480B26}</ProjectGuid>
+    <ProjectGuid>{53FCBAFD-F2D0-47FF-81D4-6FBBF92644A4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Game</RootNamespace>
-    <AssemblyName>Game</AssemblyName>
+    <RootNamespace>GameStarter</RootNamespace>
+    <AssemblyName>GameStarter</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,24 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FallingObjects\AbstractFallingObject.cs" />
-    <Compile Include="FallingObjects\CrookedStick.cs" />
-    <Compile Include="FallingObjects\Cube.cs" />
-    <Compile Include="FallingObjectType.cs" />
-    <Compile Include="FallingObjects\Hanger.cs" />
-    <Compile Include="FallingObjects\StraightStick.cs" />
-    <Compile Include="FallingObjects\Thunder.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Starter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TetrisGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Task 2.1 OOP\OOP\Task2.CustomCanvas\Task2.CustomCanvas.csproj">
-      <Project>{67507938-21af-4dd3-b72e-d7c6c94f7520}</Project>
-      <Name>Task2.CustomCanvas</Name>
+    <ProjectReference Include="..\GameInterface\GameInterface.csproj">
+      <Project>{b4c6ac55-28cb-491e-a848-8e6bd75c147c}</Project>
+      <Name>GameInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TetrisGame\TetrisGame.csproj">
+      <Project>{4b711974-973e-4dde-99eb-89b3e85a4991}</Project>
+      <Name>TetrisGame</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

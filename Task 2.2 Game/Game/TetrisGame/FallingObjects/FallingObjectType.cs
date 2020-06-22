@@ -1,4 +1,4 @@
-﻿namespace Game
+﻿namespace TetrisGame.FallingObjects
 {
     public enum FallingObjectType
     {

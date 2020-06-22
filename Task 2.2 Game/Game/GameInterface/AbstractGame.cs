@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using CustomCanvas;
 using CustomCanvas.Canvases;
-using CustomCanvas.Figures;
 
 namespace GameInterface
 {
@@ -14,36 +11,60 @@ namespace GameInterface
         protected readonly AbstractCanvas _canvas;
         protected readonly KeyPressedHandler _keyPressedHandler;
 
-        private readonly LinkedList<AbstractGameObject> _controlledGameObjects;
+        private readonly List<List<AbstractGameObject>> _gameObjectsByPriority;
 
-        public AbstractGame(int width, int height)
+        public AbstractGame(int width, int height, int priorityLimit)
         {
+            if (width <= 0)
+                throw new ArgumentOutOfRangeException(nameof(width), $"Argument {nameof(width)} must be positive.");
+
+            if (height <= 0)
+                throw new ArgumentOutOfRangeException(nameof(height), $"Argument {nameof(height)} must be positive.");
+
+            if (priorityLimit < 0)
+                throw new ArgumentOutOfRangeException(nameof(priorityLimit), $"Argument {nameof(priorityLimit)} can't be negative.");
+
             TickNumber = 0;
             Score = 0;
             IsGameEnded = false;
             GameSpeed = 10;
             Width = width;
             Height = height;
+            PriorityLimit = priorityLimit;
 
             _canvas = new ConsoleCanvas(width, height);
             _keyPressedHandler = new KeyPressedHandler(InitHandledKeys());
-            _controlledGameObjects = new LinkedList<AbstractGameObject>();
+            _gameObjectsByPriority = new List<List<AbstractGameObject>>(priorityLimit + 1);
+
+            for (int i = 0; i < priorityLimit + 1; i++)
+                _gameObjectsByPriority.Add(new List<AbstractGameObject>());
+
+            _keyPressedHandler.KeyPressed += OnKeyPressed;
         }
+
+        public AbstractGame(int width, int height) : this(width, height, 0) { }
 
         public abstract int DelayTime { get; }
 
         public long TickNumber { get; protected set; }
         public int Score { get; protected set; }
         public bool IsGameEnded { get; protected set; }
+
         public int GameSpeed { get; protected set; }
         public int Width { get; }
         public int Height { get; }
 
+        public int PriorityLimit { get; }
+
+        public abstract void OnKeyPressed(object sender, ConsoleKeyPressedEventArgs e);
+
         public virtual void Start()
         {
             Console.CursorVisible = false;
+            Init();
 
-            Task keyHandler = _keyPressedHandler.StartHandleAsync();
+            Thread thread = new Thread(() => _keyPressedHandler.StartHandle());
+            thread.Start();
 
             while (!IsGameEnded)
             {
@@ -51,19 +72,46 @@ namespace GameInterface
             }
 
             Console.CursorVisible = false;
-            keyHandler.Wait();
+            _keyPressedHandler.StopHandle();
+            thread.Join();
         }
 
-        protected abstract void Process();
+        public IReadOnlyList<AbstractGameObject> GetGameObjectsByPriority(int priority)
+        {
+            if (priority < 0 || priority > PriorityLimit)
+                throw new ArgumentOutOfRangeException(nameof(priority), $"Invalid value of {nameof(priority)}.");
+
+            return _gameObjectsByPriority[priority];
+        }
 
         protected abstract List<ConsoleKey> InitHandledKeys();
+
+        // for create start objects
+        protected virtual void Init() { }
+
+        protected virtual void Process()
+        {
+            for (int i = 0; i < _gameObjectsByPriority.Count; i++)
+            {
+                for (int j = _gameObjectsByPriority[i].Count - 1; j >= 0; j--)
+                {
+                    if (_gameObjectsByPriority[i][j] is IProcessable)
+                    {
+                        (_gameObjectsByPriority[i][j] as IProcessable).Process();
+                    }
+                }
+            }
+        }
 
         protected virtual void AddGameObject(AbstractGameObject gameObject)
         {
             foreach (var figure in gameObject.Figures)
                 _canvas.AddFigure(figure);
 
-            _controlledGameObjects.AddLast(gameObject);
+            if (gameObject is IProcessable)
+                _gameObjectsByPriority[(gameObject as IProcessable).Proirity].Add(gameObject);
+            else
+                _gameObjectsByPriority[0].Add(gameObject);
         }
 
         protected virtual void RemoveGameObject(AbstractGameObject gameObject)
@@ -71,7 +119,10 @@ namespace GameInterface
             foreach (var figure in gameObject.Figures)
                 _canvas.RemoveFigure(figure);
 
-            _controlledGameObjects.Remove(gameObject);
+            if (gameObject is IProcessable)
+                _gameObjectsByPriority[(gameObject as IProcessable).Proirity].Remove(gameObject);
+            else
+                _gameObjectsByPriority[0].Remove(gameObject);
         }
 
         private void ProcessHandle()

@@ -2,14 +2,13 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4C6AC55-28CB-491E-A848-8E6BD75C147C}</ProjectGuid>
+    <ProjectGuid>{4B711974-973E-4DDE-99EB-89B3E85A4991}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameInterface</RootNamespace>
-    <AssemblyName>GameInterface</AssemblyName>
+    <RootNamespace>TetrisGame</RootNamespace>
+    <AssemblyName>TetrisGame</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -42,16 +41,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractGame.cs" />
-    <Compile Include="AbstractGameObject.cs" />
-    <Compile Include="IProcessable.cs" />
-    <Compile Include="KeyPressedHandler.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="FalledObject.cs" />
+    <Compile Include="FallingObjects\AbstractFallingObject.cs" />
+    <Compile Include="FallingObjects\CrookedStick.cs" />
+    <Compile Include="FallingObjects\Cube.cs" />
+    <Compile Include="FallingObjects\FallingObjectCreater.cs" />
+    <Compile Include="FallingObjects\FallingObjectType.cs" />
+    <Compile Include="FallingObjects\Hanger.cs" />
+    <Compile Include="FallingObjects\StraightStick.cs" />
+    <Compile Include="FallingObjects\Thunder.cs" />
+    <Compile Include="Tetris.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TetrisGameObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Task 2.1 OOP\OOP\Task2.CustomCanvas\Task2.CustomCanvas.csproj">
       <Project>{67507938-21af-4dd3-b72e-d7c6c94f7520}</Project>
       <Name>Task2.CustomCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameInterface\GameInterface.csproj">
+      <Project>{b4c6ac55-28cb-491e-a848-8e6bd75c147c}</Project>
+      <Name>GameInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CustomCanvas;
 using CustomCanvas.Figures;
 
@@ -11,10 +7,13 @@ namespace GameInterface
     public abstract class AbstractGameObject
     {
         protected readonly List<AbstractFigure> _figures;
+        protected readonly AbstractGame _gameState;
 
-        public AbstractGameObject(Point center)
+        public AbstractGameObject(Point center, AbstractGame gameState)
         {
             _figures = new List<AbstractFigure>();
+            _gameState = gameState;
+
             Center = center;
         }
 

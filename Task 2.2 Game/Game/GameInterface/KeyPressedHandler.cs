@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace GameInterface
 {
@@ -34,19 +31,17 @@ namespace GameInterface
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public event ConsoleKeyPressedEventHandler OnKeyPressed = delegate { };
+        public event ConsoleKeyPressedEventHandler KeyPressed = delegate { };
 
         public void StopHandle() => _cancellationTokenSource.Cancel();
 
-        public async Task StartHandleAsync()
+        public void StartHandle()
         {
             while (true)
             {
-                Task<ConsoleKeyInfo> listener = Task.Run(() => Console.ReadKey(), _cancellationTokenSource.Token);
+                var keyInfo = Console.ReadKey();
 
-                await listener;
-
-                OnKeyPressed(this, new ConsoleKeyPressedEventArgs(listener.Result.Key));
+                KeyPressed(this, new ConsoleKeyPressedEventArgs(keyInfo.Key));
 
                 if (_cancellationTokenSource.IsCancellationRequested)
                     return;

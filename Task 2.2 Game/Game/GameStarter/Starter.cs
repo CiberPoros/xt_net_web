@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
+using GameInterface;
+using TetrisGame;
 
-namespace Game
+namespace GameStarter
 {
-    class Program
+    class Starter
     {
         private static readonly string baseInfoMessage =
             $"Горячие клавиши:{Environment.NewLine}" +
@@ -13,14 +15,13 @@ namespace Game
             $"4. Стрелка вниз  - ускорение фигуры;{Environment.NewLine}" +
             $"Нажмите любую клавишу для старта...";
 
-        // TODO: add the following figures view on right side
         static void Main()
         {
             Console.OutputEncoding = Encoding.Unicode;
 
             int w = 12;
-            int h = 9;
-            Console.SetWindowSize(TetrisGame.CellSize * w + 3, TetrisGame.CellSize * h + 5);
+            int h = 10;
+            Console.SetWindowSize(5 * w + 3, 5 * h + 5);
 
             Console.WriteLine(baseInfoMessage);
 
@@ -28,13 +29,13 @@ namespace Game
             {
                 Console.ReadKey();
 
-                TetrisGame game = new TetrisGame(w, h);
-                int gamePoints = game.Start();
+                AbstractGame game = new Tetris(w * 5, h * 5);
+                game.Start();
 
                 Console.Clear();
                 Console.SetCursorPosition(0, 0);
 
-                Console.WriteLine($"Игра окончена. Ваш счет: {gamePoints}");
+                Console.WriteLine($"Игра окончена. Ваш счет: {game.Score}");
                 Console.WriteLine("Нажмите любою клавишу для старта...");
             }
         }
