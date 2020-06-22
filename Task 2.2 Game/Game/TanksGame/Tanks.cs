@@ -79,6 +79,8 @@ namespace TanksGame
 
             HandleKills();
 
+            CheckWin();
+
             updateStateWaitHandler.Set();
 
             UpdateConsole();
@@ -94,6 +96,15 @@ namespace TanksGame
                 ConsoleKey.DownArrow,
                 ConsoleKey.Enter,
             };
+        }
+
+        private void CheckWin()
+        {
+            if (GetGameObjectsByPriority(EnemyTank.EnemyTankPriority).Count == 0)
+            {
+                IsGameEnded = true;
+                IsWin = true;
+            }
         }
 
         private void HandleKills()

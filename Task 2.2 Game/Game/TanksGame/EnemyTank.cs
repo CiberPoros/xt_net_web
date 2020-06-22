@@ -10,6 +10,8 @@ namespace TanksGame
 {
     public class EnemyTank : TanksGameObject, IProcessable
     {
+        public const int EnemyTankPriority = 2;
+
         private static readonly Random _random = new Random();
 
         public EnemyTank(Point leftTop, AbstractGame gameState) : base(leftTop, gameState)
@@ -17,7 +19,7 @@ namespace TanksGame
 
         }
 
-        public int Proirity => 2;
+        public int Proirity => EnemyTankPriority;
 
         public override TanksGameObjectType GetGameObjType() => TanksGameObjectType.EnemyTank;
 

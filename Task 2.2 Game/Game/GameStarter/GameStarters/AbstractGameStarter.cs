@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using GameInterface;
@@ -30,11 +31,13 @@ namespace GameStarter.GameStarters
             Console.Clear();
             Console.SetCursorPosition(0, 0);
 
-            Console.WriteLine($"Игра окончена. Ваш счет: {game.Score}");
+            Console.WriteLine(CreateGameResultMessage(game));
             Console.WriteLine("Нажмите любою клавишу для выхода в основное меню...");
 
             Console.ReadKey();
         }
+
+        public abstract string CreateGameResultMessage(AbstractGame game);
 
         protected abstract AbstractGame CreateGame();
 

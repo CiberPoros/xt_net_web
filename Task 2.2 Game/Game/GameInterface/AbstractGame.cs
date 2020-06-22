@@ -29,6 +29,7 @@ namespace GameInterface
             TickNumber = 0;
             Score = 0;
             IsGameEnded = false;
+            IsWin = false;
             GameSpeed = 10;
             Width = width;
             Height = height;
@@ -51,6 +52,7 @@ namespace GameInterface
         public long TickNumber { get; protected set; }
         public int Score { get; protected set; }
         public bool IsGameEnded { get; protected set; }
+        public bool IsWin { get; protected set; }
 
         public int GameSpeed { get; protected set; }
         public int Width { get; }

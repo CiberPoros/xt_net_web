@@ -24,6 +24,8 @@ namespace GameStarter.GameStarters
 
         public override int GameHeight => 10;
 
+        public override string CreateGameResultMessage(AbstractGame game) => $"Игра окончена. Ваш счет: {game.Score}";
+
         protected override AbstractGame CreateGame() => new Tetris(GameWidth * 5, GameHeight * 5);
     }
 }

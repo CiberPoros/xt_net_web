@@ -25,6 +25,14 @@ namespace GameStarter.GameStarters
 
         public override string BaseInfoMessage => _baseInfoMessage;
 
+        public override string CreateGameResultMessage(AbstractGame game)
+        {
+            if (game.IsWin)
+                return $"Игра окончена. Вы победили. Ваш счет: {game.Score}";
+            else 
+                return $"Игра окончена. Вы проиграли. Ваш счет: {game.Score}";
+        }
+
         protected override AbstractGame CreateGame() => new Tanks(GameWidth * 5, GameHeight * 5);
     }
 }
