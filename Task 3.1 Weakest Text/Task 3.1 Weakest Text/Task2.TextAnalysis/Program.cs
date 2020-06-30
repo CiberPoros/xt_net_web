@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CString;
 
 namespace Task2.TextAnalysis
 {
     class Program
     {
+        const int WORD_LENGTH_FOR_FORMAT = 25;
+        const int COUNT_WORDS_FORMAT_LENGTH = 10;
+        const int FREQUENCIES_FORMAT_LENGTH = 8;
+
         private static readonly char[] separators = new char[] { ' ', ',', '.', '!', ';', ';', '?', '(', ')', '-', '_', '\'', '"', '@' };
 
         static void Main()
@@ -22,14 +24,14 @@ namespace Task2.TextAnalysis
 
             Console.WriteLine($"Всего слов: {wordsCount}");
             Console.WriteLine();
-            Console.WriteLine($"        Строка        | Количество | Частота |");
+            Console.WriteLine($"{CustomString.CreateInstance("Строка".ToCharArray()).FormatCenter(WORD_LENGTH_FOR_FORMAT)}| Количество | Частота |");
 
             foreach (var kvp in frequencies)
             {
                 Console.WriteLine(
-                    $"{kvp.Key, -21} " +
-                    $"| {CustomString.CreateInstance(kvp.Value.ToString().ToCharArray()).FormatCenter(10)} " +
-                    $"| {CustomString.CreateInstance(((kvp.Value + .0) / wordsCount).ToString("0.####").ToCharArray()).FormatCenter(8)}" +
+                    $"{kvp.Key, -WORD_LENGTH_FOR_FORMAT}" +
+                    $"| {CustomString.CreateInstance(kvp.Value.ToString().ToCharArray()).FormatCenter(COUNT_WORDS_FORMAT_LENGTH)} " +
+                    $"| {CustomString.CreateInstance(((kvp.Value + .0) / wordsCount).ToString("0.####").ToCharArray()).FormatCenter(FREQUENCIES_FORMAT_LENGTH)}" +
                     $"| ");
             }
         }
