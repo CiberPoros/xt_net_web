@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1.WeakestLink", "Task1.WeakestLink\Task1.WeakestLink.csproj", "{45E3A230-481A-4856-A9EF-E60BBD299A4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2.TextAnalysis", "Task2.TextAnalysis\Task2.TextAnalysis.csproj", "{515CA384-367C-4D36-A290-61497F352BD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1.String", "..\..\Task 2.1 OOP\OOP\Task1.String\Task1.String.csproj", "{EE758F96-E849-4880-B0E2-779ACA049C8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{45E3A230-481A-4856-A9EF-E60BBD299A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45E3A230-481A-4856-A9EF-E60BBD299A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45E3A230-481A-4856-A9EF-E60BBD299A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515CA384-367C-4D36-A290-61497F352BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515CA384-367C-4D36-A290-61497F352BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515CA384-367C-4D36-A290-61497F352BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515CA384-367C-4D36-A290-61497F352BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE758F96-E849-4880-B0E2-779ACA049C8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE758F96-E849-4880-B0E2-779ACA049C8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE758F96-E849-4880-B0E2-779ACA049C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE758F96-E849-4880-B0E2-779ACA049C8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
