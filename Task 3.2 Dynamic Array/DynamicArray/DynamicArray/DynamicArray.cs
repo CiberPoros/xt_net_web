@@ -197,12 +197,11 @@ namespace CustomCollections
             if (startIndex + count > Count)
                 throw new ArgumentException(
                     "startIndex is outside the range of valid indexes for the DynamicArray." +
-                    "-or- count is less than 0. -or- startIndex and count do not specify a valid section" +
-                    "in the DynamicArray.");
+                    "-or- startIndex and count do not specify a valid section in the DynamicArray.");
 
-            for (int i = startIndex; i < startIndex + count; i++)
-                if (match(_data[i]))
-                    return i;
+            for (int i = 0; i < count; i++, startIndex++)
+                if (match(_data[startIndex]))
+                    return startIndex;
 
             return -1;
         }
@@ -238,11 +237,80 @@ namespace CustomCollections
                     "-or- count is less than 0. -or- index and count do not specify a valid section" +
                     "in the DynamicArray.");
 
-            for (int i = 0; i < count; i++)
-                if (match(_data[startIndex - i]))
-                    return startIndex - i;
+            for (int i = 0; i < count; i++, startIndex--)
+                if (match(_data[startIndex]))
+                    return startIndex;
 
             return -1;
+        }
+
+        public void ForEach(Action<T> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action), $"Argument {nameof(action)} is null.");
+
+            try
+            {
+                foreach (var val in _data)
+                    action(val);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("An element in the collection has been modified.", e);
+            }
+        }
+
+        public DynamicArray<T> GetRange(int index, int count) 
+        {
+            if (index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Argument {index} can't be negative.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
+
+            if (index + count > Count)
+                throw new ArgumentException("index and count do not denote a valid range of elements in the DynamicArray.");
+
+            T[] result = new T[count];
+            for (int i = 0; i < count; i++, index++)
+                result[i] = _data[index];
+
+            return new DynamicArray<T>(result);
+        }
+
+        public int IndexOf(T item, int index, int count)
+        {
+            if (index < 0 || index > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Argument {index} can't be negative or greater than count of elements - 1.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
+
+            if (index + count > Count)
+                throw new ArgumentException(
+                    "index is outside the range of valid indexes for the DynamicArray." +
+                    "-or- index and count do not specify a valid section in the DynamicArray.");
+
+            for (int i = 0; i < count; i++, index++)
+                if (Equals(item, _data[index]))
+                    return index;
+
+            return -1;
+        }
+        public int IndexOf(T item, int index) => IndexOf(item, index, Count - index);
+        public int IndexOf(T item) => IndexOf(item, 0);
+
+        public void Insert(int index, T item)
+        {
+            if (index < 0 || index > Count)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements.");
+
+            Add(item);
+
+            for (int i = Count - 1; i > index; i--)
+                _data[i] = _data[i - 1];
+
+            _data[index] = item;
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -272,27 +340,7 @@ namespace CustomCollections
         }
 
 
-        public int IndexOf(T item)
-        {
-            for (int i = 0; i < Count; i++)
-                if (Equals(item, _data[i]))
-                    return i;
 
-            return -1;
-        }
-
-        public void Insert(int index, T item)
-        {
-            if (index < 0 || index > Count)
-                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements.");
-
-            Add(item);
-
-            for (int i = Count - 1; i > index; i--)
-                _data[i] = _data[i - 1];
-
-            _data[index] = item;
-        }
 
         public void RemoveAt(int index)
         {
