@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomArray
 {
-    public class DynamicArray<T> : IEnumerable<T>, ICollection<T>
+    public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>
     {
         private T[] _data;
 
@@ -37,6 +37,24 @@ namespace CustomArray
 
         public bool IsReadOnly => throw new NotImplementedException();
 
+        public T this[int index] 
+        { 
+            get
+            {
+                if (index < 0 || index > Count - 1)
+                    throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+
+                return _data[index];
+            }
+            set
+            {
+                if (index < 0 || index > Count - 1)
+                    throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+
+                _data[index] = value;
+            }
+        }
+
         private void ResizeArray(int newCountOfElements)
         {
             int newSize = Capacity;
@@ -51,6 +69,7 @@ namespace CustomArray
             _data = temp;
         }
 
+        #region IENUMERABLE_IMPLEMENTATION
         public IEnumerator<T> GetEnumerator()
         {
             foreach (var val in _data)
@@ -58,7 +77,9 @@ namespace CustomArray
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        #endregion
 
+        #region ICOLLECTION_IMPLEMENTATION
         public void Add(T value)
         {
             if (Count + 1 > Capacity)
@@ -68,7 +89,6 @@ namespace CustomArray
             Count++;
         }
 
-        #region ICOLLECTION_IMPLEMENTATION
         public void Clear() => Count = 0;
 
         public bool Contains(T item)
@@ -114,6 +134,39 @@ namespace CustomArray
             }
 
             return false;
+        }
+        #endregion
+
+        #region ILIST_IMPLEMENTATION
+        public int IndexOf(T item)
+        {
+            for (int i = 0; i < Count; i++)
+                if (AreEqual(item, _data[i]))
+                    return i;
+
+            return -1;
+        }
+
+        public void Insert(int index, T item)
+        {
+            if (index < 0 || index > Count)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements.");
+
+            Add(item);
+
+            for (int i = Count - 1; i > index; i--)
+                _data[i] = _data[i - 1];
+
+            _data[index] = item;
+        }
+
+        public void RemoveAt(int index)
+        {
+            if (index < 0 || index > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+
+            for (int i = index; i < Count - 1; i++)
+                _data[i] = _data[i + 1];
         }
         #endregion
 
