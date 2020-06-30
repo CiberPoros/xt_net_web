@@ -31,7 +31,7 @@ namespace Task2.TextAnalysis
                 Console.WriteLine(
                     $"{kvp.Key, -WORD_LENGTH_FOR_FORMAT}" +
                     $"| {CustomString.CreateInstance(kvp.Value.ToString().ToCharArray()).FormatCenter(COUNT_WORDS_FORMAT_LENGTH)} " +
-                    $"| {CustomString.CreateInstance(((kvp.Value + .0) / wordsCount).ToString("0.####").ToCharArray()).FormatCenter(FREQUENCIES_FORMAT_LENGTH)}" +
+                    $"| {CustomString.CreateInstance(((kvp.Value + .0) / wordsCount).ToString("0.#####").ToCharArray()).FormatCenter(FREQUENCIES_FORMAT_LENGTH)}" +
                     $"| ");
             }
         }
