@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomArray
 {
-    public class DynamicArray<T>
+    public class DynamicArray<T> : IEnumerable<T>
     {
         private T[] _data;
 
@@ -53,5 +54,13 @@ namespace CustomArray
 
             _data = temp;
         }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var val in _data)
+                yield return val;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
