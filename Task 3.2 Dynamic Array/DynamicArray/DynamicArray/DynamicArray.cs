@@ -60,6 +60,7 @@ namespace CustomCollections
             _data[Count] = value;
             Count++;
         }
+
         public void AddRange(IEnumerable<T> collection)
         {
             if (collection == null)
@@ -70,7 +71,9 @@ namespace CustomCollections
             foreach (var value in collection)
                 Add(value);
         }
+
         public void Clear() => Count = 0;
+
         public bool Contains(T item)
         {
             foreach (var val in _data)
@@ -79,6 +82,7 @@ namespace CustomCollections
 
             return false;
         }
+
         public DynamicArray<TOutput> ConvertAll<TOutput>(Converter<T, TOutput> converter)
         {
             if (converter == null)
@@ -86,6 +90,7 @@ namespace CustomCollections
 
             return new DynamicArray<TOutput>(_data.Select(value => converter(value)));
         }         
+
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (array == null)
@@ -138,6 +143,7 @@ namespace CustomCollections
 
             CopyTo(array, 0);
         }
+
         public bool Exists(Predicate<T> match)
         {
             if (match == null)
@@ -149,6 +155,7 @@ namespace CustomCollections
 
             return false;
         }
+
         public T Find(Predicate<T> match)
         {
             if (match == null)
@@ -160,6 +167,7 @@ namespace CustomCollections
 
             return default;
         }
+
         public DynamicArray<T> FindAll(Predicate<T> match)
         {
             if (match == null)
@@ -171,6 +179,70 @@ namespace CustomCollections
                     result.Add(val);
 
             return result;
+        }
+
+        public int FindIndex(Predicate<T> match) => FindIndex(0, Count, match);
+        public int FindIndex(int startIndex, Predicate<T> match) => FindIndex(startIndex, Count, match);
+        public int FindIndex(int startIndex, int count, Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
+
+            if (startIndex < 0 || startIndex > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(startIndex), $"Argument {startIndex} can't be negative or greater than count of elements - 1.");
+
+            if (startIndex + count > Count)
+                throw new ArgumentException(
+                    "startIndex is outside the range of valid indexes for the DynamicArray." +
+                    "-or- count is less than 0. -or- startIndex and count do not specify a valid section" +
+                    "in the DynamicArray.");
+
+            for (int i = startIndex; i < startIndex + count; i++)
+                if (match(_data[i]))
+                    return i;
+
+            return -1;
+        }
+
+        public T FindLast(Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            for (int i = Count - 1; i >= 0; i--)
+                if (match(_data[i]))
+                    return _data[i];
+
+            return default;
+        }
+
+        public int FindLastIndex(Predicate<T> match) => FindLastIndex(0, Count, match);
+        public int FindLastIndex(int startIndex, Predicate<T> match) => FindLastIndex(startIndex, Count, match);
+        public int FindLastIndex(int startIndex, int count, Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
+
+            if (startIndex < 0 || startIndex > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(startIndex), $"Argument {startIndex} can't be negative or greater than count of elements - 1.");
+
+            if (startIndex - count + 1 < 0)
+                throw new ArgumentException(
+                    "index is outside the range of valid indexes for the DynamicArray." +
+                    "-or- count is less than 0. -or- index and count do not specify a valid section" +
+                    "in the DynamicArray.");
+
+            for (int i = 0; i < count; i++)
+                if (match(_data[startIndex - i]))
+                    return startIndex - i;
+
+            return -1;
         }
 
         public IEnumerator<T> GetEnumerator()
