@@ -5,37 +5,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomArray
+namespace CustomCollections
 {
-    public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>
+    public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>, IReadOnlyCollection<T>, IReadOnlyList<T>
     {
         private T[] _data;
 
-        public DynamicArray(int length)
-        {
-            if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), $"Argument {nameof(length)} can't be negative.");
-
-            _data = new T[length];
-        }
-
         public DynamicArray() : this(8) { }
-
-        public DynamicArray(IEnumerable<T> values) : this()
+        public DynamicArray(int capacity)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values), $"Argument {nameof(values)} can't be negative.");
+            if (capacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(capacity), $"Argument {nameof(capacity)} can't be negative.");
 
-            ResizeArray(values.Count());
+            _data = new T[capacity];
+        }
+        public DynamicArray(IEnumerable<T> collection) : this()
+        {
+            if (collection == null)
+                throw new ArgumentNullException(nameof(collection), $"Argument {nameof(collection)} is null.");
 
-            foreach (var value in values)
+            ResizeArray(collection.Count());
+
+            foreach (var value in collection)
                 Add(value);
         }
 
         public int Capacity { get => _data.Length; }
         public int Count { get; private set; }
-
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
 
         public T this[int index] 
         { 
@@ -55,31 +52,6 @@ namespace CustomArray
             }
         }
 
-        private void ResizeArray(int newCountOfElements)
-        {
-            int newSize = Capacity;
-
-            while (newSize < newCountOfElements)
-                newSize <<= 1;
-
-            T[] temp = new T[newSize];
-
-            _data.CopyTo(temp, 0);
-
-            _data = temp;
-        }
-
-        #region IENUMERABLE_IMPLEMENTATION
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var val in _data)
-                yield return val;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        #endregion
-
-        #region ICOLLECTION_IMPLEMENTATION
         public void Add(T value)
         {
             if (Count + 1 > Capacity)
@@ -88,18 +60,32 @@ namespace CustomArray
             _data[Count] = value;
             Count++;
         }
+        public void AddRange(IEnumerable<T> collection)
+        {
+            if (collection == null)
+                throw new ArgumentNullException(nameof(collection), $"Argument {nameof(collection)} is null.");
 
+            ResizeArray(Count + collection.Count());
+
+            foreach (var value in collection)
+                Add(value);
+        }
         public void Clear() => Count = 0;
-
         public bool Contains(T item)
         {
             foreach (var val in _data)
-                if (AreEqual(item, val))
+                if (Equals(item, val))
                     return true;
 
             return false;
         }
+        public DynamicArray<TOutput> ConvertAll<TOutput>(Converter<T, TOutput> converter)
+        {
+            if (converter == null)
+                throw new ArgumentNullException(nameof(converter), $"Argument {nameof(converter)} is null.");
 
+            return new DynamicArray<TOutput>(_data.Select(value => converter(value)));
+        }         
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (array == null)
@@ -109,19 +95,96 @@ namespace CustomArray
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"Argument {arrayIndex} can't be negative.");
 
             if (Count + arrayIndex > array.Length)
-                throw new ArithmeticException(
+                throw new ArgumentException(
                     "Count of elements in the source DynamicArray is greater than the " +
                     "available space from arrayIndex to the end of the destination array.");
 
             for (int i = 0; i < Count; i++, arrayIndex++)
                 array[arrayIndex] = _data[i];
         }
+        public void CopyTo(int index, T[] array, int arrayIndex, int count)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array), $"Argument {nameof(array)} is null.");
+
+            if (index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Argument {index} can't be negative.");
+
+            if (arrayIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"Argument {arrayIndex} can't be negative.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
+
+            if (index >= Count || Count - index + arrayIndex > array.Length)
+                throw new ArgumentException(
+                    "index is equal to or greater than the DynamicArray.Count" + 
+                    "of the source DynamicArray. -or- The number of elements" +
+                    "from index to the end of the source DynamicArray is greater" +
+                    "than the available space from arrayIndex to the end of the destination array.");
+
+            for (int i = 0; i < count; i++, arrayIndex++)
+                array[arrayIndex] = _data[index + i];
+        }
+        public void CopyTo(T[] array)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array), $"Argument {nameof(array)} is null.");
+
+            if (Count > array.Length)
+                throw new ArithmeticException(
+                    "Count of elements in the source DynamicArray is greater than the " +
+                    "number of elements that the destination array can contain.");
+
+            CopyTo(array, 0);
+        }
+        public bool Exists(Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            foreach (var val in _data)
+                if (match(val))
+                    return true;
+
+            return false;
+        }
+        public T Find(Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            foreach (var val in _data)
+                if (match(val))
+                    return val;
+
+            return default;
+        }
+        public DynamicArray<T> FindAll(Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            DynamicArray<T> result = new DynamicArray<T>();
+            foreach (var val in _data)
+                if (match(val))
+                    result.Add(val);
+
+            return result;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var val in _data)
+                yield return val;
+        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public bool Remove(T item)
         {
             for (int i = 0; i < Count; i++)
             {
-                if (AreEqual(item, _data[i]))
+                if (Equals(item, _data[i]))
                 {
                     for (int j = i; j < Count - 1; j++)
                     {
@@ -135,13 +198,12 @@ namespace CustomArray
 
             return false;
         }
-        #endregion
 
-        #region ILIST_IMPLEMENTATION
+
         public int IndexOf(T item)
         {
             for (int i = 0; i < Count; i++)
-                if (AreEqual(item, _data[i]))
+                if (Equals(item, _data[i]))
                     return i;
 
             return -1;
@@ -168,9 +230,20 @@ namespace CustomArray
             for (int i = index; i < Count - 1; i++)
                 _data[i] = _data[i + 1];
         }
-        #endregion
 
-        private bool AreEqual(T value1, T value2) =>
-            value1 == null && value2 == null || value1 != null && value2 != null && value1.Equals(value2);
+
+        private void ResizeArray(int newCountOfElements)
+        {
+            int newSize = Capacity == 0 ? 1 : Capacity;
+
+            while (newSize < newCountOfElements)
+                newSize <<= 1;
+
+            T[] temp = new T[newSize];
+
+            _data.CopyTo(temp, 0);
+
+            _data = temp;
+        }
     }
 }
