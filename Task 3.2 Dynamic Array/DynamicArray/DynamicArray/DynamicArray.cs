@@ -9,13 +9,17 @@ namespace CustomCollections
 {
     public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>, IReadOnlyCollection<T>, IReadOnlyList<T>
     {
+        private const int BASE_CAPACITY = 8;
+
         private T[] _data;
 
-        public DynamicArray() : this(8) { }
+        public DynamicArray() : this(BASE_CAPACITY) { }
         public DynamicArray(int capacity)
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity), $"Argument {nameof(capacity)} can't be negative.");
+
+            Count = 0;
 
             _data = new T[capacity];
         }
@@ -24,10 +28,7 @@ namespace CustomCollections
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection), $"Argument {nameof(collection)} is null.");
 
-            ResizeArray(collection.Count());
-
-            foreach (var value in collection)
-                Add(value);
+            AddRange(collection);
         }
 
         public int Capacity { get => _data.Length; }
@@ -66,17 +67,22 @@ namespace CustomCollections
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection), $"Argument {nameof(collection)} is null.");
 
-            ResizeArray(Count + collection.Count());
+            int addCnt = collection.Count();
+            if (Count + addCnt > Capacity)
+                ResizeArray(Count + addCnt);
 
             foreach (var value in collection)
-                Add(value);
+            {
+                _data[Count] = value;
+                Count++;
+            }
         }
 
         public void Clear() => Count = 0;
 
         public bool Contains(T item)
         {
-            foreach (var val in _data)
+            foreach (var val in this)
                 if (Equals(item, val))
                     return true;
 
@@ -149,7 +155,7 @@ namespace CustomCollections
             if (match == null)
                 throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
 
-            foreach (var val in _data)
+            foreach (var val in this)
                 if (match(val))
                     return true;
 
@@ -161,7 +167,7 @@ namespace CustomCollections
             if (match == null)
                 throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
 
-            foreach (var val in _data)
+            foreach (var val in this)
                 if (match(val))
                     return val;
 
@@ -174,7 +180,7 @@ namespace CustomCollections
                 throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
 
             DynamicArray<T> result = new DynamicArray<T>();
-            foreach (var val in _data)
+            foreach (var val in this)
                 if (match(val))
                     result.Add(val);
 
@@ -182,7 +188,7 @@ namespace CustomCollections
         }
 
         public int FindIndex(Predicate<T> match) => FindIndex(0, Count, match);
-        public int FindIndex(int startIndex, Predicate<T> match) => FindIndex(startIndex, Count, match);
+        public int FindIndex(int startIndex, Predicate<T> match) => FindIndex(startIndex, Count - startIndex, match);
         public int FindIndex(int startIndex, int count, Predicate<T> match)
         {
             if (match == null)
@@ -218,8 +224,8 @@ namespace CustomCollections
             return default;
         }
 
-        public int FindLastIndex(Predicate<T> match) => FindLastIndex(0, Count, match);
-        public int FindLastIndex(int startIndex, Predicate<T> match) => FindLastIndex(startIndex, Count, match);
+        public int FindLastIndex(Predicate<T> match) => FindLastIndex(Count - 1, Count, match);
+        public int FindLastIndex(int startIndex, Predicate<T> match) => FindLastIndex(startIndex, startIndex + 1, match);
         public int FindLastIndex(int startIndex, int count, Predicate<T> match)
         {
             if (match == null)
@@ -234,8 +240,7 @@ namespace CustomCollections
             if (startIndex - count + 1 < 0)
                 throw new ArgumentException(
                     "index is outside the range of valid indexes for the DynamicArray." +
-                    "-or- count is less than 0. -or- index and count do not specify a valid section" +
-                    "in the DynamicArray.");
+                    "-or- index and count do not specify a valid section in the DynamicArray.");
 
             for (int i = 0; i < count; i++, startIndex--)
                 if (match(_data[startIndex]))
@@ -251,7 +256,7 @@ namespace CustomCollections
 
             try
             {
-                foreach (var val in _data)
+                foreach (var val in this)
                     action(val);
             }
             catch (Exception e)
@@ -313,12 +318,49 @@ namespace CustomCollections
             _data[index] = item;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public void InsertRange(int index, IEnumerable<T> collection)
         {
-            foreach (var val in _data)
-                yield return val;
+            if (collection == null)
+                throw new ArgumentNullException(nameof(collection), $"Argument {nameof(collection)} is null.");
+
+            if (index < 0 || index > Count)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements.");
+
+            int cntNewItems = collection.Count();
+            AddRange(collection);
+
+            for (int i = Count - 1, j = i - cntNewItems; j >= index; i--, j--)
+                _data[i] = _data[j];
+
+            int currentIndex = index;
+            foreach (var item in collection)
+            {
+                _data[currentIndex] = item;
+                currentIndex++;
+            }
         }
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public int LastIndexOf(T item) => LastIndexOf(item, Count - 1);
+        public int LastIndexOf(T item, int index) => LastIndexOf(item, index, index + 1);
+        public int LastIndexOf(T item, int index, int count)
+        {
+            if (index < 0 || index > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Argument {index} can't be negative or greater than count of elements - 1.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
+
+            if (index - count + 1 < 0)
+                throw new ArgumentException(
+                    "index is outside the range of valid indexes for the DynamicArray." +
+                    "-or- index and count do not specify a valid section in the DynamicArray.");
+
+            for (int i = 0; i < count; i++, index--)
+                if (Equals(item, _data[index]))
+                    return index;
+
+            return -1;
+        }
 
         public bool Remove(T item)
         {
@@ -339,18 +381,118 @@ namespace CustomCollections
             return false;
         }
 
+        public int RemoveAll(Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
 
+            int offset = 0;
+            for (int i = 0; i < Count; i++)
+            {
+                if (match(_data[i]))              
+                    offset++;
+                else
+                    _data[i - offset] = _data[i];
+            }
 
+            Count -= offset;
+
+            return offset;
+        }
 
         public void RemoveAt(int index)
         {
             if (index < 0 || index > Count - 1)
                 throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
 
-            for (int i = index; i < Count - 1; i++)
-                _data[i] = _data[i + 1];
+            for (int i = index + 1; i < Count; i++)
+                _data[i - 1] = _data[i];
+
+            Count--;
         }
 
+        public void RemoveRange(int index, int count)
+        {
+            if (index < 0 || index > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Value of {nameof(count)} can't be negative.");
+
+            if (index + count > Count)
+                throw new ArgumentException("index and count do not specify a valid section in the DynamicArray.");
+
+            for (int i = index + count; i < Count; i++)
+                _data[i - count] = _data[i];
+
+            Count -= count;
+        }
+
+        public void Reverse(int index, int count)
+        {
+            if (index < 0 || index > Count - 1)
+                throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), $"Value of {nameof(count)} can't be negative.");
+
+            if (index + count > Count)
+                throw new ArgumentException("index and count do not specify a valid section in the DynamicArray.");
+
+            for (int i = index, j = index + count - 1; i < j; i++, j--)
+            {
+                T temp = _data[i];
+                _data[i] = _data[j];
+                _data[j] = temp;
+            }
+        }
+        public void Reverse() => Reverse(0, Count);
+
+        public T[] ToArray()
+        {
+            T[] result = new T[Count];
+
+            for (int i = 0; i < Count; i++)
+                result[i] = _data[i];
+
+            return result;
+        }
+
+        public void TrimExcess()
+        {
+            int newCapacity = Math.Max(BASE_CAPACITY, Count);
+
+            if (Capacity == newCapacity)
+                return;
+
+            T[] temp = new T[newCapacity];
+
+            for (int i = 0; i < Count; i++)
+                temp[i] = _data[i];
+
+            _data = temp;
+        }
+
+        public bool TrueForAll(Predicate<T> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match), $"Argument {nameof(match)} is null.");
+
+            foreach (var item in this)
+                if (!match(item))
+                    return false;
+
+            return true;
+        }
+
+        // TODO
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Count; i++)
+                yield return _data[i];
+        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private void ResizeArray(int newCountOfElements)
         {
