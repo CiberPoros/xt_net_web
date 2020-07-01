@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomCollections
 {
-    public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>, IReadOnlyCollection<T>, IReadOnlyList<T>
+    public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>, IReadOnlyCollection<T>, IReadOnlyList<T>, ICloneable
     {
         private const int BASE_CAPACITY = 8;
 
@@ -94,7 +92,11 @@ namespace CustomCollections
             if (converter == null)
                 throw new ArgumentNullException(nameof(converter), $"Argument {nameof(converter)} is null.");
 
-            return new DynamicArray<TOutput>(_data.Select(value => converter(value)));
+            TOutput[] temp = new TOutput[Count];
+            for (int i = 0; i < Count; i++)
+                temp[i] = converter(_data[i]);
+
+            return new DynamicArray<TOutput>(temp);
         }         
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -506,6 +508,16 @@ namespace CustomCollections
             _data.CopyTo(temp, 0);
 
             _data = temp;
+        }
+
+        public object Clone()
+        {
+            T[] temp = new T[Capacity];
+
+            for (int i = 0; i < Count; i++)
+                temp[i] = this[i];
+
+            return new DynamicArray<T>(temp);
         }
     }
 }
