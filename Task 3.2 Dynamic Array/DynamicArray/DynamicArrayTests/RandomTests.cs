@@ -11,7 +11,7 @@ namespace DynamicArrayTests
     public class RandomTests
     {
         private const int DEFAULT_STEPS_COUNT = 1000;
-        private const int DEFAULT_COUNT_OF_ELEMENTS = 10;
+        private const int DEFAULT_COUNT_OF_ELEMENTS = 1000;
         private const int DEFAULT_RANDOM_ELEMENT_MIN_VALUE = -100;
         private const int DEFAULT_RANDOM_ELEMENT_MAX_VALUE = 100;
 
@@ -441,6 +441,30 @@ namespace DynamicArrayTests
         }
 
         [TestMethod]
+        public void InsertRangeTest()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                int countElementsInRandomCollection = _random.Next(10);
+                int[] randomCollection = new int[countElementsInRandomCollection];
+
+                for (int j = 0; j < countElementsInRandomCollection; j++)
+                    randomCollection[j] = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+
+                int index = _random.Next(array.Count + 1);
+
+                array.InsertRange(index, randomCollection);
+                list.InsertRange(index, randomCollection);
+
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
         public void LastIndexOfTest1()
         {
             DynamicArray<int> array = new DynamicArray<int>();
@@ -495,23 +519,100 @@ namespace DynamicArrayTests
         }
 
         [TestMethod]
-        public void InsertRangeTest()
+        public void RemoveTest()
         {
             DynamicArray<int> array = new DynamicArray<int>();
             List<int> list = new List<int>();
 
+            FillCollections(array, list);
+
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int countElementsInRandomCollection = _random.Next(10);
-                int[] randomCollection = new int[countElementsInRandomCollection];
+                var randomItem = array.Count == 0 ? _random.Next() : array[_random.Next(array.Count)];
 
-                for (int j = 0; j < countElementsInRandomCollection; j++)
-                    randomCollection[j] = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                if (array.Remove(randomItem) != list.Remove(randomItem))
+                    Assert.Fail();
 
-                int index = _random.Next(array.Count + 1);
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
 
-                array.InsertRange(index, randomCollection);
-                list.InsertRange(index, randomCollection);
+                randomItem = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+
+                if (array.Remove(randomItem) != list.Remove(randomItem))
+                    Assert.Fail();
+
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RemoveAllTest()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                var randomItem = array.Count == 0 ? _random.Next() : array[_random.Next(array.Count)];
+
+                if (array.RemoveAll(item => item <= randomItem) != list.RemoveAll(item => item <= randomItem))
+                    Assert.Fail();
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+
+                randomItem = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+
+                if (array.RemoveAll(item => item <= randomItem) != list.RemoveAll(item => item <= randomItem))
+                    Assert.Fail();
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RemoveAtTest()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                if (array.Count == 0)
+                    return;
+
+                int index = _random.Next(array.Count);
+
+                array.RemoveAt(index);
+                list.RemoveAt(index);
+
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RemoveRangeTest()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                if (array.Count == 0)
+                    return;
+
+                int index = _random.Next(array.Count);
+                int count = _random.Next(Math.Min(10, array.Count - index));
+
+                array.RemoveRange(index, count);
+                list.RemoveRange(index, count);
 
                 if (!HaveEqualsElements(array, list))
                     Assert.Fail();
