@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CustomCollections;
 using System.Collections.Generic;
 using static DynamicArrayTests.Utils;
+using System.Linq;
 
 namespace DynamicArrayTests
 {
@@ -10,7 +11,7 @@ namespace DynamicArrayTests
     public class RandomTests
     {
         private const int DEFAULT_STEPS_COUNT = 1000;
-        private const int DEFAULT_COUNT_OF_ELEMENTS = 1000;
+        private const int DEFAULT_COUNT_OF_ELEMENTS = 10;
         private const int DEFAULT_RANDOM_ELEMENT_MIN_VALUE = -100;
         private const int DEFAULT_RANDOM_ELEMENT_MAX_VALUE = 100;
 
@@ -125,7 +126,6 @@ namespace DynamicArrayTests
             if (!HaveEqualsElements(resArray, resList))
                 Assert.Fail();
         }
-
         [TestMethod]
         public void CopyToTest2()
         {
@@ -134,16 +134,20 @@ namespace DynamicArrayTests
 
             FillCollections(array, list);
 
-            var resArray = new int[array.Count + 10];
-            var resList = new int[list.Count + 10];
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                int incrCount = _random.Next(10);
+                var resArray = new int[array.Count + incrCount];
+                var resList = new int[list.Count + incrCount];
 
-            array.CopyTo(resArray, 5);
-            list.CopyTo(resList, 5);
+                int arrayIndex = _random.Next(resArray.Length - array.Count + 1);
+                array.CopyTo(resArray, arrayIndex);
+                list.CopyTo(resList, arrayIndex);
 
-            if (!HaveEqualsElements(resArray, resList))
-                Assert.Fail();
+                if (!HaveEqualsElements(resArray, resList))
+                    Assert.Fail();
+            }  
         }
-
         [TestMethod]
         public void CopyToTest3()
         {
@@ -152,14 +156,21 @@ namespace DynamicArrayTests
 
             FillCollections(array, list);
 
-            var resArray = new int[array.Count + 10];
-            var resList = new int[list.Count + 10];
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                int incrCount = _random.Next(10);
+                var resArray = new int[array.Count + incrCount];
+                var resList = new int[list.Count + incrCount];
 
-            array.CopyTo(3, resArray, 5, DEFAULT_STEPS_COUNT - 5);
-            list.CopyTo(3, resList, 5, DEFAULT_STEPS_COUNT - 5);
+                int index = _random.Next(array.Count);
+                int count = _random.Next(array.Count - index);
+                int arrayIndex = _random.Next(resArray.Length - count + 1);
+                array.CopyTo(index, resArray, arrayIndex, count);
+                list.CopyTo(index, resList, arrayIndex, count);
 
-            if (!HaveEqualsElements(resArray, resList))
-                Assert.Fail();
+                if (!HaveEqualsElements(resArray, resList))
+                    Assert.Fail();
+            }
         }
 
         [TestMethod]
@@ -229,7 +240,6 @@ namespace DynamicArrayTests
                     Assert.Fail();
             }
         }
-
         [TestMethod]
         public void FindIndexTest2()
         {
@@ -248,7 +258,6 @@ namespace DynamicArrayTests
                     Assert.Fail();
             }
         }
-
         [TestMethod]
         public void FindIndexTest3()
         {
@@ -302,7 +311,6 @@ namespace DynamicArrayTests
                     Assert.Fail();
             }
         }
-
         [TestMethod]
         public void FindLastIndexTest2()
         {
@@ -321,7 +329,6 @@ namespace DynamicArrayTests
                     Assert.Fail();
             }
         }
-
         [TestMethod]
         public void FindLastIndexTest3()
         {
@@ -376,7 +383,6 @@ namespace DynamicArrayTests
                     Assert.Fail();
             }
         }
-
         [TestMethod]
         public void IndexOfTest2()
         {
@@ -395,7 +401,6 @@ namespace DynamicArrayTests
                     Assert.Fail();
             }
         }
-
         [TestMethod]
         public void IndexOfTest3()
         {
@@ -431,6 +436,60 @@ namespace DynamicArrayTests
                 list.Insert(index, randomValue);
 
                 if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void LastIndexOfTest1()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            ActionTest(array, list, testableAction);
+
+            void testableAction(int randomElement)
+            {
+                if (array.LastIndexOf(randomElement) != list.LastIndexOf(randomElement))
+                    Assert.Fail();
+            }
+        }
+        [TestMethod]
+        public void LastIndexOfTest2()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            ActionTest(array, list, testableAction);
+
+            void testableAction(int randomElement)
+            {
+                int index = _random.Next(array.Count);
+
+                if (array.LastIndexOf(randomElement, index) != list.LastIndexOf(randomElement, index))
+                    Assert.Fail();
+            }
+        }
+        [TestMethod]
+        public void LastIndexOfTest3()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            ActionTest(array, list, testableAction);
+
+            void testableAction(int randomElement)
+            {
+                int index = _random.Next(array.Count);
+                int count = _random.Next(index + 1);
+
+                if (array.LastIndexOf(randomElement, index, count) != list.LastIndexOf(randomElement, index, count))
                     Assert.Fail();
             }
         }

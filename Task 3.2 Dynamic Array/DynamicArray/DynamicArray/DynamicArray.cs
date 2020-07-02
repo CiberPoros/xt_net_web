@@ -130,11 +130,10 @@ namespace CustomCollections
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count), $"Argument {count} can't be negative.");
 
-            if (index >= Count || Count - index + arrayIndex > array.Length)
+            if (index + count > Count || arrayIndex + count > array.Length)
                 throw new ArgumentException(
-                    "index is equal to or greater than the DynamicArray.Count" + 
-                    "of the source DynamicArray. -or- The number of elements" +
-                    "from index to the end of the source DynamicArray is greater" +
+                    "The number of elements from index to the end is greater than count of elements in DynamicArray. " +
+                    "-or- the number of elements from index to the end of the source DynamicArray is greater " +
                     "than the available space from arrayIndex to the end of the destination array.");
 
             for (int i = 0; i < count; i++, arrayIndex++)
