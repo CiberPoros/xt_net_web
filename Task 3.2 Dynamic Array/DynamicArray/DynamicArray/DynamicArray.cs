@@ -8,6 +8,7 @@ namespace CustomCollections
     public class DynamicArray<T> : IEnumerable<T>, ICollection<T>, IList<T>, IReadOnlyCollection<T>, IReadOnlyList<T>, ICloneable
     {
         private const int BASE_CAPACITY = 8;
+        private const double TRIM_EXCESS_COUNT_LIMIT = 0.9d;
 
         private T[] _data;
 
@@ -462,17 +463,15 @@ namespace CustomCollections
 
         public void TrimExcess()
         {
-            int newCapacity = Math.Max(BASE_CAPACITY, Count);
+            if ((Count + .0) / Capacity < TRIM_EXCESS_COUNT_LIMIT)
+            {
+                T[] temp = new T[Count];
 
-            if (Capacity == newCapacity)
-                return;
+                for (int i = 0; i < Count; i++)
+                    temp[i] = _data[i];
 
-            T[] temp = new T[newCapacity];
-
-            for (int i = 0; i < Count; i++)
-                temp[i] = _data[i];
-
-            _data = temp;
+                _data = temp;
+            }   
         }
 
         public bool TrueForAll(Predicate<T> match)
@@ -486,8 +485,6 @@ namespace CustomCollections
 
             return true;
         }
-
-        // TODO
 
         public IEnumerator<T> GetEnumerator()
         {
