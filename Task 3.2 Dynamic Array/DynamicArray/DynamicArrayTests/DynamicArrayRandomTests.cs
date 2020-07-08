@@ -2,21 +2,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CustomCollections;
 using System.Collections.Generic;
-using static DynamicArrayTests.Utils;
-using System.Linq;
+using static DynamicArrayTests.RandomTestsUtils;
 
 namespace DynamicArrayTests
 {
     [TestClass]
-    public class RandomTests
+    public class DynamicArrayRandomTests
     {
-        private const int DEFAULT_STEPS_COUNT = 1000;
-        private const int DEFAULT_COUNT_OF_ELEMENTS = 1000;
-        private const int DEFAULT_RANDOM_ELEMENT_MIN_VALUE = -100;
-        private const int DEFAULT_RANDOM_ELEMENT_MAX_VALUE = 100;
-
-        private static readonly Random _random = new Random();
-
         [TestMethod]
         public void AddTest()
         {
@@ -689,32 +681,5 @@ namespace DynamicArrayTests
             if (array.TrueForAll(a => false) != list.TrueForAll(a => false))
                 Assert.Fail();
         }
-
-        private void ActionTest(DynamicArray<int> array, List<int> list, Action<int> testableAction)
-        {
-            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
-            {
-                int randomElement = array[_random.Next(array.Count)];
-                testableAction(randomElement);
-
-                randomElement = list[_random.Next(list.Count)];
-                testableAction(randomElement);
-
-                randomElement = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
-                testableAction(randomElement);
-            }
-        }
-
-        private void FillCollections(DynamicArray<int> dymanicArray, List<int> list, int elementsCount)
-        {
-            for (int i = 0; i < elementsCount; i++)
-            {
-                int value = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
-                dymanicArray.Add(value);
-                list.Add(value);
-            }
-        }
-
-        private void FillCollections(DynamicArray<int> dymanicArray, List<int> list) => FillCollections(dymanicArray, list, DEFAULT_COUNT_OF_ELEMENTS);
     }
 }
