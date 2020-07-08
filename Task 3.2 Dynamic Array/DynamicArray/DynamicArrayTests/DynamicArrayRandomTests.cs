@@ -17,7 +17,7 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int value = _random.Next();
+                int value = RandomTestsUtils.Random.Next();
                 array.Add(value);
                 list.Add(value);
 
@@ -34,11 +34,11 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int len = _random.Next(10);
+                int len = RandomTestsUtils.Random.Next(10);
                 int[] collection = new int[len];
 
                 for (int j = 0; j < len; j++)
-                    collection[j] = _random.Next();
+                    collection[j] = RandomTestsUtils.Random.Next();
 
                 array.AddRange(collection);
                 list.AddRange(collection);
@@ -128,11 +128,11 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int incrCount = _random.Next(10);
+                int incrCount = RandomTestsUtils.Random.Next(10);
                 var resArray = new int[array.Count + incrCount];
                 var resList = new int[list.Count + incrCount];
 
-                int arrayIndex = _random.Next(resArray.Length - array.Count + 1);
+                int arrayIndex = RandomTestsUtils.Random.Next(resArray.Length - array.Count + 1);
                 array.CopyTo(resArray, arrayIndex);
                 list.CopyTo(resList, arrayIndex);
 
@@ -150,13 +150,13 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int incrCount = _random.Next(10);
+                int incrCount = RandomTestsUtils.Random.Next(10);
                 var resArray = new int[array.Count + incrCount];
                 var resList = new int[list.Count + incrCount];
 
-                int index = _random.Next(array.Count);
-                int count = _random.Next(array.Count - index);
-                int arrayIndex = _random.Next(resArray.Length - count + 1);
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(array.Count - index);
+                int arrayIndex = RandomTestsUtils.Random.Next(resArray.Length - count + 1);
                 array.CopyTo(index, resArray, arrayIndex, count);
                 list.CopyTo(index, resList, arrayIndex, count);
 
@@ -244,7 +244,7 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
+                int index = RandomTestsUtils.Random.Next(array.Count);
 
                 if (array.FindIndex(index, a => a <= randomElement) != list.FindIndex(index, a => a <= randomElement))
                     Assert.Fail();
@@ -262,8 +262,8 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
-                int count = _random.Next(array.Count - index);
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(array.Count - index);
 
                 if (array.FindIndex(index, count, a => a <= randomElement) != list.FindIndex(index, count, a => a <= randomElement))
                     Assert.Fail();
@@ -315,7 +315,7 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
+                int index = RandomTestsUtils.Random.Next(array.Count);
 
                 if (array.FindLastIndex(index, a => a <= randomElement) != list.FindLastIndex(index, a => a <= randomElement))
                     Assert.Fail();
@@ -333,8 +333,8 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
-                int count = _random.Next(index + 1);
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(index + 1);
 
                 if (array.FindLastIndex(index, count, a => a <= randomElement) != list.FindLastIndex(index, count, a => a <= randomElement))
                     Assert.Fail();
@@ -351,8 +351,8 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int index = _random.Next(array.Count);
-                int count = _random.Next(array.Count - index);
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(array.Count - index);
 
                 if (!HaveEqualsElements(array.GetRange(index, count), list.GetRange(index, count)))
                     Assert.Fail();
@@ -387,7 +387,7 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
+                int index = RandomTestsUtils.Random.Next(array.Count);
 
                 if (array.IndexOf(randomElement, index) != list.IndexOf(randomElement, index))
                     Assert.Fail();
@@ -405,8 +405,8 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
-                int count = _random.Next(array.Count - index);
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(array.Count - index);
 
                 if (array.IndexOf(randomElement, index, count) != list.IndexOf(randomElement, index, count))
                     Assert.Fail();
@@ -421,8 +421,8 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int randomValue = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
-                int index = _random.Next(array.Count + 1);
+                int randomValue = RandomTestsUtils.Random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                int index = RandomTestsUtils.Random.Next(array.Count + 1);
 
                 array.Insert(index, randomValue);
                 list.Insert(index, randomValue);
@@ -440,13 +440,13 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int countElementsInRandomCollection = _random.Next(10);
+                int countElementsInRandomCollection = RandomTestsUtils.Random.Next(10);
                 int[] randomCollection = new int[countElementsInRandomCollection];
 
                 for (int j = 0; j < countElementsInRandomCollection; j++)
-                    randomCollection[j] = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                    randomCollection[j] = RandomTestsUtils.Random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
 
-                int index = _random.Next(array.Count + 1);
+                int index = RandomTestsUtils.Random.Next(array.Count + 1);
 
                 array.InsertRange(index, randomCollection);
                 list.InsertRange(index, randomCollection);
@@ -484,7 +484,7 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
+                int index = RandomTestsUtils.Random.Next(array.Count);
 
                 if (array.LastIndexOf(randomElement, index) != list.LastIndexOf(randomElement, index))
                     Assert.Fail();
@@ -502,8 +502,8 @@ namespace DynamicArrayTests
 
             void testableAction(int randomElement)
             {
-                int index = _random.Next(array.Count);
-                int count = _random.Next(index + 1);
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(index + 1);
 
                 if (array.LastIndexOf(randomElement, index, count) != list.LastIndexOf(randomElement, index, count))
                     Assert.Fail();
@@ -520,7 +520,7 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                var randomItem = array.Count == 0 ? _random.Next() : array[_random.Next(array.Count)];
+                var randomItem = array.Count == 0 ? RandomTestsUtils.Random.Next() : array[RandomTestsUtils.Random.Next(array.Count)];
 
                 if (array.Remove(randomItem) != list.Remove(randomItem))
                     Assert.Fail();
@@ -528,7 +528,7 @@ namespace DynamicArrayTests
                 if (!HaveEqualsElements(array, list))
                     Assert.Fail();
 
-                randomItem = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                randomItem = RandomTestsUtils.Random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
 
                 if (array.Remove(randomItem) != list.Remove(randomItem))
                     Assert.Fail();
@@ -548,14 +548,14 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                var randomItem = array.Count == 0 ? _random.Next() : array[_random.Next(array.Count)];
+                var randomItem = array.Count == 0 ? RandomTestsUtils.Random.Next() : array[RandomTestsUtils.Random.Next(array.Count)];
 
                 if (array.RemoveAll(item => item <= randomItem) != list.RemoveAll(item => item <= randomItem))
                     Assert.Fail();
                 if (!HaveEqualsElements(array, list))
                     Assert.Fail();
 
-                randomItem = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                randomItem = RandomTestsUtils.Random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
 
                 if (array.RemoveAll(item => item <= randomItem) != list.RemoveAll(item => item <= randomItem))
                     Assert.Fail();
@@ -577,7 +577,7 @@ namespace DynamicArrayTests
                 if (array.Count == 0)
                     return;
 
-                int index = _random.Next(array.Count);
+                int index = RandomTestsUtils.Random.Next(array.Count);
 
                 array.RemoveAt(index);
                 list.RemoveAt(index);
@@ -600,8 +600,8 @@ namespace DynamicArrayTests
                 if (array.Count == 0)
                     return;
 
-                int index = _random.Next(array.Count);
-                int count = _random.Next(Math.Min(10, array.Count - index));
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(Math.Min(10, array.Count - index));
 
                 array.RemoveRange(index, count);
                 list.RemoveRange(index, count);
@@ -638,8 +638,8 @@ namespace DynamicArrayTests
 
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int index = _random.Next(array.Count);
-                int count = _random.Next(Math.Min(10, array.Count - index));
+                int index = RandomTestsUtils.Random.Next(array.Count);
+                int count = RandomTestsUtils.Random.Next(Math.Min(10, array.Count - index));
 
                 array.Reverse(index, count);
                 list.Reverse(index, count);

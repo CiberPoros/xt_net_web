@@ -11,19 +11,19 @@ namespace DynamicArrayTests
         public const int DEFAULT_RANDOM_ELEMENT_MIN_VALUE = -100;
         public const int DEFAULT_RANDOM_ELEMENT_MAX_VALUE = 100;
 
-        public static readonly Random _random = new Random();
+        public static readonly Random Random = new Random();
 
         public static void ActionTest(DynamicArray<int> array, List<int> list, Action<int> testableAction)
         {
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
             {
-                int randomElement = array[_random.Next(array.Count)];
+                int randomElement = array[Random.Next(array.Count)];
                 testableAction(randomElement);
 
-                randomElement = list[_random.Next(list.Count)];
+                randomElement = list[Random.Next(list.Count)];
                 testableAction(randomElement);
 
-                randomElement = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                randomElement = Random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
                 testableAction(randomElement);
             }
         }
@@ -32,7 +32,7 @@ namespace DynamicArrayTests
         {
             for (int i = 0; i < elementsCount; i++)
             {
-                int value = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
+                int value = Random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
                 dymanicArray.Add(value);
                 list.Add(value);
             }
