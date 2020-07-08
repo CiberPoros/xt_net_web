@@ -619,6 +619,77 @@ namespace DynamicArrayTests
             }
         }
 
+        [TestMethod]
+        public void ReverseTest1()
+        {
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                DynamicArray<int> array = new DynamicArray<int>();
+                List<int> list = new List<int>();
+
+                FillCollections(array, list);
+
+                array.Reverse();
+                list.Reverse();
+
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+        [TestMethod]
+        public void ReverseTest2()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                int index = _random.Next(array.Count);
+                int count = _random.Next(Math.Min(10, array.Count - index));
+
+                array.Reverse(index, count);
+                list.Reverse(index, count);
+
+                if (!HaveEqualsElements(array, list))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ToArrayTest()
+        {
+            for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
+            {
+                DynamicArray<int> array = new DynamicArray<int>();
+                List<int> list = new List<int>();
+
+                FillCollections(array, list);
+
+                var arrayRes = array.ToArray();
+                var listRes = array.ToArray();
+
+                if (!HaveEqualsElements(arrayRes, listRes))
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TrueForAllTest()
+        {
+            DynamicArray<int> array = new DynamicArray<int>();
+            List<int> list = new List<int>();
+
+            FillCollections(array, list);
+
+            if (array.TrueForAll(a => true) != list.TrueForAll(a => true))
+                Assert.Fail();
+
+            if (array.TrueForAll(a => false) != list.TrueForAll(a => false))
+                Assert.Fail();
+        }
+
         private void ActionTest(DynamicArray<int> array, List<int> list, Action<int> testableAction)
         {
             for (int i = 0; i < DEFAULT_STEPS_COUNT; i++)
@@ -634,14 +705,16 @@ namespace DynamicArrayTests
             }
         }
 
-        private void FillCollections(DynamicArray<int> dymanicArray, List<int> list)
+        private void FillCollections(DynamicArray<int> dymanicArray, List<int> list, int elementsCount)
         {
-            for (int i = 0; i < DEFAULT_COUNT_OF_ELEMENTS; i++)
+            for (int i = 0; i < elementsCount; i++)
             {
                 int value = _random.Next(DEFAULT_RANDOM_ELEMENT_MIN_VALUE, DEFAULT_RANDOM_ELEMENT_MAX_VALUE);
                 dymanicArray.Add(value);
                 list.Add(value);
             }
         }
+
+        private void FillCollections(DynamicArray<int> dymanicArray, List<int> list) => FillCollections(dymanicArray, list, DEFAULT_COUNT_OF_ELEMENTS);
     }
 }

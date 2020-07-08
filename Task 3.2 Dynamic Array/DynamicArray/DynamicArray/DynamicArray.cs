@@ -30,7 +30,28 @@ namespace CustomCollections
             AddRange(collection);
         }
 
-        public int Capacity { get => _data.Length; }
+        public int Capacity 
+        { 
+            get => _data.Length;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), $"Parameter {nameof(value)} can't be negative.");
+
+                if (value == _data.Length)
+                    return;
+
+                T[] temp = new T[value];
+
+                int newCount = Math.Min(Count, value);
+                for (int i = 0; i < newCount; i++)
+                    temp[i] = _data[i];
+
+                _data = temp;
+                Count = newCount;
+            }
+        }
+
         public int Count { get; private set; }
         public bool IsReadOnly => false;
 
@@ -38,17 +59,17 @@ namespace CustomCollections
         { 
             get
             {
-                if (index < 0 || index > Count - 1)
-                    throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+                if (index < -Count || index > Count - 1)
+                    throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be less than -Count or greater than Count - 1.");
 
-                return _data[index];
+                return _data[(index + Count) % Count];
             }
             set
             {
-                if (index < 0 || index > Count - 1)
-                    throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be negative or greater than count of elements - 1.");
+                if (index < -Count || index > Count - 1)
+                    throw new ArgumentOutOfRangeException(nameof(index), $"Value of {nameof(index)} can't be less than -Count or greater than Count - 1.");
 
-                _data[index] = value;
+                _data[(index + Count) % Count] = value;
             }
         }
 
@@ -307,6 +328,7 @@ namespace CustomCollections
         public int IndexOf(T item, int index) => IndexOf(item, index, Count - index);
         public int IndexOf(T item) => IndexOf(item, 0);
 
+        // TODO: Куда тут вкрутить возвращаемый bool?
         public void Insert(int index, T item)
         {
             if (index < 0 || index > Count)
@@ -485,12 +507,22 @@ namespace CustomCollections
             return true;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public virtual IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < Count; i++)
                 yield return _data[i];
         }
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public object Clone()
+        {
+            T[] temp = new T[Capacity];
+
+            for (int i = 0; i < Count; i++)
+                temp[i] = this[i];
+
+            return new DynamicArray<T>(temp);
+        }
 
         private void ResizeArray(int newCountOfElements)
         {
@@ -504,16 +536,6 @@ namespace CustomCollections
             _data.CopyTo(temp, 0);
 
             _data = temp;
-        }
-
-        public object Clone()
-        {
-            T[] temp = new T[Capacity];
-
-            for (int i = 0; i < Count; i++)
-                temp[i] = this[i];
-
-            return new DynamicArray<T>(temp);
         }
     }
 }
