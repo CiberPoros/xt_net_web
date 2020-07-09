@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task1.SuperArray", "Task1.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperArrayExamples", "SuperArrayExamples\SuperArrayExamples.csproj", "{FCE614E6-B594-413C-9711-8DC762F8EDAB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperString", "SuperString\SuperString.csproj", "{2345FF5B-131A-40AC-B81E-478FD1B832E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperStringExamples", "SuperStringExamples\SuperStringExamples.csproj", "{4194B22E-5512-42CA-AFFC-60E6C09446A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{FCE614E6-B594-413C-9711-8DC762F8EDAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCE614E6-B594-413C-9711-8DC762F8EDAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCE614E6-B594-413C-9711-8DC762F8EDAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2345FF5B-131A-40AC-B81E-478FD1B832E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2345FF5B-131A-40AC-B81E-478FD1B832E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2345FF5B-131A-40AC-B81E-478FD1B832E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2345FF5B-131A-40AC-B81E-478FD1B832E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4194B22E-5512-42CA-AFFC-60E6C09446A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4194B22E-5512-42CA-AFFC-60E6C09446A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4194B22E-5512-42CA-AFFC-60E6C09446A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4194B22E-5512-42CA-AFFC-60E6C09446A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
