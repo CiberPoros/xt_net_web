@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace Task1.SuperArray
 {
-    public static class ArrayHelper
+    public static class ArrayExtensions
     {
         public static void ForEach<T>(this T[] array, Action<T> action)
         {
@@ -32,7 +32,7 @@ namespace Task1.SuperArray
                 array[i] = transformer(array[i]);
         }
 
-        public static T GetCommonest<T>(this T[] array)
+        public static T Commonest<T>(this T[] array)
         {
             if (array == null)
                 throw new ArgumentNullException(nameof(array), $"Parameter {array} can't be null.");
@@ -42,7 +42,7 @@ namespace Task1.SuperArray
 
             return array
                 .GroupBy(val => val)
-                .Aggregate(default(IGrouping<T, T>), (commonest, next) => next.Count() > commonest.Count() ? next : commonest)
+                .Aggregate((commonest, next) => next.Count() > commonest.Count() ? next : commonest)
                 .Key;
         }
 
