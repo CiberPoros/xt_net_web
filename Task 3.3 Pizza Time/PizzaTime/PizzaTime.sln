@@ -11,6 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperString", "SuperString\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperStringExamples", "SuperStringExamples\SuperStringExamples.csproj", "{4194B22E-5512-42CA-AFFC-60E6C09446A5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Task1", "Task1", "{3AED6C81-0621-46B1-8534-7515C9250051}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Task2", "Task2", "{31741293-7FB7-4D2B-A2F4-47A329A4A0B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Task3", "Task3", "{158523C5-EA86-46EF-A81F-FB0523202230}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +42,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E129428-49F1-4B11-8955-E0FDBE1AB79F} = {3AED6C81-0621-46B1-8534-7515C9250051}
+		{FCE614E6-B594-413C-9711-8DC762F8EDAB} = {3AED6C81-0621-46B1-8534-7515C9250051}
+		{2345FF5B-131A-40AC-B81E-478FD1B832E6} = {31741293-7FB7-4D2B-A2F4-47A329A4A0B1}
+		{4194B22E-5512-42CA-AFFC-60E6C09446A5} = {31741293-7FB7-4D2B-A2F4-47A329A4A0B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFC523F8-548E-4D3D-8904-27FB9960DDA8}
