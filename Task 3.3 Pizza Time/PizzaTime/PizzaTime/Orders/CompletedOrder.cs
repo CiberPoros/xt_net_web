@@ -23,7 +23,7 @@ namespace PizzaTime.Orders
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.Append("Полученный заказ. Составляющие: ");
+            stringBuilder.Append($"Полученный заказ # {Number}. Составляющие: ");
             stringBuilder.Append(Environment.NewLine);
 
             foreach (var product in _products)

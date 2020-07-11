@@ -15,9 +15,14 @@ namespace PizzaTime.Cooks
     {
         private bool _isFree;
 
+        private readonly object _locker;
+
         public Cook()
         {
             _isFree = true;
+
+            _locker = new object();
+
             OrderCompleted = delegate { };
 
             OrderCompleted += OnOrderCompleted;
@@ -30,28 +35,38 @@ namespace PizzaTime.Cooks
 
         public event EventHandler<OrderCompletedEventArgs> OrderCompleted;
 
-        public void OnOrderAdded(object sender, OrderAddedEventArgs e) => TakeNewOrder();
+        public async void OnOrderAdded(object sender, OrderAddedEventArgs e) => await TakeNewOrder();
 
-        private void OnOrderCompleted(object sender, OrderCompletedEventArgs e) => TakeNewOrder();
+        private async void OnOrderCompleted(object sender, OrderCompletedEventArgs e) => await TakeNewOrder();
 
-        private void TakeNewOrder()
+        private async Task TakeNewOrder()
         {
-            if (!_isFree)
-                return;
+            IOrder order = null;
 
-            IOrder order = OrderController.Instance.DequeueOrder();
+            lock (_locker)
+            {
+                if (!_isFree)
+                    return;
 
-            if (order == null)
-                return;
+                order = OrderController.Instance.DequeueOrder();
 
-            CompleteOrder(order);
+                if (order == null)
+                    return;
+
+                _isFree = false; 
+            }
+
+            await CompleteOrder(order);
         }
 
-        private void CompleteOrder(IOrder order)
+        private async Task CompleteOrder(IOrder order)
         {
-            _isFree = false;
-
             int allCoocingTime = order.ProductTypes.Sum(productType => AbstractProduct.GetCookintTimeByType(productType));
+
+            var awaiter = Task.Run(async delegate
+            {
+                await Task.Delay(TimeSpan.FromSeconds(allCoocingTime));
+            });
 
             LinkedList<AbstractProduct> completedProducts = new LinkedList<AbstractProduct>();
             foreach (var productType in order.ProductTypes)
@@ -60,6 +75,8 @@ namespace PizzaTime.Cooks
             ICompletedOrder completedOrder = new CompletedOrder(order.Number, completedProducts);
 
             ProductDeliveryWindow.Instance.AddCompletedOrder(completedOrder);
+
+            await awaiter;
 
             _isFree = true;
 

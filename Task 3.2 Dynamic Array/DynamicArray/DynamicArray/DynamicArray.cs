@@ -98,7 +98,13 @@ namespace CustomCollections
             }
         }
 
-        public void Clear() => Count = 0;
+        public void Clear()
+        {
+            for (int i = 0; i < Count; i++)
+                _data[i] = default;
+
+            Count = 0;
+        }
 
         public bool Contains(T item)
         {
@@ -397,6 +403,8 @@ namespace CustomCollections
                         _data[j] = _data[j + 1];
                     }
 
+                    _data[Count - 1] = default;
+
                     Count--;
                     return true;
                 }
@@ -419,6 +427,9 @@ namespace CustomCollections
                     _data[i - offset] = _data[i];
             }
 
+            for (int i = 0; i < offset; i++)
+                _data[Count - 1 - i] = default;
+
             Count -= offset;
 
             return offset;
@@ -432,6 +443,7 @@ namespace CustomCollections
             for (int i = index + 1; i < Count; i++)
                 _data[i - 1] = _data[i];
 
+            _data[Count - 1] = default;
             Count--;
         }
 
@@ -448,6 +460,9 @@ namespace CustomCollections
 
             for (int i = index + count; i < Count; i++)
                 _data[i - count] = _data[i];
+
+            for (int i = 0; i < count; i++)
+                _data[Count - 1 - i] = default;
 
             Count -= count;
         }

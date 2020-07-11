@@ -60,6 +60,8 @@ namespace Restaurant
             };
 
             client2.MakeOrder(productTypes2, restaurant.GetNearCashier());
+
+            Console.ReadKey();
         }
     }
 }

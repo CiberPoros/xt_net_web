@@ -10,9 +10,8 @@ namespace CustomCollections
 
         public override IEnumerator<T> GetEnumerator()
         {
-            while (true)
-                for (int i = 0; i < Count; i++)
-                    yield return this[i];
+            for (int i = 0; ; i = (i + 1) % Count)
+                yield return this[i];
         }
     }
 }
