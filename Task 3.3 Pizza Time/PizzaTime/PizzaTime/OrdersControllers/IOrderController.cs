@@ -5,12 +5,13 @@ using PizzaTime.Orders;
 
 namespace PizzaTime.OrdersControllers
 {
+    // Заказы должны как-то передаваться от кассира в поварам - будем считать, что за это отвечает контроллер
     public interface IOrderController
     {
         event EventHandler<OrderAddedEventArgs> OrderAdded;
 
-        void EnqueueOrder(IOrder order);
+        void EnqueueOrder(AbstractOrder order);
 
-        IOrder DequeueOrder();
+        AbstractOrder DequeueOrder();
     }
 }

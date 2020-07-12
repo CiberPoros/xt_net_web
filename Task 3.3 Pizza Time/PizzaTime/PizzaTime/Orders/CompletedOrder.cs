@@ -5,7 +5,7 @@ using PizzaTime.Products;
 
 namespace PizzaTime.Orders
 {
-    public class CompletedOrder : ICompletedOrder
+    public class CompletedOrder : AbstractCompletedOrder
     {
         protected readonly LinkedList<AbstractProduct> _products;
 
@@ -15,9 +15,7 @@ namespace PizzaTime.Orders
             Number = number;
         }
 
-        public int Number { get; }
-
-        public IReadOnlyCollection<AbstractProduct> Products => _products;
+        public override IReadOnlyCollection<AbstractProduct> Products => _products;
 
         public override string ToString()
         {

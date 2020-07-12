@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using PizzaTime.Orders;
 using PizzaTime.OrdersControllers;
+using PizzaTime.ProductDeliveryWindows;
 
 namespace PizzaTime.Cooks
 {
@@ -10,6 +11,7 @@ namespace PizzaTime.Cooks
     {
         event EventHandler<OrderCompletedEventArgs> OrderCompleted;
 
-        void OnOrderAdded(object sender, OrderAddedEventArgs e);
+        AbstractProductDeliveryWindow NearProductDeliveryWindow { set; }
+        IOrderController OrderController { set; }
     }
 }

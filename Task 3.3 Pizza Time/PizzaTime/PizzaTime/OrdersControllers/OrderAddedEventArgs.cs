@@ -7,11 +7,11 @@ namespace PizzaTime.OrdersControllers
 {
     public class OrderAddedEventArgs : EventArgs
     {
-        public OrderAddedEventArgs(IOrder order)
+        public OrderAddedEventArgs(AbstractOrder order)
         {
             Order = order;
         }
 
-        public IOrder Order { get; }
+        public AbstractOrder Order { get; }
     }
 }

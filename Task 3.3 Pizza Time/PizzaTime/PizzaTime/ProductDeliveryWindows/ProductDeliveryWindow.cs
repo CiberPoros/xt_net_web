@@ -5,24 +5,22 @@ using PizzaTime.Orders;
 
 namespace PizzaTime.ProductDeliveryWindows
 {
-    public class ProductDeliveryWindow : IProductDeliveryWindow
+    public class ProductDeliveryWindow : AbstractProductDeliveryWindow
     {
-        private static readonly Lazy<IProductDeliveryWindow> _instance = new Lazy<IProductDeliveryWindow>(() => new ProductDeliveryWindow());
-
-        private readonly Dictionary<int, ICompletedOrder> _completedOrders;
+        private readonly Dictionary<int, AbstractCompletedOrder> _completedOrders;
 
         private readonly object _locker = new object();
 
-        private ProductDeliveryWindow()
+        public ProductDeliveryWindow(int windowNumber) : base (windowNumber)
         {
-            _completedOrders = new Dictionary<int, ICompletedOrder>();
+            _completedOrders = new Dictionary<int, AbstractCompletedOrder>();
+
+            CompletedOrderTaken = delegate { };
         }
 
-        public static IProductDeliveryWindow Instance => _instance.Value;
+        public override event EventHandler<CompletedOrderTakenEventArgs> CompletedOrderTaken;
 
-        public event EventHandler<CompletedOrderTakenEventArgs> CompletedOrderTaken;
-
-        public void AddCompletedOrder(ICompletedOrder completedOrder)
+        public override void AddCompletedOrder(AbstractCompletedOrder completedOrder)
         {
             if (completedOrder == null)
                 throw new ArgumentNullException(nameof(completedOrder), "Parameter is null.");
@@ -33,9 +31,9 @@ namespace PizzaTime.ProductDeliveryWindows
             }
         }
 
-        public ICompletedOrder ExtractCompletedOrderByNumber(int orderNumber)
+        public override AbstractCompletedOrder ExtractCompletedOrderByNumber(int orderNumber)
         {
-            ICompletedOrder completedOrder = null;
+            AbstractCompletedOrder completedOrder = null;
 
             lock (_locker)
             {

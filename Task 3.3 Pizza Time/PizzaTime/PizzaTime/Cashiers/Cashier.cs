@@ -13,10 +13,14 @@ namespace PizzaTime.Cashiers
 {
     public class Cashier : ICashier
     {
+        private IOrderController _orderController;
+
         public Cashier()
         {
             OrderAccepted = delegate { };
         }
+
+        public IOrderController OrderController { set => _orderController = value ?? throw new ArgumentNullException(nameof(value), "Argument is null."); }
 
         public event EventHandler<OrderAcceptedEventArgs> OrderAccepted;
 
@@ -28,13 +32,16 @@ namespace PizzaTime.Cashiers
             if (!productTypes.Any())
                 throw new ArgumentException("Collection must contains at least one element.", nameof(productTypes));
 
-            IOrder order = new Order(productTypes);
+            if (_orderController == null)
+                throw new NullReferenceException($"{nameof(_orderController)} is null.");
+
+            AbstractOrder order = new Order(productTypes);
 
             giveOrderNumberCallBack(order.Number);
 
             OrderAccepted(this, new OrderAcceptedEventArgs(order));
 
-            OrderController.Instance.EnqueueOrder(order);
+            _orderController.EnqueueOrder(order);
         }
     }
 }

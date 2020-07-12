@@ -6,7 +6,7 @@ using PizzaTime.Products;
 
 namespace PizzaTime.Orders
 {
-    public class Order : IOrder
+    public class Order : AbstractOrder
     {
         private static int _lastNumber;
 
@@ -23,9 +23,7 @@ namespace PizzaTime.Orders
             Number = _lastNumber++;
         }
 
-        public int Number { get; }
-
-        public IReadOnlyCollection<ProductType> ProductTypes => _productTypes;
+        public override IReadOnlyCollection<ProductType> ProductTypes => _productTypes;
 
         public override bool Equals(object obj)
         {

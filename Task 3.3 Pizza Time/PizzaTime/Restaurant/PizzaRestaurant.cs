@@ -11,31 +11,53 @@ using PizzaTime.Cooks;
 using PizzaTime.OrdersControllers;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.Tables;
+using PizzaTime.Restaurants;
 
 namespace Restaurant
 {
-    public class PizzaRestaurant
+    public class PizzaRestaurant : IRestaurant
     {
         private static readonly Random _random = new Random();
 
         private readonly List<ICashier> _cashiers;
         private readonly List<ICook> _cooks;
         private readonly List<ITable> _tables;
+        private readonly Dictionary<int, AbstractProductDeliveryWindow> _productDeliveryWindowsByNumber;
+
+        private readonly IOrderController _orderController;
 
         public PizzaRestaurant()
         {
             _cashiers = new List<ICashier>();
             _cooks = new List<ICook>();
             _tables = new List<ITable>();
+            _productDeliveryWindowsByNumber = new Dictionary<int, AbstractProductDeliveryWindow>();
+
+            _orderController = new OrderController();
         }
 
-        // вариант, что у кассира очередь клиентов, не рассматривается, заказ принимается моментально
-        public ICashier GetNearCashier() => 
-            _cashiers.Any() ? _cashiers[_random.Next(_cashiers.Count)] : throw new Exception("Restaurant doesn't have at least one cashier.");
+        public IReadOnlyList<ICashier> Cashiers => _cashiers;
+        public IReadOnlyList<ITable> Tables => _tables;
+        public IReadOnlyDictionary<int, AbstractProductDeliveryWindow> ProductDeliveryWindows => _productDeliveryWindowsByNumber;
 
-        // у ресторана много панелей, где высвечиваются заказы, поэтому пусть клиент подписывается просто на ближайшее табло
-        public ITable GetNearTable() =>
-            _tables.Any()? _tables[_random.Next(_tables.Count)] : throw new Exception("Restaurant doesn't have at least one table.");
+        public void AddProductDeliveryWindow(AbstractProductDeliveryWindow productDeliveryWindow)
+        {
+            if (productDeliveryWindow == null)
+                throw new ArgumentNullException(nameof(productDeliveryWindow), "Parameter is null.");
+
+            if (_productDeliveryWindowsByNumber.ContainsKey(productDeliveryWindow.WindowNumber))
+                throw new ArgumentException("Product delivery window already exists.", nameof(productDeliveryWindow));
+
+            _productDeliveryWindowsByNumber.Add(productDeliveryWindow.WindowNumber, productDeliveryWindow);
+        }
+
+        public bool RemoveProductDeliveryWindow(AbstractProductDeliveryWindow productDeliveryWindow)
+        {
+            if (productDeliveryWindow == null)
+                throw new ArgumentNullException(nameof(productDeliveryWindow), "Parameter is null.");
+
+            return _productDeliveryWindowsByNumber.Remove(productDeliveryWindow.WindowNumber);
+        }
 
         public void AddCashier(ICashier cashier)
         {
@@ -45,6 +67,7 @@ namespace Restaurant
             if (_cashiers.Contains(cashier))
                 throw new ArgumentException("Cashier already exists.", nameof(cashier));
 
+            cashier.OrderController = _orderController;
             _cashiers.Add(cashier);
         }
 
@@ -64,7 +87,13 @@ namespace Restaurant
             if (_cooks.Contains(cook))
                 throw new ArgumentException("Cook already exists.", nameof(cook));
 
-            OrderController.Instance.OrderAdded += cook.OnOrderAdded;
+            if (!_productDeliveryWindowsByNumber.Any())
+                throw new ProductDeliveryWindowNotFoundException("Product delivery window list is empty! The first add at least one element.");
+
+            cook.OrderController = _orderController;
+
+            int _nearProductDeliveryWindowNumber = _random.Next(_productDeliveryWindowsByNumber.Count); // будем считать, что это выбор ближайшего
+            cook.NearProductDeliveryWindow = _productDeliveryWindowsByNumber.ElementAt(_nearProductDeliveryWindowNumber).Value;
 
             _cooks.Add(cook);
         }
@@ -77,7 +106,8 @@ namespace Restaurant
             if (!_cooks.Contains(cook))
                 return false;
 
-            OrderController.Instance.OrderAdded -= cook.OnOrderAdded;
+            cook.NearProductDeliveryWindow = null;
+            cook.OrderController = null;
 
             return _cooks.Remove(cook);
         }
@@ -96,7 +126,8 @@ namespace Restaurant
             foreach (var cook in _cooks)
                 cook.OrderCompleted += table.OnOrderCompleted;
 
-            ProductDeliveryWindow.Instance.CompletedOrderTaken += table.OnCompletedOrderTaken;
+            foreach (var productDeliverywindow in _productDeliveryWindowsByNumber)
+                productDeliverywindow.Value.CompletedOrderTaken += table.OnCompletedOrderTaken;
 
             _tables.Add(table);
         }
@@ -115,7 +146,8 @@ namespace Restaurant
             foreach (var cook in _cooks)
                 cook.OrderCompleted -= table.OnOrderCompleted;
 
-            ProductDeliveryWindow.Instance.CompletedOrderTaken -= table.OnCompletedOrderTaken;
+            foreach (var productDeliverywindow in _productDeliveryWindowsByNumber)
+                productDeliverywindow.Value.CompletedOrderTaken -= table.OnCompletedOrderTaken;
 
             return _tables.Remove(table);
         }

@@ -11,14 +11,14 @@ namespace PizzaTime.Tables
     public class Table : ITable
     {
         private readonly LinkedList<int> _completingOrdersNumbers;
-        private readonly LinkedList<int> _completedOrdersNumbers;
+        private readonly Dictionary<int, int> _completedOrdersInfosByNumber;
 
         private readonly object _locker;
 
         public Table()
         {
             _completingOrdersNumbers = new LinkedList<int>();
-            _completedOrdersNumbers = new LinkedList<int>();
+            _completedOrdersInfosByNumber = new Dictionary<int, int>();
 
             _locker = new object();
 
@@ -27,15 +27,13 @@ namespace PizzaTime.Tables
 
         public event EventHandler<OrderMarkedCompletedEventArgs> OrderMarkedCompleted;
 
-        public IReadOnlyCollection<int> CompletingOrdersNumbers => _completingOrdersNumbers;
-
-        public IReadOnlyCollection<int> CompletedOrdersNumbers => _completedOrdersNumbers;
-
         public void OnOrderAccepted(object sender, OrderAcceptedEventArgs e)
         {
             lock (_locker)
             {
-                _completingOrdersNumbers.AddLast(e.Order.Number);
+                // TODO: if order number contains - log this 
+                if (_completingOrdersNumbers.Contains(e.Order.Number))
+                    _completingOrdersNumbers.AddLast(e.Order.Number);
             }
         }
 
@@ -43,8 +41,9 @@ namespace PizzaTime.Tables
         {
             lock (_locker)
             {
-                _completingOrdersNumbers.Remove(e.CompletedOrder.Number);
-                _completedOrdersNumbers.Remove(e.CompletedOrder.Number);
+                _completingOrdersNumbers.Remove(e.CompletedOrder.Number); // TODO: if order number contains - log this 
+
+                _completedOrdersInfosByNumber.Remove(e.CompletedOrder.Number);
             }
         }
 
@@ -52,12 +51,13 @@ namespace PizzaTime.Tables
         {
             lock (_locker)
             {
-                _completingOrdersNumbers.Remove(e.CompletedOrder.Number);
+                _completingOrdersNumbers.Remove(e.CompletdOrderInfo.OrderNumber); // TODO: if order number don't contains - log this 
 
-                _completedOrdersNumbers.AddLast(e.CompletedOrder.Number);
+                if (!_completedOrdersInfosByNumber.ContainsKey(e.CompletdOrderInfo.OrderNumber)) // TODO: if order number contains - log this 
+                    _completedOrdersInfosByNumber.Add(e.CompletdOrderInfo.OrderNumber, e.CompletdOrderInfo.ProductDeliveryWindowNumber);
             }
 
-            OrderMarkedCompleted(this, new OrderMarkedCompletedEventArgs(e.CompletedOrder.Number));
+            OrderMarkedCompleted(this, new OrderMarkedCompletedEventArgs(e.CompletdOrderInfo));
         }
     }
 }

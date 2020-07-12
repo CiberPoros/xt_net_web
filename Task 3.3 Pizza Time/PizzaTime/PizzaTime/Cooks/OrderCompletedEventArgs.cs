@@ -7,11 +7,11 @@ namespace PizzaTime.Cooks
 {
     public class OrderCompletedEventArgs : EventArgs
     {
-        public OrderCompletedEventArgs(ICompletedOrder completedOrder)
+        public OrderCompletedEventArgs(CompletdOrderInfo completdOrderInfo)
         {
-            CompletedOrder = completedOrder ?? throw new ArgumentNullException(nameof(completedOrder), "Argument is null.");
+            CompletdOrderInfo = completdOrderInfo;
         }
 
-        public ICompletedOrder CompletedOrder { get; }
+        public CompletdOrderInfo CompletdOrderInfo { get; }
     }
 }

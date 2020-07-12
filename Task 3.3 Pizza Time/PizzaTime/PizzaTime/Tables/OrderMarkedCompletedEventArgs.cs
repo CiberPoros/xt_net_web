@@ -7,11 +7,11 @@ namespace PizzaTime.Tables
 {
     public class OrderMarkedCompletedEventArgs : EventArgs
     {
-        public OrderMarkedCompletedEventArgs(int orderNumber)
+        public OrderMarkedCompletedEventArgs(CompletdOrderInfo completdOrderInfo)
         {
-            OrderNumber = orderNumber;
+            CompletdOrderInfo = completdOrderInfo;
         }
 
-        public int OrderNumber { get; }
+        public CompletdOrderInfo CompletdOrderInfo { get; }
     }
 }

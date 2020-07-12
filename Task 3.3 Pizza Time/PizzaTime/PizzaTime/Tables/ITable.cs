@@ -14,9 +14,6 @@ namespace PizzaTime.Tables
     {
         event EventHandler<OrderMarkedCompletedEventArgs> OrderMarkedCompleted;
 
-        IReadOnlyCollection<int> CompletingOrdersNumbers { get; }
-        IReadOnlyCollection<int> CompletedOrdersNumbers { get; }
-
         void OnOrderAccepted(object sender, OrderAcceptedEventArgs e);
         void OnCompletedOrderTaken(object sender, CompletedOrderTakenEventArgs e);
         void OnOrderCompleted(object sender, OrderCompletedEventArgs e);
