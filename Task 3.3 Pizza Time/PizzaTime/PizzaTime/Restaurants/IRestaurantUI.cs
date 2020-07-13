@@ -8,6 +8,8 @@ namespace PizzaTime.Restaurants
     // Этот интерфейс для клиентов
     public interface IRestaurantUI
     {
+        string RestaurantName { get; }
+
         // пусть ресторан дает юзеру все кассы, а юзер сам выберет, в какую хочет встать
         IReadOnlyCollection<AbstractCashier> Cashiers { get; }
 

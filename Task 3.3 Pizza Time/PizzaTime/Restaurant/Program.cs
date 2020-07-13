@@ -8,6 +8,7 @@ using PizzaTime.Products;
 using PizzaTime.Restaurants;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.OrdersControllers;
+using Logger;
 
 namespace Restaurant
 {
@@ -15,7 +16,7 @@ namespace Restaurant
     {
         static void Main()
         {
-            IRestaurantUI restaurant = CreateRestaurant();
+            IRestaurantUI restaurant = CreateRestaurant(out ILogger logger);
 
             IClient client = new Client();
             client.EnterRestaurant(restaurant);
@@ -51,25 +52,34 @@ namespace Restaurant
             Console.ReadKey();
         }
 
-        private static IRestaurantUI CreateRestaurant()
+        private static void OnLogged(object sender, string logInfo)
         {
-            var restaurant = new PizzaRestaurant(new OrdersController());
+            Console.WriteLine(logInfo);
+            Console.WriteLine();
+        }
 
-            restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(1));
-            restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(2));
-            restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(3));
+        private static IRestaurantUI CreateRestaurant(out ILogger logger)
+        {
+            var restaurant = new PizzaRestaurant(new OrdersController(), "Donna Pizza");
 
-            restaurant.AddCashier(new Cashier(restaurant));
-            restaurant.AddCashier(new Cashier(restaurant));
-            restaurant.AddCashier(new Cashier(restaurant));
-            restaurant.AddCashier(new Cashier(restaurant));
+            logger = new RestaurantActionsLogger(restaurant);
+            logger.Logged += OnLogged;
 
-            restaurant.AddCook(new Cook(restaurant));
-            restaurant.AddCook(new Cook(restaurant));
-            restaurant.AddCook(new Cook(restaurant));
+            restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(restaurant, 1));
+            restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(restaurant, 2));
+            restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(restaurant, 3));
 
-            restaurant.AddTable(new Table(restaurant));
-            restaurant.AddTable(new Table(restaurant));
+            restaurant.AddCashier(new Cashier(restaurant, "Вася"));
+            restaurant.AddCashier(new Cashier(restaurant, "Петя"));
+            restaurant.AddCashier(new Cashier(restaurant, "Даша"));
+            restaurant.AddCashier(new Cashier(restaurant, "Саша"));
+
+            restaurant.AddCook(new Cook(restaurant, "Бурген"));
+            restaurant.AddCook(new Cook(restaurant, "Омар"));
+            restaurant.AddCook(new Cook(restaurant, "Альберто"));
+
+            restaurant.AddTable(new Table(restaurant, 1703));
+            restaurant.AddTable(new Table(restaurant, 1428));
 
             return restaurant;
         }

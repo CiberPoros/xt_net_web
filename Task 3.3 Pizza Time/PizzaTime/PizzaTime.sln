@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaTime", "PizzaTime\Pizz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant", "Restaurant\Restaurant.csproj", "{009F5D3C-75B7-48A8-8C72-755475003965}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{DA08B0E1-B9B8-4035-9741-C8E549110436}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{009F5D3C-75B7-48A8-8C72-755475003965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{009F5D3C-75B7-48A8-8C72-755475003965}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{009F5D3C-75B7-48A8-8C72-755475003965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA08B0E1-B9B8-4035-9741-C8E549110436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA08B0E1-B9B8-4035-9741-C8E549110436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA08B0E1-B9B8-4035-9741-C8E549110436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA08B0E1-B9B8-4035-9741-C8E549110436}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{4194B22E-5512-42CA-AFFC-60E6C09446A5} = {31741293-7FB7-4D2B-A2F4-47A329A4A0B1}
 		{C21FB32D-5643-4940-AA08-8B965B6BA398} = {158523C5-EA86-46EF-A81F-FB0523202230}
 		{009F5D3C-75B7-48A8-8C72-755475003965} = {158523C5-EA86-46EF-A81F-FB0523202230}
+		{DA08B0E1-B9B8-4035-9741-C8E549110436} = {158523C5-EA86-46EF-A81F-FB0523202230}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFC523F8-548E-4D3D-8904-27FB9960DDA8}

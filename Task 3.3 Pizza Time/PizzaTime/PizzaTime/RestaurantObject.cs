@@ -9,7 +9,7 @@ namespace PizzaTime
 
         public RestaurantObject(IRestaurant restaurant)
         {
-            _restaurant = restaurant;
+            _restaurant = restaurant ?? throw new ArgumentNullException(nameof(restaurant), "Argument is null.");
 
             SubscribeToRestaurantObjects();
         }
@@ -19,6 +19,8 @@ namespace PizzaTime
             protected get => _restaurant; 
             set => _restaurant = value ?? throw new ArgumentNullException(nameof(value), "Argument is null."); 
         }
+
+        public abstract RestaurantObjectType RestaurantObjectType { get; }
 
         protected abstract void SubscribeToRestaurantObjects();
         protected abstract void UnsubscribeFromRestaurantObjects();

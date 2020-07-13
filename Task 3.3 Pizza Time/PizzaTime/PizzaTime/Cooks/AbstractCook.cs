@@ -28,6 +28,8 @@ namespace PizzaTime.Cooks
 
         public event EventHandler<OrderCompletedEventArgs> OrderCompleted;
 
+        public override RestaurantObjectType RestaurantObjectType => RestaurantObjectType.Cook;
+
         protected override void SubscribeToRestaurantObjects()
         {
             Restaurant.CookRemoved += OnCookRemoved;

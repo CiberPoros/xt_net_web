@@ -27,6 +27,8 @@ namespace PizzaTime.Tables
 
         public event EventHandler<OrderMarkedCompletedEventArgs> OrderMarkedCompleted;
 
+        public override RestaurantObjectType RestaurantObjectType => RestaurantObjectType.Table;
+
         protected override void SubscribeToRestaurantObjects()
         {
             Restaurant.TableRemoved += OnTableRemoved;

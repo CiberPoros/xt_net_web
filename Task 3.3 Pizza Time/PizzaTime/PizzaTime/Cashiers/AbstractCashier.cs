@@ -16,6 +16,8 @@ namespace PizzaTime.Cashiers
 
         public event EventHandler<OrderAcceptedEventArgs> OrderAccepted;
 
+        public override RestaurantObjectType RestaurantObjectType => RestaurantObjectType.Cashier; 
+
         public virtual void AcceptOrder(ICollection<ProductType> productTypes, Action<int> takeOrderNumberCallBack)
         {
             if (productTypes == null)

@@ -17,9 +17,11 @@ namespace PizzaTime.Restaurants
 
         protected IOrdersController _ordersController;
 
-        public AbstractRestaurant(IOrdersController ordersController)
+        public AbstractRestaurant(IOrdersController ordersController, string restaurantName)
         {
             _ordersController = ordersController ?? throw new ArgumentNullException(nameof(ordersController), "Argument is null.");
+
+            RestaurantName = restaurantName ?? throw new ArgumentNullException(nameof(restaurantName), "Argument is null.");
 
             _cashiers = new List<AbstractCashier>();
             _cooks = new List<AbstractCook>();
@@ -47,6 +49,8 @@ namespace PizzaTime.Restaurants
 
         public event EventHandler<AbstractProductDeliveryWindow> ProductDeliveryWindowAdded;
         public event EventHandler<AbstractProductDeliveryWindow> ProductDeliveryWindowRemoved;
+
+        public string RestaurantName { get; }
 
         public IReadOnlyCollection<AbstractCashier> Cashiers => _cashiers;
         public IReadOnlyCollection<AbstractTable> Tables => _tables;
@@ -161,6 +165,11 @@ namespace PizzaTime.Restaurants
             TableRemoved(this, table);
 
             return true;
+        }
+
+        public override string ToString()
+        {
+            return $"Ресторан с названием {RestaurantName}";
         }
     }
 }

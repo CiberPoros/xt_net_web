@@ -52,6 +52,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{da08b0e1-b9b8-4035-9741-c8e549110436}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PizzaTime\PizzaTime.csproj">
       <Project>{c21fb32d-5643-4940-aa08-8b965b6ba398}</Project>
       <Name>PizzaTime</Name>

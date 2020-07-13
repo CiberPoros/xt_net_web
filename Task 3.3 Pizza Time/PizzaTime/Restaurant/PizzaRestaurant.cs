@@ -5,7 +5,7 @@ namespace Restaurant
 {
     public class PizzaRestaurant : AbstractRestaurant
     {
-        public PizzaRestaurant(IOrdersController ordersController) : base(ordersController)
+        public PizzaRestaurant(IOrdersController ordersController, string restaurantName) : base(ordersController, restaurantName)
         {
 
         }

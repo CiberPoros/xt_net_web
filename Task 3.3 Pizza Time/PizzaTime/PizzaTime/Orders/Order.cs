@@ -21,18 +21,5 @@ namespace PizzaTime.Orders
         }
 
         public override IReadOnlyCollection<ProductType> ProductTypes => _productTypes;
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
-
-            if (!(obj is Order other))
-                return false;
-
-            return Number == other.Number;
-        }
-
-        public override int GetHashCode() => Number;
     }
 }
