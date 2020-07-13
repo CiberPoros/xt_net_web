@@ -1,21 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using PizzaTime.Cashiers;
+using PizzaTime.Cooks;
+using PizzaTime.OrdersControllers;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.Tables;
 
 namespace PizzaTime.Restaurants
 {
+    // Этот интерфейс исключительно для внутренних сущностей ресторана
     public interface IRestaurant
     {
-        // пусть ресторан дает юзеру все кассы, а юзер сам выберет, в какую хочет встать
-        IReadOnlyList<ICashier> Cashiers { get; }
+        IReadOnlyCollection<AbstractCashier> Cashiers { get; }
+        IReadOnlyCollection<AbstractCook> Cooks { get; }
+        IReadOnlyCollection<AbstractTable> Tables { get; }
+        IReadOnlyDictionary<int, AbstractProductDeliveryWindow> ProductDeliveryWindowsByNumber { get; }
 
-        // Табло с информацией о готовящихся/готовых заказах. В ресторане их может быть несколько, но информация во всех идентична. Пусть юзер просто сам выберет, на какой табло подписаться
-        IReadOnlyList<ITable> Tables { get; }
+        event EventHandler<AbstractCashier> CashierAdded;
+        event EventHandler<AbstractCashier> CashierRemoved;
 
-        // Окна выдачи готовых заказов. На табло будет отображаться, в каком окне можно забрать заказ
-        IReadOnlyDictionary<int, AbstractProductDeliveryWindow> ProductDeliveryWindows { get; }
+        event EventHandler<AbstractCook> CookAdded;
+        event EventHandler<AbstractCook> CookRemoved;
+
+        event EventHandler<AbstractTable> TableAdded;
+        event EventHandler<AbstractTable> TableRemoved;
+
+        event EventHandler<AbstractProductDeliveryWindow> ProductDeliveryWindowAdded;
+        event EventHandler<AbstractProductDeliveryWindow> ProductDeliveryWindowRemoved;
+
+        IOrdersController OrdersController { get; }
     }
 }

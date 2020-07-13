@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using PizzaTime.Cashiers;
 using PizzaTime.Clients;
 using PizzaTime.Cooks;
@@ -11,6 +7,7 @@ using PizzaTime.Tables;
 using PizzaTime.Products;
 using PizzaTime.Restaurants;
 using PizzaTime.ProductDeliveryWindows;
+using PizzaTime.OrdersControllers;
 
 namespace Restaurant
 {
@@ -18,7 +15,7 @@ namespace Restaurant
     {
         static void Main()
         {
-            IRestaurant restaurant = CreateRestaurant();
+            IRestaurantUI restaurant = CreateRestaurant();
 
             IClient client = new Client();
             client.EnterRestaurant(restaurant);
@@ -54,25 +51,25 @@ namespace Restaurant
             Console.ReadKey();
         }
 
-        private static IRestaurant CreateRestaurant()
+        private static IRestaurantUI CreateRestaurant()
         {
-            var restaurant = new PizzaRestaurant();
+            var restaurant = new PizzaRestaurant(new OrdersController());
 
             restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(1));
             restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(2));
             restaurant.AddProductDeliveryWindow(new ProductDeliveryWindow(3));
 
-            restaurant.AddCashier(new Cashier());
-            restaurant.AddCashier(new Cashier());
-            restaurant.AddCashier(new Cashier());
-            restaurant.AddCashier(new Cashier());
+            restaurant.AddCashier(new Cashier(restaurant));
+            restaurant.AddCashier(new Cashier(restaurant));
+            restaurant.AddCashier(new Cashier(restaurant));
+            restaurant.AddCashier(new Cashier(restaurant));
 
-            restaurant.AddCook(new Cook());
-            restaurant.AddCook(new Cook());
-            restaurant.AddCook(new Cook());
+            restaurant.AddCook(new Cook(restaurant));
+            restaurant.AddCook(new Cook(restaurant));
+            restaurant.AddCook(new Cook(restaurant));
 
-            restaurant.AddTable(new Table());
-            restaurant.AddTable(new Table());
+            restaurant.AddTable(new Table(restaurant));
+            restaurant.AddTable(new Table(restaurant));
 
             return restaurant;
         }

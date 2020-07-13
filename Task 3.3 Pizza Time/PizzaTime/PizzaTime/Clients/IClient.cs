@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PizzaTime.Cashiers;
-using PizzaTime.Orders;
+﻿using System.Collections.Generic;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.Products;
 using PizzaTime.Restaurants;
@@ -12,10 +8,14 @@ namespace PizzaTime.Clients
 {
     public interface IClient
     {
-        void EnterRestaurant(IRestaurant restaurant);
+        void EnterRestaurant(IRestaurantUI restaurant);
         bool LeaveRestaurant();
 
         // returns order number
         void MakeOrder(ICollection<ProductType> productTypes);
+
+        void OnOrderMarkedCompleted(object sender, OrderMarkedCompletedEventArgs e);
+
+        void TakeCompletedOrder(int orderNumber, IProductDeliveryWindow productDeliveryWindow);
     }
 }

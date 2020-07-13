@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using PizzaTime.Orders;
 
 namespace PizzaTime.OrdersControllers
 {
-    public class OrderController : IOrderController
+    public class OrdersController : IOrdersController
     {
         private readonly Queue<AbstractOrder> _hangingOrders;
 
-        public OrderController()
+        public OrdersController()
         {
             _hangingOrders = new Queue<AbstractOrder>();
 

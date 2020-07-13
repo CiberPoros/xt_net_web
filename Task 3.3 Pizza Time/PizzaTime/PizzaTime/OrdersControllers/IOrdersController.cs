@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using PizzaTime.Orders;
 
 namespace PizzaTime.OrdersControllers
 {
     // Заказы должны как-то передаваться от кассира в поварам - будем считать, что за это отвечает контроллер
-    public interface IOrderController
+    public interface IOrdersController
     {
         event EventHandler<OrderAddedEventArgs> OrderAdded;
 

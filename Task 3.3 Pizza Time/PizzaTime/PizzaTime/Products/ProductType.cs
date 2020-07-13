@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PizzaTime.Products
+﻿namespace PizzaTime.Products
 {
     public enum ProductType : byte
     {

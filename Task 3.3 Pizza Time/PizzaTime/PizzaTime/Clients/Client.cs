@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using PizzaTime.Cashiers;
-using PizzaTime.Orders;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.Products;
 using PizzaTime.Restaurants;
@@ -16,7 +13,7 @@ namespace PizzaTime.Clients
         private static readonly Random _random = new Random();
 
         private readonly HashSet<int> _expectedOrdersNumbers;
-        private IRestaurant _currentRestaurant;
+        private IRestaurantUI _currentRestaurant;
 
         public Client()
         {
@@ -25,18 +22,12 @@ namespace PizzaTime.Clients
 
         public IReadOnlyCollection<int> ExpectedOrdersNumbers => _expectedOrdersNumbers;
 
-        public void EnterRestaurant(IRestaurant restaurant)
+        public void EnterRestaurant(IRestaurantUI restaurant)
         {
             if (_currentRestaurant != null)
                 throw new ClientIsAlreadyInRestaurantException(_currentRestaurant, "Client is already in the restaurant.");
 
             _currentRestaurant = restaurant;
-
-            if (!_currentRestaurant.ProductDeliveryWindows.Any())
-                return;
-
-            foreach (var table in _currentRestaurant.Tables)
-                table.OrderMarkedCompleted += OnOrderMarkedCompleted;
         }
 
         public bool LeaveRestaurant()
@@ -44,6 +35,8 @@ namespace PizzaTime.Clients
             if (_currentRestaurant == null)
                 return false;
 
+            // Вообще, это не обязательно, если клиент заберет все сделанные им заказы, он и так отпишется от всех табло
+            // Но ведь он может уйти, не забрав заказ... Только как остальные сущности будут вести себя в таком случае? // TODO: подумать
             foreach (var table in _currentRestaurant.Tables)
                 table.OrderMarkedCompleted -= OnOrderMarkedCompleted;
 
@@ -52,7 +45,7 @@ namespace PizzaTime.Clients
             return true;
         }
 
-        public void MakeOrder(ICollection<ProductType> productTypes)
+        public virtual void MakeOrder(ICollection<ProductType> productTypes)
         {
             if (productTypes == null)
                 throw new ArgumentNullException(nameof(productTypes), "Argument is null.");
@@ -66,29 +59,62 @@ namespace PizzaTime.Clients
             if (!_currentRestaurant.Cashiers.Any())
                 throw new KeyNotFoundException($"{nameof(_currentRestaurant)} doesn't contains at least one cashier.");
 
-            var сashier = _currentRestaurant.Cashiers[_random.Next(_currentRestaurant.Cashiers.Count)]; // считаем, что выбирает ближайшего.. или свободного
+            foreach (var table in _currentRestaurant.Tables)
+                table.OrderMarkedCompleted += OnOrderMarkedCompleted;
+
+            // считаем, что выбирает ближайшего.. или свободного
+            var сashier = _currentRestaurant.Cashiers.ElementAt(_random.Next(_currentRestaurant.Cashiers.Count)); 
 
             сashier.AcceptOrder(productTypes, TakeOrderNumber);
         }
 
-        private void OnOrderMarkedCompleted(object sender, OrderMarkedCompletedEventArgs e)
+        public virtual void OnOrderMarkedCompleted(object sender, OrderMarkedCompletedEventArgs e)
         {
-            if (_expectedOrdersNumbers.Contains(e.CompletdOrderInfo.OrderNumber))
+            IProductDeliveryWindow productDeliveryWindow;
+            try
             {
-                if (!_currentRestaurant.ProductDeliveryWindows.TryGetValue(e.CompletdOrderInfo.ProductDeliveryWindowNumber, out AbstractProductDeliveryWindow window))
-                {
-                    throw new KeyNotFoundException($"Restaurant does not have a window with number {e.CompletdOrderInfo.ProductDeliveryWindowNumber}.");
-                }
+                productDeliveryWindow = _currentRestaurant.GetProductDeliveryWindowByNumber(e.CompletdOrderInfo.ProductDeliveryWindowNumber);
+            }
+            catch
+            {
+                throw;
+            }
 
-                Console.WriteLine(TakeCompletedOrder(e.CompletdOrderInfo.OrderNumber, window));
+            try
+            {
+                TakeCompletedOrder(e.CompletdOrderInfo.OrderNumber, productDeliveryWindow);
+            }
+            catch (KeyNotFoundException)
+            {
+                // Этот момент не критичен, т.к. клиент может быть подписан сразу на несколько табло, и этот метод тригерят сразу много эвентов.
+                // А номер заказа удаляется сразу после первого триггера эвента
+                // Поэтому на остальные можно не обращать внимания
+                // Этот момент я бы просто логировал
+            }
+            catch
+            {
+                throw;
             }
         }
 
-        private AbstractCompletedOrder TakeCompletedOrder(int orderNumber, AbstractProductDeliveryWindow productDeliveryWindow)
+        public virtual void TakeCompletedOrder(int orderNumber, IProductDeliveryWindow productDeliveryWindow)
         {
-            _expectedOrdersNumbers.Remove(orderNumber);
+            if (!_expectedOrdersNumbers.Remove(orderNumber))
+                throw new KeyNotFoundException($"Client did not place an order with this number.");
 
-            return productDeliveryWindow.ExtractCompletedOrderByNumber(orderNumber);
+            var completedOrder = productDeliveryWindow.ExtractCompletedOrderByNumber(orderNumber);
+            if (completedOrder == null)
+                throw new ArgumentException($"Order with this number doesn't conteins in this product delivery window.", nameof(orderNumber));
+
+            if (!_expectedOrdersNumbers.Any())
+            {
+                foreach (var table in _currentRestaurant.Tables)
+                {
+                    table.OrderMarkedCompleted -= OnOrderMarkedCompleted;
+                }
+            }
+
+            Console.WriteLine(completedOrder);
         }
 
         private void TakeOrderNumber(int orderNumber) => _expectedOrdersNumbers.Add(orderNumber);
