@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.Products;
 using PizzaTime.Restaurants;
@@ -10,6 +11,9 @@ namespace PizzaTime.Clients
 {
     public class Client : IClient
     {
+        private const int MIN_MOVING_TIME_TO_PRODUCT_WINDOW_IN_MILLISECONDS = 500;
+        private const int MAX_MOVING_TIME_TO_PRODUCT_WINDOW_IN_MILLISECONDS = 2000;
+
         private static readonly Random _random = new Random();
 
         private readonly HashSet<int> _expectedOrdersNumbers;
@@ -68,20 +72,15 @@ namespace PizzaTime.Clients
             сashier.AcceptOrder(productTypes, TakeOrderNumber);
         }
 
-        public virtual void OnOrderMarkedCompleted(object sender, OrderMarkedCompletedEventArgs e)
+        public async virtual void OnOrderMarkedCompleted(object sender, OrderMarkedCompletedEventArgs e)
         {
+            // имитация похода до окна выдачи продуктов
+            await Task.Delay(TimeSpan.FromMilliseconds(_random.Next(MIN_MOVING_TIME_TO_PRODUCT_WINDOW_IN_MILLISECONDS, MAX_MOVING_TIME_TO_PRODUCT_WINDOW_IN_MILLISECONDS)));
+
             IProductDeliveryWindow productDeliveryWindow;
             try
             {
                 productDeliveryWindow = _currentRestaurant.GetProductDeliveryWindowByNumber(e.CompletdOrderInfo.ProductDeliveryWindowNumber);
-            }
-            catch
-            {
-                throw;
-            }
-
-            try
-            {
                 TakeCompletedOrder(e.CompletdOrderInfo.OrderNumber, productDeliveryWindow);
             }
             catch (KeyNotFoundException)

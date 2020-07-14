@@ -2,7 +2,7 @@
 {
     public class Pizza : AbstractProduct
     {
-        public const int COOKING_TIME = 5;
+        public const int COOKING_TIME = 2;
 
         public override int CookingTimeInSeconds => COOKING_TIME;
 

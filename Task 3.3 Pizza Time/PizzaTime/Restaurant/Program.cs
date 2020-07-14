@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using PizzaTime.Cashiers;
 using PizzaTime.Clients;
 using PizzaTime.Cooks;
@@ -9,6 +8,7 @@ using PizzaTime.Restaurants;
 using PizzaTime.ProductDeliveryWindows;
 using PizzaTime.OrdersControllers;
 using Logger;
+using System.Linq;
 
 namespace Restaurant
 {
@@ -18,39 +18,27 @@ namespace Restaurant
         {
             IRestaurantUI restaurant = CreateRestaurant(out ILogger logger);
 
-            IClient client = new Client();
-            client.EnterRestaurant(restaurant);
-
-            var productTypes = new List<ProductType>
-            {
-                ProductType.Pizza,
-                ProductType.Pizza,
-                ProductType.Shawarma,
-                ProductType.Shawarma,
-            };
-            client.MakeOrder(productTypes);
-
-            productTypes.Clear();
-
-            productTypes.Add(ProductType.Pizza);
-            productTypes.Add(ProductType.Shawarma);
-            client.MakeOrder(productTypes);
+            IClient client1 = new Client();
+            client1.EnterRestaurant(restaurant);
 
             IClient client2 = new Client();
             client2.EnterRestaurant(restaurant);
 
-            var productTypes2 = new List<ProductType>
-            {
-                ProductType.Shawarma,
-                ProductType.Shawarma,
-                ProductType.Shawarma,
-                ProductType.Shawarma,
-            };
+            IClient client3 = new Client();
+            client3.EnterRestaurant(restaurant);
 
-            client2.MakeOrder(productTypes2);
+            MakeOrder(client1, ProductType.Pizza);
+            MakeOrder(client2, ProductType.Pizza, ProductType.Shawarma);
+            MakeOrder(client1, ProductType.Pizza);
+            MakeOrder(client3, ProductType.Shawarma, ProductType.Shawarma, ProductType.Shawarma);
+            MakeOrder(client1, ProductType.Shawarma);
 
             Console.ReadKey();
         }
+
+        private static void MakeOrder(IClient client, params ProductType[] productTypes) =>
+            client.MakeOrder(productTypes.ToList());
+
 
         private static void OnLogged(object sender, string logInfo)
         {
