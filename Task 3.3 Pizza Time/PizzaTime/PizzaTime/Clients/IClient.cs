@@ -11,11 +11,7 @@ namespace PizzaTime.Clients
         void EnterRestaurant(IRestaurantUI restaurant);
         bool LeaveRestaurant();
 
-        // returns order number
         void MakeOrder(ICollection<ProductType> productTypes);
-
-        void OnOrderMarkedCompleted(object sender, OrderMarkedCompletedEventArgs e);
-
         void TakeCompletedOrder(int orderNumber, IProductDeliveryWindow productDeliveryWindow);
     }
 }

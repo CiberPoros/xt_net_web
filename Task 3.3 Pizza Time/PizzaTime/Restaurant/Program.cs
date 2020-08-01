@@ -39,7 +39,6 @@ namespace Restaurant
         private static void MakeOrder(IClient client, params ProductType[] productTypes) =>
             client.MakeOrder(productTypes.ToList());
 
-
         private static void OnLogged(object sender, string logInfo)
         {
             Console.WriteLine(logInfo);
