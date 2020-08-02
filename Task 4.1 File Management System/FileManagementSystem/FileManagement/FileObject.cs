@@ -20,9 +20,12 @@ namespace FileManagement
             if (!File.Exists(fullName))
                 throw new ArgumentException("File does not exists.", nameof(fullName));
 
-            Data = File.ReadAllBytes(fullName);
+            InitData = File.ReadAllBytes(fullName);
+            LastData = new byte[InitData.Length];
+            Array.Copy(InitData, LastData, InitData.Length);
         }
 
-        public byte[] Data { get; set; }
+        public byte[] InitData { get; set; }
+        public byte[] LastData { get; set; }
     }
 }

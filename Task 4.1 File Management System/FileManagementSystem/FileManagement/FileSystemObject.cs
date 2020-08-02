@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileManagement.FilesChangeManagers.FileChangeDescriptions;
 
 namespace FileManagement
 {
@@ -21,6 +22,8 @@ namespace FileManagement
             FullPath = fullName ?? throw new ArgumentNullException(nameof(fullName));
             StartMonitoringTime = startMonitoringTime;
         }
+
+        public List<FileSystemObjectChangeDescription> FileChangeDescriptions { get; set; } = new List<FileSystemObjectChangeDescription>();
 
         public string FullPath
         {

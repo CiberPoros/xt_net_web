@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace FileManagement.FilesChangeManagers.FileChangeDescriptions
 {
     [Serializable]
-    public class AddDataDescription : FileChangeDescription
+    public class AddDataDescription : FileSystemObjectChangeDescription
     {
         public AddDataDescription()
         {

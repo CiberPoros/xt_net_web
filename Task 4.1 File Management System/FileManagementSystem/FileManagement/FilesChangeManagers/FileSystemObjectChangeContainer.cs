@@ -5,19 +5,19 @@ using FileManagement.FilesChangeManagers.FileChangeDescriptions;
 namespace FileManagement.FilesChangeManagers
 {
     [Serializable]
-    public class FileChangesObject
+    public class FileSystemObjectChangeContainer
     {
-        public FileChangesObject()
+        public FileSystemObjectChangeContainer()
         {
         }
 
-        public FileChangesObject(string fullPath, List<FileChangeDescription> fileChangeDescriptions)
+        public FileSystemObjectChangeContainer(string fullPath, List<FileSystemObjectChangeDescription> fileChangeDescriptions)
         {
             FullPath = fullPath;
             FileChangeDescriptions = fileChangeDescriptions;
         }
 
         public string FullPath { get; set; }
-        public List<FileChangeDescription> FileChangeDescriptions { get; set; } = new List<FileChangeDescription>();
+        public List<FileSystemObjectChangeDescription> FileChangeDescriptions { get; set; } = new List<FileSystemObjectChangeDescription>();
     }
 }

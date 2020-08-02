@@ -43,12 +43,12 @@
   <ItemGroup>
     <Compile Include="DirectoryObject.cs" />
     <Compile Include="FilesChangeManagers\FileChangeDescriptions\AddDataDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\CreateFileDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\DeleteFileDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\FileChangeDescription.cs" />
+    <Compile Include="FilesChangeManagers\FileChangeDescriptions\CreateFileSystemObjectDescription.cs" />
+    <Compile Include="FilesChangeManagers\FileChangeDescriptions\DeleteFileSystemObjectDescription.cs" />
+    <Compile Include="FilesChangeManagers\FileChangeDescriptions\FileSystemObjectChangeDescription.cs" />
     <Compile Include="FilesChangeManagers\FileChangeDescriptions\RemoveDataDescription.cs" />
-    <Compile Include="FilesChangeManagers\FilesChangeManager.cs" />
-    <Compile Include="FilesChangeManagers\FileChangesObject.cs" />
+    <Compile Include="FilesChangeManagers\FileSystemChangeManager.cs" />
+    <Compile Include="FilesChangeManagers\FileSystemObjectChangeContainer.cs" />
     <Compile Include="FileObject.cs" />
     <Compile Include="FileSystemObject.cs" />
     <Compile Include="FilesObserver.cs" />
@@ -56,6 +56,7 @@
     <Compile Include="IFilesRestorer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializableDictionary.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

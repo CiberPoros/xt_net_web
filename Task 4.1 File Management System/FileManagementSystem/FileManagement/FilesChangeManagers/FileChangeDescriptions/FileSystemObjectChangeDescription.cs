@@ -2,14 +2,14 @@
 
 namespace FileManagement.FilesChangeManagers.FileChangeDescriptions
 {
-    public abstract class FileChangeDescription
+    public abstract class FileSystemObjectChangeDescription
     {
-        protected FileChangeDescription()
+        protected FileSystemObjectChangeDescription()
         {
 
         }
 
-        protected FileChangeDescription(DateTime changeDateTime)
+        protected FileSystemObjectChangeDescription(DateTime changeDateTime)
         {
             ChangeDateTime = changeDateTime;
         }

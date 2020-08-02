@@ -21,15 +21,16 @@ namespace FileManagement
 
             foreach (var fileInfo in directoryInfo.GetFiles())
             {
-                InnerFileSystemObjects.Add(new FileObject(fileInfo.FullName, startMonitoringTime));
+                InnerFileObjects.Add(new FileObject(fileInfo.FullName, startMonitoringTime));
             }
 
             foreach (var directory in directoryInfo.GetDirectories())
             {
-                InnerFileSystemObjects.Add(new DirectoryObject(directory.FullName, startMonitoringTime));
+                InnerDirectoryObjects.Add(new DirectoryObject(directory.FullName, startMonitoringTime));
             }
         }
 
-        public List<FileSystemObject> InnerFileSystemObjects { get; set; } = new List<FileSystemObject>();
+        public List<DirectoryObject> InnerDirectoryObjects { get; set; } = new List<DirectoryObject>();
+        public List<FileObject> InnerFileObjects { get; set; } = new List<FileObject>();
     }
 }
