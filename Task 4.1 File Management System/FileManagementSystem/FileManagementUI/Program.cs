@@ -4,19 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileManagement;
+using FileManagement.FilesObservers;
+using FileManagement.FilesRestorers;
+using FileManagement.Interfaces;
 
 namespace FileManagementUI
 {
-    class Program
+    internal class Program
     {
-        private static readonly string observableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
-        private static readonly string backupDirectoryPath = $@"{Environment.CurrentDirectory}\BackupDirectory";
+        private static readonly string ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
 
         private const int MaxCountOfEnumElements = 9;
         private const char ExitSymbol = 'q';
         private const ConsoleKey ExitConsoleKey = ConsoleKey.Q;
 
-        private static readonly Dictionary<ConsoleKey, int> _keysForReadEnumFromConsole = new Dictionary<ConsoleKey, int>()
+        private static readonly Dictionary<ConsoleKey, int> KeysForReadEnumFromConsole = new Dictionary<ConsoleKey, int>()
         {
             {ConsoleKey.D1, 1},
             {ConsoleKey.NumPad1, 1},
@@ -38,12 +40,33 @@ namespace FileManagementUI
             {ConsoleKey.NumPad9, 9},
         };
 
-        static void Main(string[] args)
+        internal static void Main()
         {
-            IFilesObserver observer = new FilesObserver(observableDirectoryPath, backupDirectoryPath);
-            observer.StartObserving();
-            var val = ReadEnumValueFromConsole<WorkMode>();
-            Console.WriteLine(val);
+            while (true)
+            {
+                bool exit = false;
+                switch (ReadEnumValueFromConsole<WorkMode>())
+                {
+                    case WorkMode.None:
+                        break;
+                    case WorkMode.Observer:
+                        IFilesObserver observer = new FilesObserver(ObservableDirectoryPath);
+                        observer.StartObserving();
+                        break;
+                    case WorkMode.Restorer:
+                        IFilesRestorer restorer = new FilesRestorer();
+                        Console.WriteLine("Enter date:");
+                        var date = Console.ReadLine();
+                        restorer.Restore(DateTime.Now, ObservableDirectoryPath);
+                        break;
+                    case null:
+                        exit = true;
+                        break;
+                }
+
+                if (exit)
+                    break;
+            }
         }
 
         /// <summary>
@@ -78,7 +101,7 @@ namespace FileManagementUI
                 if (key.Key == ExitConsoleKey)
                     return null;
 
-                if (_keysForReadEnumFromConsole.TryGetValue(key.Key, out var enumValueNumber))
+                if (KeysForReadEnumFromConsole.TryGetValue(key.Key, out var enumValueNumber))
                 {
                     int currentIndex = 1;
                     foreach (var enumValue in enumValues)

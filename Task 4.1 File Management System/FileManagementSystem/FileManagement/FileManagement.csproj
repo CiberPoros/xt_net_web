@@ -41,21 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectoryObject.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\AddDataDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\CreateFileSystemObjectDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\DeleteFileSystemObjectDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\FileSystemObjectChangeDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileChangeDescriptions\RemoveDataDescription.cs" />
-    <Compile Include="FilesChangeManagers\FileSystemChangeManager.cs" />
-    <Compile Include="FilesChangeManagers\FileSystemObjectChangeContainer.cs" />
-    <Compile Include="FileObject.cs" />
-    <Compile Include="FileSystemObject.cs" />
-    <Compile Include="FilesObserver.cs" />
-    <Compile Include="IFilesObserver.cs" />
-    <Compile Include="IFilesRestorer.cs" />
+    <Compile Include="FileChangeDescriptions\DataChangeFileSystemObjectDescription.cs" />
+    <Compile Include="FilesRestorers\FilesRestorer.cs" />
+    <Compile Include="FileSystemObjects\DirectoryObject.cs" />
+    <Compile Include="FileChangeDescriptions\CreateFileSystemObjectDescription.cs" />
+    <Compile Include="FileChangeDescriptions\DeleteFileSystemObjectDescription.cs" />
+    <Compile Include="FileChangeDescriptions\FileSystemObjectChangeDescription.cs" />
+    <Compile Include="FileSystemObjects\FileObject.cs" />
+    <Compile Include="FileSystemObjects\FileSystemObject.cs" />
+    <Compile Include="FilesObservers\FilesObserver.cs" />
+    <Compile Include="Interfaces\IFilesObserver.cs" />
+    <Compile Include="Interfaces\IFilesRestorer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />

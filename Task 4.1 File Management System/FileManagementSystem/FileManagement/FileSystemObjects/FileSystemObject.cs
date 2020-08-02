@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FileManagement.FilesChangeManagers.FileChangeDescriptions;
+using FileManagement.FileChangeDescriptions;
 
-namespace FileManagement
+namespace FileManagement.FileSystemObjects
 {
     [Serializable]
     public abstract class FileSystemObject
@@ -31,6 +28,6 @@ namespace FileManagement
             set => _fullPath = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public DateTime StartMonitoringTime { get; }
+        public DateTime StartMonitoringTime { get; set; }
     }
 }

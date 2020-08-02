@@ -1,34 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.IO;
-using System.Security.Permissions;
+using System.Linq;
 using System.Xml.Serialization;
-using FileManagement.FilesChangeManagers;
-using FileManagement.FilesChangeManagers.FileChangeDescriptions;
+using FileManagement.FileChangeDescriptions;
+using FileManagement.FileSystemObjects;
+using FileManagement.Interfaces;
 
-namespace FileManagement
+namespace FileManagement.FilesObservers
 {
     public class FilesObserver : IFilesObserver
     {
-        private const string InitialBackupFileName = "Initial save.txt";
-
         private bool _wasChangeOnLastCheck = false;
 
         private DirectoryObject _observableDirectoryObject;
-        private readonly string _backupDirectoryPath;
 
-        public FilesObserver(string path, string backupDirectoryPath)
+        public FilesObserver(string path)
         {
             if (!Directory.Exists(path))
                 throw new ArgumentException("Directory does not exist", nameof(path));
 
-            _backupDirectoryPath = backupDirectoryPath;
-
-            if (!Directory.Exists(backupDirectoryPath))
+            if (!Directory.Exists(Utils.BackupDirectoryPath))
             {
                 Init(path);
                 return;
@@ -40,12 +32,12 @@ namespace FileManagement
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine($"Error of load last backup. File not found.");
+                Debug.WriteLine($"Error of load last backup. File not found.");
                 Init(path);
             }
             catch (Exception)
             {
-                Console.WriteLine($"Error of load last backup.");
+                Debug.WriteLine($"Error of load last backup.");
                 Init(path);
             }
         }
@@ -69,10 +61,19 @@ namespace FileManagement
 
             CheckAddFileSystemObjects(directoryObject, dateTime);
 
+            CheckFilesChanges(directoryObject, dateTime);
+        }
+
+        private void CheckFilesChanges(DirectoryObject directoryObject, DateTime dateTime)
+        {
             foreach (var innerFileObject in directoryObject.InnerFileObjects)
             {
                 var fi = new FileInfo(innerFileObject.FullPath);
-                byte[] data = null;
+
+                if (!fi.Exists)
+                    continue;
+
+                byte[] data;
 
                 try
                 {
@@ -80,31 +81,19 @@ namespace FileManagement
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Something went wrong with files comparing...");
+                    Debug.WriteLine("Something went wrong with files comparing...");
                     continue;
                 }
 
                 if (innerFileObject.LastData != null && Utils.GetHash(innerFileObject.LastData) == Utils.GetHash(data))
                     continue;
 
-                if (innerFileObject.LastData == null)
-                {
-                    innerFileObject.LastData = data;
-
-                    var temp = new byte[data.Length];
-                    Array.Copy(data, temp, data.Length);
-
-                    innerFileObject.FileChangeDescriptions.Add(new AddDataDescription(dateTime, 0, temp));
-                    _wasChangeOnLastCheck = true;
-                    continue;
-                }
-
-                // TODO: подумать
-                innerFileObject.FileChangeDescriptions.Add(new RemoveDataDescription(dateTime, 0, innerFileObject.LastData.Length));
-                innerFileObject.FileChangeDescriptions.Add(new AddDataDescription(dateTime, 0, data.ToArray()));
-
                 innerFileObject.LastData = data;
 
+                var temp = new byte[data.Length];
+                Array.Copy(data, temp, data.Length);
+
+                innerFileObject.FileChangeDescriptions.Add(new DataChangeFileSystemObjectDescription(dateTime, temp));
                 _wasChangeOnLastCheck = true;
             }
         }
@@ -177,7 +166,7 @@ namespace FileManagement
 
         private void Init(string path)
         {
-            Directory.CreateDirectory(_backupDirectoryPath);
+            Directory.CreateDirectory(Utils.BackupDirectoryPath);
             _observableDirectoryObject = new DirectoryObject(path, DateTime.Now);
 
             Save();
@@ -185,19 +174,12 @@ namespace FileManagement
 
         private void Save()
         {
-            var serializer = new XmlSerializer(typeof(DirectoryObject), new Type[]
-            {
-                typeof(FileObject),
-                typeof(AddDataDescription),
-                typeof(CreateFileSystemObjectDescription),
-                typeof(DeleteFileSystemObjectDescription),
-                typeof(RemoveDataDescription)
-            });
+            var serializer = new XmlSerializer(typeof(DirectoryObject), Utils.UsableTypesForSerialization);
 
-            if (File.Exists(MakeInitialBackupFileFullName()))
-                File.Delete(MakeInitialBackupFileFullName());
+            if (File.Exists(Utils.BackupFileFullName))
+                File.Delete(Utils.BackupFileFullName);
 
-            using (var fs = new FileStream(MakeInitialBackupFileFullName(), FileMode.OpenOrCreate))
+            using (var fs = new FileStream(Utils.BackupFileFullName, FileMode.OpenOrCreate))
             {
                 serializer.Serialize(fs, _observableDirectoryObject);
             }
@@ -205,21 +187,12 @@ namespace FileManagement
 
         private void LoadLastBackup()
         {
-            var serializer = new XmlSerializer(typeof(DirectoryObject), new[]
-            {
-                typeof(FileObject),
-                typeof(AddDataDescription),
-                typeof(CreateFileSystemObjectDescription),
-                typeof(DeleteFileSystemObjectDescription),
-                typeof(RemoveDataDescription)
-            });
+            var serializer = new XmlSerializer(typeof(DirectoryObject), Utils.UsableTypesForSerialization);
 
-            using (var fs = new FileStream(MakeInitialBackupFileFullName(), FileMode.Open))
+            using (var fs = new FileStream(Utils.BackupFileFullName, FileMode.Open))
             {
                 _observableDirectoryObject = (DirectoryObject)serializer.Deserialize(fs);
             }
         }
-
-        private string MakeInitialBackupFileFullName() => $@"{_backupDirectoryPath}\{InitialBackupFileName}";
     }
 }

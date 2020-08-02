@@ -1,13 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FileManagement.FileChangeDescriptions;
+using FileManagement.FileSystemObjects;
 
 namespace FileManagement
 {
-    public static class Utils
+    internal static class Utils
     {
+        public const string InitialBackupFileName = "Backup.txt";
+
+        public static readonly string BackupDirectoryPath = $@"{Environment.CurrentDirectory}\BackupDirectory";
+
+        public static readonly Type[] UsableTypesForSerialization = new Type[]
+        {
+            typeof(FileObject),
+            typeof(DataChangeFileSystemObjectDescription),
+            typeof(CreateFileSystemObjectDescription),
+            typeof(DeleteFileSystemObjectDescription)
+        };
+
+        public static string BackupFileFullName => $@"{Utils.BackupDirectoryPath}\{Utils.InitialBackupFileName}";
+
         public static int GetHash(byte[] data)
         {
             unchecked

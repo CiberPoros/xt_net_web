@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileManagement.FilesChangeManagers.FileChangeDescriptions
+namespace FileManagement.FileChangeDescriptions
 {
     public abstract class FileSystemObjectChangeDescription
     {
