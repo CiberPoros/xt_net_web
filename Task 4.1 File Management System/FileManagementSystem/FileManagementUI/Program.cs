@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileManagement;
 
 namespace FileManagementUI
 {
     class Program
     {
+        private static readonly string observableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
+        private static readonly string backupDirectoryPath = $@"{Environment.CurrentDirectory}\BackupDirectory";
+
         private const int MaxCountOfEnumElements = 9;
         private const char ExitSymbol = 'q';
         private const ConsoleKey ExitConsoleKey = ConsoleKey.Q;
@@ -36,6 +40,7 @@ namespace FileManagementUI
 
         static void Main(string[] args)
         {
+            IFilesObserver observer = new FilesObserver(observableDirectoryPath, backupDirectoryPath);
             var val = ReadEnumValueFromConsole<WorkMode>();
             Console.WriteLine(val);
         }

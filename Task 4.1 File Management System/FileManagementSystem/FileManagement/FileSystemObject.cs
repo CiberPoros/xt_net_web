@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace FileManagement
 {
+    [Serializable]
     public abstract class FileSystemObject
     {
         private string _fullPath;
+
+        protected FileSystemObject()
+        {
+
+        }
 
         protected FileSystemObject(string fullName, DateTime startMonitoringTime)
         {

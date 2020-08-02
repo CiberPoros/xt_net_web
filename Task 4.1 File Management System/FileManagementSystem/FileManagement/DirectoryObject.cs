@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace FileManagement
 {
+    [Serializable]
     public class DirectoryObject : FileSystemObject
     {
+        public DirectoryObject()
+        {
+
+        }
+
         public DirectoryObject(string fullName, DateTime startMonitoringTime) : base(fullName, startMonitoringTime)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(fullName);
@@ -24,6 +30,6 @@ namespace FileManagement
             }
         }
 
-        public List<FileSystemObject> InnerFileSystemObjects { get; } = new List<FileSystemObject>();
+        public List<FileSystemObject> InnerFileSystemObjects { get; set; } = new List<FileSystemObject>();
     }
 }
