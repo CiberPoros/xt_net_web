@@ -15,7 +15,8 @@ namespace FileManagement
     public class FilesObserver : IFilesObserver
     {
         private const string InitialBackupFileName = "Initial save.txt";
-        private const string ChangesStorageFileName = "Changes.txt";
+
+        private bool _wasChangeOnLastCheck = false;
 
         private DirectoryObject _observableDirectoryObject;
         private readonly string _backupDirectoryPath;
@@ -51,7 +52,15 @@ namespace FileManagement
 
         public void StartObserving()
         {
-            
+            while (true)
+            {
+                Observe(_observableDirectoryObject, DateTime.Now);
+
+                if (_wasChangeOnLastCheck)
+                    Save();
+
+                _wasChangeOnLastCheck = false;
+            }
         }
 
         private void Observe(DirectoryObject directoryObject, DateTime dateTime)
@@ -86,12 +95,21 @@ namespace FileManagement
                     Array.Copy(data, temp, data.Length);
 
                     innerFileObject.FileChangeDescriptions.Add(new AddDataDescription(dateTime, 0, temp));
+                    _wasChangeOnLastCheck = true;
                     continue;
                 }
+
+                // TODO: подумать
+                innerFileObject.FileChangeDescriptions.Add(new RemoveDataDescription(dateTime, 0, innerFileObject.LastData.Length));
+                innerFileObject.FileChangeDescriptions.Add(new AddDataDescription(dateTime, 0, data.ToArray()));
+
+                innerFileObject.LastData = data;
+
+                _wasChangeOnLastCheck = true;
             }
         }
 
-        private static void CheckAddFileSystemObjects(DirectoryObject directoryObject, DateTime dateTime)
+        private void CheckAddFileSystemObjects(DirectoryObject directoryObject, DateTime dateTime)
         {
             DirectoryInfo currentDirectoryInfo = new DirectoryInfo(directoryObject.FullPath);
 
@@ -102,6 +120,9 @@ namespace FileManagement
                     var dirObj = new DirectoryObject(directoryInfo.FullName, dateTime);
                     directoryObject.InnerDirectoryObjects.Add(dirObj);
                     dirObj.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription(dateTime));
+                    _wasChangeOnLastCheck = true;
+
+                    Observe(dirObj, dateTime);
                 }
             }
 
@@ -112,6 +133,7 @@ namespace FileManagement
                     var fileObject = new FileObject(fileInfo.FullName, dateTime);
                     directoryObject.InnerFileObjects.Add(fileObject);
                     fileObject.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription(dateTime));
+                    _wasChangeOnLastCheck = true;
                 }
                 else if (directoryObject.InnerFileObjects.Find(fileObj =>
                     fileObj.FullPath == fileInfo.FullName && fileObj.LastData == null) != null)
@@ -119,18 +141,26 @@ namespace FileManagement
                     var obj = directoryObject.InnerFileObjects.Find(fileObj =>
                         fileObj.FullPath == fileInfo.FullName && fileObj.LastData == null);
 
+                    if (obj != null)
+                        _wasChangeOnLastCheck = true;
+
                     obj?.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription());
                 }
             }
         }
 
-        private static void CheckDeleteFileSystemObjects(DirectoryObject directoryObject, DateTime dateTime)
+        private void CheckDeleteFileSystemObjects(DirectoryObject directoryObject, DateTime dateTime)
         {
             foreach (var innerDirectoryObject in directoryObject.InnerDirectoryObjects)
             {
                 if (!Directory.Exists(innerDirectoryObject.FullPath))
                 {
                     innerDirectoryObject.FileChangeDescriptions.Add(new DeleteFileSystemObjectDescription(dateTime));
+                    _wasChangeOnLastCheck = true;
+                }
+                else
+                {
+                    Observe(innerDirectoryObject, dateTime);
                 }
             }
 
@@ -140,6 +170,7 @@ namespace FileManagement
                 {
                     innerFileObject.FileChangeDescriptions.Add(new DeleteFileSystemObjectDescription(dateTime));
                     innerFileObject.LastData = null;
+                    _wasChangeOnLastCheck = true;
                 }
             }
         }
@@ -149,6 +180,11 @@ namespace FileManagement
             Directory.CreateDirectory(_backupDirectoryPath);
             _observableDirectoryObject = new DirectoryObject(path, DateTime.Now);
 
+            Save();
+        }
+
+        private void Save()
+        {
             var serializer = new XmlSerializer(typeof(DirectoryObject), new Type[]
             {
                 typeof(FileObject),
@@ -158,8 +194,13 @@ namespace FileManagement
                 typeof(RemoveDataDescription)
             });
 
-            serializer.Serialize(new FileStream(
-                MakeInitialBackupFileFullName(), FileMode.OpenOrCreate), _observableDirectoryObject);
+            if (File.Exists(MakeInitialBackupFileFullName()))
+                File.Delete(MakeInitialBackupFileFullName());
+
+            using (var fs = new FileStream(MakeInitialBackupFileFullName(), FileMode.OpenOrCreate))
+            {
+                serializer.Serialize(fs, _observableDirectoryObject);
+            }
         }
 
         private void LoadLastBackup()
@@ -173,11 +214,12 @@ namespace FileManagement
                 typeof(RemoveDataDescription)
             });
 
-            _observableDirectoryObject = (DirectoryObject)serializer.Deserialize(
-                new FileStream(MakeInitialBackupFileFullName(), FileMode.Open));
+            using (var fs = new FileStream(MakeInitialBackupFileFullName(), FileMode.Open))
+            {
+                _observableDirectoryObject = (DirectoryObject)serializer.Deserialize(fs);
+            }
         }
 
         private string MakeInitialBackupFileFullName() => $@"{_backupDirectoryPath}\{InitialBackupFileName}";
-        private string MakeChangesStorageFileFullName() => $@"{_backupDirectoryPath}\{ChangesStorageFileName}";
     }
 }

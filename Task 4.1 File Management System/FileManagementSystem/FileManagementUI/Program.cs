@@ -41,6 +41,7 @@ namespace FileManagementUI
         static void Main(string[] args)
         {
             IFilesObserver observer = new FilesObserver(observableDirectoryPath, backupDirectoryPath);
+            observer.StartObserving();
             var val = ReadEnumValueFromConsole<WorkMode>();
             Console.WriteLine(val);
         }
