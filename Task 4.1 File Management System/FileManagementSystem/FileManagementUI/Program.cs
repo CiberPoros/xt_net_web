@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FileManagement;
+using System.IO;
 using FileManagement.FilesObservers;
 using FileManagement.FilesRestorers;
 using FileManagement.Interfaces;
@@ -12,11 +9,19 @@ namespace FileManagementUI
 {
     internal class Program
     {
-        private static readonly string ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
-
         private const int MaxCountOfEnumElements = 9;
         private const char ExitSymbol = 'q';
         private const ConsoleKey ExitConsoleKey = ConsoleKey.Q;
+
+        private const string LoggingHasStartedMessage = "Logging has started. To stop logging close the program.";
+        private const string LoggingProcessMessage = "Logging...";
+        private const string EnterDateMessage = "Enter date with format \"mm/dd/yy hh:mm:ss\":";
+        private const string ErrorInputMessage = "Error input. Try again...";
+        private const string NoneEnumTypeName = "NONE";
+        private const string EnteredFutureDateMessage = "Entered a future date. Last backup will be restored...";
+        private const string RestoringIsCompletedMessage = "Restoring is completed!";
+
+        private static readonly string ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
 
         private static readonly Dictionary<ConsoleKey, int> KeysForReadEnumFromConsole = new Dictionary<ConsoleKey, int>()
         {
@@ -40,28 +45,31 @@ namespace FileManagementUI
             {ConsoleKey.NumPad9, 9},
         };
 
+        private static readonly string PressToExitMessage = $"{ExitSymbol}. - Press to exit...";
+        private static readonly string IncorrectEnumFieldsCountErrorMessage = $"This method can't be used for enums with more than {MaxCountOfEnumElements}";
+
         internal static void Main()
         {
+            CreateWordDirectory();
+
             while (true)
             {
-                bool exit = false;
+                var exit = false;
                 switch (ReadEnumValueFromConsole<WorkMode>())
                 {
-                    case WorkMode.None:
+                    case WorkMode.NONE:
                         break;
-                    case WorkMode.Observer:
-                        IFilesObserver observer = new FilesObserver(ObservableDirectoryPath);
-                        observer.StartObserving();
+                    case WorkMode.OBSERVER:
+                        HandleObserve();
                         break;
-                    case WorkMode.Restorer:
-                        IFilesRestorer restorer = new FilesRestorer();
-                        Console.WriteLine("Enter date:");
-                        var date = Console.ReadLine();
-                        restorer.Restore(DateTime.Now, ObservableDirectoryPath);
+                    case WorkMode.RESTORER:
+                        HandleRestore();
                         break;
                     case null:
                         exit = true;
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 if (exit)
@@ -69,29 +77,66 @@ namespace FileManagementUI
             }
         }
 
+        private static void CreateWordDirectory()
+        {
+            if (!Directory.Exists(ObservableDirectoryPath))
+                Directory.CreateDirectory(ObservableDirectoryPath);
+        }
+
+        private static void HandleObserve()
+        {
+            IFilesObserver observer = new FilesObserver(ObservableDirectoryPath);
+
+            Console.WriteLine(LoggingHasStartedMessage);
+            Console.WriteLine(LoggingProcessMessage);
+
+            observer.StartObserving();
+        }
+
+        private static void HandleRestore()
+        {
+            IFilesRestorer restorer = new FilesRestorer();
+            Console.WriteLine(EnterDateMessage);
+
+            DateTime dateTime;
+
+            while (!DateTime.TryParse(Console.ReadLine(), out dateTime))
+            {
+                Console.WriteLine(ErrorInputMessage);
+            }
+
+            if (dateTime > DateTime.Now)
+                Console.WriteLine(EnteredFutureDateMessage);
+
+            restorer.Restore(dateTime, ObservableDirectoryPath);
+
+            Console.WriteLine(RestoringIsCompletedMessage);
+            Console.WriteLine();
+        }
+
         /// <summary>
         /// Returns enum type or null for exit
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T? ReadEnumValueFromConsole<T>(bool skipNone = true) where T : struct, Enum
+        private static T? ReadEnumValueFromConsole<T>(bool skipNone = true) where T : struct, Enum
         {
             var enumValues = (T[])Enum.GetValues(typeof(T));
             if (enumValues.Length > MaxCountOfEnumElements)
-                throw new ArgumentException($"This method can't be used for enums with more than {MaxCountOfEnumElements}",
+                throw new ArgumentException(IncorrectEnumFieldsCountErrorMessage,
                     $"Enum type name: {typeof(T)}");
 
-            int startIndex = 1;
+            var startIndex = 1;
             foreach (var enumValue in enumValues)
             {
-                if (skipNone && enumValue.ToString().ToUpper() == "NONE")
+                if (skipNone && enumValue.ToString().ToUpper() == NoneEnumTypeName)
                     continue;
 
                 Console.WriteLine($"{startIndex}. - {enumValue};");
                 startIndex++;
             }
 
-            Console.WriteLine($"{ExitSymbol}. - Exit to previous menu...");
+            Console.WriteLine(PressToExitMessage);
 
             while (true)
             {
@@ -103,10 +148,10 @@ namespace FileManagementUI
 
                 if (KeysForReadEnumFromConsole.TryGetValue(key.Key, out var enumValueNumber))
                 {
-                    int currentIndex = 1;
+                    var currentIndex = 1;
                     foreach (var enumValue in enumValues)
                     {
-                        if (skipNone && enumValue.ToString().ToUpper() == "NONE")
+                        if (skipNone && enumValue.ToString().ToUpper() == NoneEnumTypeName)
                             continue;
 
                         if (currentIndex == enumValueNumber)
@@ -116,7 +161,7 @@ namespace FileManagementUI
                     }
                 }
 
-                Console.WriteLine("Error input. Try again...");
+                Console.WriteLine(ErrorInputMessage);
             }
         }
     }

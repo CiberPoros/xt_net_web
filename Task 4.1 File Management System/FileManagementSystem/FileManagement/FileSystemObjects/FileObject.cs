@@ -6,6 +6,8 @@ namespace FileManagement.FileSystemObjects
     [Serializable]
     public class FileObject : FileSystemObject
     {
+        private const string FileDoesNotExistsError = "File does not exists.";
+
         public FileObject()
         {
 
@@ -14,7 +16,7 @@ namespace FileManagement.FileSystemObjects
         public FileObject(string fullName, DateTime startMonitoringTime) : base(fullName, startMonitoringTime)
         {
             if (!File.Exists(fullName))
-                throw new ArgumentException("File does not exists.", nameof(fullName));
+                throw new ArgumentException(FileDoesNotExistsError, nameof(fullName));
 
             InitData = File.ReadAllBytes(fullName);
             LastData = new byte[InitData.Length];

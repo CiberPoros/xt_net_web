@@ -11,6 +11,11 @@ namespace FileManagement.FilesObservers
 {
     public class FilesObserver : IFilesObserver
     {
+        private const string DirectoryDoesNotExistError = "Directory does not exist";
+        private const string FileNotFountError = "Error of load last backup. File not found.";
+        private const string LastBackupLoadError = "Error of load last backup.";
+        private const string ComparingFilesError = "Something went wrong with files comparing...";
+
         private bool _wasChangeOnLastCheck = false;
 
         private DirectoryObject _observableDirectoryObject;
@@ -18,7 +23,7 @@ namespace FileManagement.FilesObservers
         public FilesObserver(string path)
         {
             if (!Directory.Exists(path))
-                throw new ArgumentException("Directory does not exist", nameof(path));
+                throw new ArgumentException(DirectoryDoesNotExistError, nameof(path));
 
             if (!Directory.Exists(Utils.BackupDirectoryPath))
             {
@@ -32,12 +37,12 @@ namespace FileManagement.FilesObservers
             }
             catch (FileNotFoundException)
             {
-                Debug.WriteLine($"Error of load last backup. File not found.");
+                Debug.WriteLine(FileNotFountError);
                 Init(path);
             }
             catch (Exception)
             {
-                Debug.WriteLine($"Error of load last backup.");
+                Debug.WriteLine(LastBackupLoadError);
                 Init(path);
             }
         }
@@ -81,7 +86,7 @@ namespace FileManagement.FilesObservers
                 }
                 catch (Exception)
                 {
-                    Debug.WriteLine("Something went wrong with files comparing...");
+                    Debug.WriteLine(ComparingFilesError);
                     continue;
                 }
 
@@ -102,38 +107,44 @@ namespace FileManagement.FilesObservers
         {
             DirectoryInfo currentDirectoryInfo = new DirectoryInfo(directoryObject.FullPath);
 
-            foreach (var directoryInfo in currentDirectoryInfo.GetDirectories())
+            if (currentDirectoryInfo.Exists)
             {
-                if (directoryObject.InnerDirectoryObjects.All(dirObj => dirObj.FullPath != directoryInfo.FullName))
+                foreach (var directoryInfo in currentDirectoryInfo.GetDirectories())
                 {
-                    var dirObj = new DirectoryObject(directoryInfo.FullName, dateTime);
-                    directoryObject.InnerDirectoryObjects.Add(dirObj);
-                    dirObj.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription(dateTime));
-                    _wasChangeOnLastCheck = true;
+                    if (directoryObject.InnerDirectoryObjects.All(dirObj => dirObj.FullPath != directoryInfo.FullName))
+                    {
+                        var dirObj = new DirectoryObject(directoryInfo.FullName, dateTime);
+                        directoryObject.InnerDirectoryObjects.Add(dirObj);
+                        dirObj.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription(dateTime));
+                        _wasChangeOnLastCheck = true;
 
-                    Observe(dirObj, dateTime);
+                        Observe(dirObj, dateTime);
+                    }
                 }
             }
 
-            foreach (var fileInfo in currentDirectoryInfo.GetFiles())
+            if (currentDirectoryInfo.Exists)
             {
-                if (directoryObject.InnerFileObjects.All(fileObj => fileObj.FullPath != fileInfo.FullName))
+                foreach (var fileInfo in currentDirectoryInfo.GetFiles())
                 {
-                    var fileObject = new FileObject(fileInfo.FullName, dateTime);
-                    directoryObject.InnerFileObjects.Add(fileObject);
-                    fileObject.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription(dateTime));
-                    _wasChangeOnLastCheck = true;
-                }
-                else if (directoryObject.InnerFileObjects.Find(fileObj =>
-                    fileObj.FullPath == fileInfo.FullName && fileObj.LastData == null) != null)
-                {
-                    var obj = directoryObject.InnerFileObjects.Find(fileObj =>
-                        fileObj.FullPath == fileInfo.FullName && fileObj.LastData == null);
-
-                    if (obj != null)
+                    if (directoryObject.InnerFileObjects.All(fileObj => fileObj.FullPath != fileInfo.FullName))
+                    {
+                        var fileObject = new FileObject(fileInfo.FullName, dateTime);
+                        directoryObject.InnerFileObjects.Add(fileObject);
+                        fileObject.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription(dateTime));
                         _wasChangeOnLastCheck = true;
+                    }
+                    else if (directoryObject.InnerFileObjects.Find(fileObj =>
+                        fileObj.FullPath == fileInfo.FullName && fileObj.LastData == null) != null)
+                    {
+                        var obj = directoryObject.InnerFileObjects.Find(fileObj =>
+                            fileObj.FullPath == fileInfo.FullName && fileObj.LastData == null);
 
-                    obj?.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription());
+                        if (obj != null)
+                            _wasChangeOnLastCheck = true;
+
+                        obj?.FileChangeDescriptions.Add(new CreateFileSystemObjectDescription());
+                    }
                 }
             }
         }
@@ -142,15 +153,16 @@ namespace FileManagement.FilesObservers
         {
             foreach (var innerDirectoryObject in directoryObject.InnerDirectoryObjects)
             {
+                if (innerDirectoryObject.FileChangeDescriptions.Any() && innerDirectoryObject.FileChangeDescriptions.Last() is DeleteFileSystemObjectDescription)
+                    continue;
+
                 if (!Directory.Exists(innerDirectoryObject.FullPath))
                 {
                     innerDirectoryObject.FileChangeDescriptions.Add(new DeleteFileSystemObjectDescription(dateTime));
                     _wasChangeOnLastCheck = true;
                 }
-                else
-                {
-                    Observe(innerDirectoryObject, dateTime);
-                }
+
+                Observe(innerDirectoryObject, dateTime);
             }
 
             foreach (var innerFileObject in directoryObject.InnerFileObjects)

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using FileManagement.FileChangeDescriptions;
 using FileManagement.FileSystemObjects;
@@ -15,6 +11,8 @@ namespace FileManagement.FilesRestorers
 {
     public class FilesRestorer : IFilesRestorer
     {
+        private const string CanNotLoadLastBackupError = "Can't load last backup.";
+
         private static string RestoreCatalogName =>
             $"Restore_{DateTime.Now.ToString("G", CultureInfo.CreateSpecificCulture("de-DE")).Replace(':', '-')}";
 
@@ -31,7 +29,7 @@ namespace FileManagement.FilesRestorers
             }
             catch (Exception)
             {
-                Debug.WriteLine("Can't load last backup.");
+                Debug.WriteLine(CanNotLoadLastBackupError);
             }
         }
 
@@ -85,7 +83,17 @@ namespace FileManagement.FilesRestorers
             }
 
             if (existed)
-                CreateRestoredDirection(directoryObject);
+            {
+                try
+                {
+                    CreateRestoredDirection(directoryObject);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"Can't restore direction: {directoryObject.FullPath}");
+                    return;
+                }
+            }
 
             RestoreDirectoryObject(directoryObject);
         }
@@ -117,7 +125,16 @@ namespace FileManagement.FilesRestorers
             }
 
             if (existed)
-                CreateRestoredFile(fileObject, data);
+            {
+                try
+                {
+                    CreateRestoredFile(fileObject, data);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"Can't restore file: {fileObject.FullPath}");
+                }
+            }
         }
 
         private void CreateRestoredDirection(DirectoryObject directoryObject) =>
