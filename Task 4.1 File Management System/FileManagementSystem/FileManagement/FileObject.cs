@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,12 @@ namespace FileManagement
 {
     public class FileObject : FileSystemObject
     {
-        public FileObject(string fullPath, DateTime startMonitoringTime, byte[] data) : base(fullPath, startMonitoringTime)
+        public FileObject(string fullName, DateTime startMonitoringTime) : base(fullName, startMonitoringTime)
         {
-            Data = data;
+            if (!File.Exists(fullName))
+                throw new ArgumentException("File does not exists.", nameof(fullName));
+
+            Data = File.ReadAllBytes(fullName);
         }
 
         public byte[] Data { get; }

@@ -44,7 +44,9 @@
     <Compile Include="DirectoryObject.cs" />
     <Compile Include="FileObject.cs" />
     <Compile Include="FileSystemObject.cs" />
-    <Compile Include="FileSystemObjectManager.cs" />
+    <Compile Include="FilesObserver.cs" />
+    <Compile Include="IFilesObserver.cs" />
+    <Compile Include="IFilesRestorer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

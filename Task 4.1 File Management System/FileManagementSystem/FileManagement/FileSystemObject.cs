@@ -10,9 +10,9 @@ namespace FileManagement
     {
         private string _fullPath;
 
-        protected FileSystemObject(string fullPath, DateTime startMonitoringTime)
+        protected FileSystemObject(string fullName, DateTime startMonitoringTime)
         {
-            FullPath = fullPath ?? throw new ArgumentNullException(nameof(fullPath));
+            FullPath = fullName ?? throw new ArgumentNullException(nameof(fullName));
             StartMonitoringTime = startMonitoringTime;
         }
 
