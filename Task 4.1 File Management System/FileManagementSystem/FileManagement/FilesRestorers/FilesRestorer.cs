@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using FileManagement.FileChangeDescriptions;
 using FileManagement.FileSystemObjects;
@@ -11,9 +12,7 @@ namespace FileManagement.FilesRestorers
 {
     public class FilesRestorer : IFilesRestorer
     {
-        private const string CanNotLoadLastBackupError = "Can't load last backup.";
-
-        private static string RestoreCatalogName =>
+        private static readonly string RestoreCatalogName = 
             $"Restore_{DateTime.Now.ToString("G", CultureInfo.CreateSpecificCulture("de-DE")).Replace(':', '-')}";
 
         private string _restoreCatalog;
@@ -27,9 +26,13 @@ namespace FileManagement.FilesRestorers
             {
                 LoadLastBackup();
             }
-            catch (Exception)
+            catch (FileNotFoundException e)
             {
-                Debug.WriteLine(CanNotLoadLastBackupError);
+                Debug.WriteLine($"Couldn't load last backup: file not found. Details: {e}");
+            }
+            catch (IOException e)
+            {
+                Debug.WriteLine($"Couldn't load last backup. Details: {e}");
             }
         }
 
@@ -48,6 +51,12 @@ namespace FileManagement.FilesRestorers
 
             RestoreDirectory(_observableDirectoryObject);
         }
+
+        private static void ShowRestoreErrorMessageToConsole(string fullPath) =>
+            Console.WriteLine($"Couldn't restore direction: {fullPath}");
+
+        private static void ShowRestorePathToLongErrorMessageToConsole(string fullPath) =>
+            Console.WriteLine($"Couldn't restore direction (Path too long): {fullPath}");
 
         private void RestoreDirectoryObject(DirectoryObject directoryObject)
         {
@@ -69,28 +78,24 @@ namespace FileManagement.FilesRestorers
             directoryObject.FileChangeDescriptions.Sort((
                 val1, val2) => val2.ChangeDateTime.CompareTo(val1.ChangeDateTime));
 
-            bool existed = directoryObject.StartMonitoringTime < _restoreTime;
-            foreach (var fileChangeDescription in directoryObject.FileChangeDescriptions)
-            {
-                if (fileChangeDescription.ChangeDateTime > _restoreTime)
-                    break;
+            bool willExist = WillDirectoryExistAfterRestore(directoryObject);
 
-                if (fileChangeDescription is DeleteFileSystemObjectDescription)
-                    existed = false;
-
-                if (fileChangeDescription is CreateFileSystemObjectDescription)
-                    existed = true;
-            }
-
-            if (existed)
+            if (willExist)
             {
                 try
                 {
                     CreateRestoredDirection(directoryObject);
                 }
-                catch (Exception)
+                catch (PathTooLongException e)
                 {
-                    Console.WriteLine($"Can't restore direction: {directoryObject.FullPath}");
+                    ShowRestorePathToLongErrorMessageToConsole(directoryObject.FullPath);
+                    Debug.WriteLine(e);
+                    return;
+                }
+                catch (IOException e)
+                {
+                    ShowRestoreErrorMessageToConsole(directoryObject.FullPath);
+                    Debug.WriteLine(e);
                     return;
                 }
             }
@@ -103,8 +108,31 @@ namespace FileManagement.FilesRestorers
             fileObject.FileChangeDescriptions.Sort((
                 val1, val2) => val2.ChangeDateTime.CompareTo(val1.ChangeDateTime));
 
-            bool existed = fileObject.StartMonitoringTime < _restoreTime;
+            var (willExist, data) = WillFileObjectExistAfterRestore(fileObject);
+
+            if (willExist)
+            {
+                try
+                {
+                    CreateRestoredFile(fileObject, data);
+                }
+                catch (PathTooLongException e)
+                {
+                    ShowRestorePathToLongErrorMessageToConsole(fileObject.FullPath);
+                    Debug.WriteLine(e);
+                }
+                catch (IOException e)
+                {
+                    ShowRestoreErrorMessageToConsole(fileObject.FullPath);
+                    Debug.WriteLine(e);
+                }
+            }
+        }
+
+        private (bool willExist, byte[] data) WillFileObjectExistAfterRestore(FileObject fileObject)
+        {
             byte[] data = fileObject.InitData;
+            bool willExist = fileObject.StartMonitoringTime < _restoreTime;
 
             foreach (var fileChangeDescription in fileObject.FileChangeDescriptions)
             {
@@ -112,38 +140,54 @@ namespace FileManagement.FilesRestorers
                     break;
 
                 if (fileChangeDescription is DeleteFileSystemObjectDescription)
-                    existed = false;
+                    willExist = false;
 
                 if (fileChangeDescription is CreateFileSystemObjectDescription)
-                    existed = true;
+                    willExist = true;
 
                 if (fileChangeDescription is DataChangeFileSystemObjectDescription description)
                 {
-                    existed = true;
+                    willExist = true;
                     data = description.NewData;
                 }
             }
 
-            if (existed)
+            return (willExist, data);
+        }
+
+        private bool WillDirectoryExistAfterRestore(DirectoryObject directoryObject)
+        {
+            bool willExist = directoryObject.StartMonitoringTime < _restoreTime;
+
+            foreach (var fileChangeDescription in directoryObject.FileChangeDescriptions)
             {
-                try
-                {
-                    CreateRestoredFile(fileObject, data);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine($"Can't restore file: {fileObject.FullPath}");
-                }
+                if (fileChangeDescription.ChangeDateTime > _restoreTime)
+                    break;
+
+                if (fileChangeDescription is DeleteFileSystemObjectDescription)
+                    willExist = false;
+
+                if (fileChangeDescription is CreateFileSystemObjectDescription)
+                    willExist = true;
             }
+
+            return willExist;
         }
 
         private void CreateRestoredDirection(DirectoryObject directoryObject) =>
-            Directory.CreateDirectory($@"{_restoreCatalog}\{directoryObject.FullPath.Substring(_restorableDirectoryName.Length)
-                .TrimStart('\\', ':')}");
+            Directory.CreateDirectory(GetRestoredFileSystemObjectName(directoryObject));
 
         private void CreateRestoredFile(FileObject fileObject, byte[] data) =>
-            File.WriteAllBytes($@"{_restoreCatalog}\{fileObject.FullPath.Substring(_restorableDirectoryName.Length)
-                .TrimStart('\\', ':')}", data);
+            File.WriteAllBytes(GetRestoredFileSystemObjectName(fileObject), data);
+
+        private string GetRestoredFileSystemObjectName(FileSystemObject fileSystemObject)
+        {
+            var fsoName = fileSystemObject.FullPath.
+                                                Substring(_restorableDirectoryName.Length).
+                                                TrimStart('\\', ':');
+
+            return $@"{_restoreCatalog}\{fsoName}";
+        }
 
         private void LoadLastBackup()
         {
