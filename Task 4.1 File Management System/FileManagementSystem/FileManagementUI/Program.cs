@@ -59,7 +59,11 @@ namespace FileManagementUI
         internal static void Main()
         {
             CreateWordDirectory();
+            StartHandleUserInput();
+        }
 
+        private static void StartHandleUserInput()
+        {
             while (true)
             {
                 var exit = false;
@@ -134,18 +138,12 @@ namespace FileManagementUI
                 throw new ArgumentException(IncorrectEnumFieldsCountErrorMessage,
                     $"Enum type name: {typeof(T)}");
 
-            var startIndex = 1;
-            foreach (var enumValue in enumValues)
-            {
-                if (skipNone && enumValue.ToString().ToUpper() == NoneEnumTypeName)
-                    continue;
+            ShowActionOptionsToConsole(skipNone, enumValues);
+            return ReadActionOptionFromConsole(skipNone, enumValues);
+        }
 
-                Console.WriteLine($"{startIndex}. - {enumValue};");
-                startIndex++;
-            }
-
-            Console.WriteLine(PressToExitMessage);
-
+        private static T? ReadActionOptionFromConsole<T>(bool skipNone, T[] enumValues) where T : struct, Enum
+        {
             while (true)
             {
                 var key = Console.ReadKey();
@@ -171,6 +169,21 @@ namespace FileManagementUI
 
                 Console.WriteLine(ErrorInputMessage);
             }
+        }
+
+        private static void ShowActionOptionsToConsole<T>(bool skipNone, T[] enumValues) where T : struct, Enum
+        {
+            var startIndex = 1;
+            foreach (var enumValue in enumValues)
+            {
+                if (skipNone && enumValue.ToString().ToUpper() == NoneEnumTypeName)
+                    continue;
+
+                Console.WriteLine($"{startIndex}. - {enumValue};");
+                startIndex++;
+            }
+
+            Console.WriteLine(PressToExitMessage);
         }
     }
 }
