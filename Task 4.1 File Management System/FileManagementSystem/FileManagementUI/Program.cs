@@ -9,6 +9,35 @@ namespace FileManagementUI
 {
     internal class Program
     {
+        static Program()
+        {
+            KeysForReadEnumFromConsole = new Dictionary<ConsoleKey, int>()
+            {
+                {ConsoleKey.D1, 1},
+                {ConsoleKey.NumPad1, 1},
+                {ConsoleKey.D2, 2},
+                {ConsoleKey.NumPad2, 2},
+                {ConsoleKey.D3, 3},
+                {ConsoleKey.NumPad3, 3},
+                {ConsoleKey.D4, 4},
+                {ConsoleKey.NumPad4, 4},
+                {ConsoleKey.D5, 5},
+                {ConsoleKey.NumPad5, 5},
+                {ConsoleKey.D6, 6},
+                {ConsoleKey.NumPad6, 6},
+                {ConsoleKey.D7, 7},
+                {ConsoleKey.NumPad7, 7},
+                {ConsoleKey.D8, 8},
+                {ConsoleKey.NumPad8, 8},
+                {ConsoleKey.D9, 9},
+                {ConsoleKey.NumPad9, 9}
+            };
+
+            ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
+            PressToExitMessage = $"{ExitSymbol}. - Press to exit...";
+            IncorrectEnumFieldsCountErrorMessage = $"This method can't be used for enums with more than {MaxCountOfEnumElements}";
+        }
+
         private const int MaxCountOfEnumElements = 9;
         private const char ExitSymbol = 'q';
         private const ConsoleKey ExitConsoleKey = ConsoleKey.Q;
@@ -21,32 +50,11 @@ namespace FileManagementUI
         private const string EnteredFutureDateMessage = "Entered a future date. Last backup will be restored...";
         private const string RestoringIsCompletedMessage = "Restoring is completed!";
 
-        private static readonly string ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
+        private static readonly string ObservableDirectoryPath;
+        private static readonly string PressToExitMessage;
+        private static readonly string IncorrectEnumFieldsCountErrorMessage;
 
-        private static readonly Dictionary<ConsoleKey, int> KeysForReadEnumFromConsole = new Dictionary<ConsoleKey, int>()
-        {
-            {ConsoleKey.D1, 1},
-            {ConsoleKey.NumPad1, 1},
-            {ConsoleKey.D2, 2},
-            {ConsoleKey.NumPad2, 2},
-            {ConsoleKey.D3, 3},
-            {ConsoleKey.NumPad3, 3},
-            {ConsoleKey.D4, 4},
-            {ConsoleKey.NumPad4, 4},
-            {ConsoleKey.D5, 5},
-            {ConsoleKey.NumPad5, 5},
-            {ConsoleKey.D6, 6},
-            {ConsoleKey.NumPad6, 6},
-            {ConsoleKey.D7, 7},
-            {ConsoleKey.NumPad7, 7},
-            {ConsoleKey.D8, 8},
-            {ConsoleKey.NumPad8, 8},
-            {ConsoleKey.D9, 9},
-            {ConsoleKey.NumPad9, 9},
-        };
-
-        private static readonly string PressToExitMessage = $"{ExitSymbol}. - Press to exit...";
-        private static readonly string IncorrectEnumFieldsCountErrorMessage = $"This method can't be used for enums with more than {MaxCountOfEnumElements}";
+        private static readonly Dictionary<ConsoleKey, int> KeysForReadEnumFromConsole;
 
         internal static void Main()
         {
