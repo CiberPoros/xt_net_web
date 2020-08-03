@@ -14,5 +14,7 @@ namespace FileManagement.FileChangeDescriptions
         {
 
         }
+
+        public override bool WillExistAfterRestore => true;
     }
 }

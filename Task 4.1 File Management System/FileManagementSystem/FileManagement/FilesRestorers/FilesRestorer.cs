@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using FileManagement.FileChangeDescriptions;
 using FileManagement.FileSystemObjects;
@@ -49,7 +48,7 @@ namespace FileManagement.FilesRestorers
 
             _restoreTime = dateTime;
 
-            RestoreDirectory(_observableDirectoryObject);
+            RestoreFileSystemObject(_observableDirectoryObject);
         }
 
         private static void ShowRestoreErrorMessageToConsole(string fullPath) =>
@@ -62,123 +61,79 @@ namespace FileManagement.FilesRestorers
         {
             foreach (var innerDirectoryObject in directoryObject.InnerDirectoryObjects)
             {
-                RestoreDirectory(innerDirectoryObject);
+                RestoreFileSystemObject(innerDirectoryObject);
 
                 RestoreDirectoryObject(innerDirectoryObject);
             }
 
             foreach (var innerFileObject in directoryObject.InnerFileObjects)
             {
-                RestoreFile(innerFileObject);
+                RestoreFileSystemObject(innerFileObject);
             }
         }
 
-        private void RestoreDirectory(DirectoryObject directoryObject)
+        private void RestoreFileSystemObject(FileSystemObject fileSystemObject)
         {
-            directoryObject.FileChangeDescriptions.Sort((
+            fileSystemObject.FileChangeDescriptions.Sort((
                 val1, val2) => val2.ChangeDateTime.CompareTo(val1.ChangeDateTime));
 
-            bool willExist = WillDirectoryExistAfterRestore(directoryObject);
+            var (willExist, data) = WillFileSystemObjectExistAfterRestore(fileSystemObject);
 
             if (willExist)
             {
                 try
                 {
-                    CreateRestoredDirection(directoryObject);
+                    CreateRestoredFileSystemObject(fileSystemObject, data);
                 }
                 catch (PathTooLongException e)
                 {
-                    ShowRestorePathToLongErrorMessageToConsole(directoryObject.FullPath);
-                    Debug.WriteLine(e);
-                    return;
-                }
-                catch (IOException e)
-                {
-                    ShowRestoreErrorMessageToConsole(directoryObject.FullPath);
-                    Debug.WriteLine(e);
-                    return;
-                }
-            }
-
-            RestoreDirectoryObject(directoryObject);
-        }
-
-        private void RestoreFile(FileObject fileObject)
-        {
-            fileObject.FileChangeDescriptions.Sort((
-                val1, val2) => val2.ChangeDateTime.CompareTo(val1.ChangeDateTime));
-
-            var (willExist, data) = WillFileObjectExistAfterRestore(fileObject);
-
-            if (willExist)
-            {
-                try
-                {
-                    CreateRestoredFile(fileObject, data);
-                }
-                catch (PathTooLongException e)
-                {
-                    ShowRestorePathToLongErrorMessageToConsole(fileObject.FullPath);
+                    ShowRestorePathToLongErrorMessageToConsole(fileSystemObject.FullPath);
                     Debug.WriteLine(e);
                 }
                 catch (IOException e)
                 {
-                    ShowRestoreErrorMessageToConsole(fileObject.FullPath);
+                    ShowRestoreErrorMessageToConsole(fileSystemObject.FullPath);
                     Debug.WriteLine(e);
                 }
             }
+
+            if (fileSystemObject is DirectoryObject directoryObject)
+                RestoreDirectoryObject(directoryObject);
         }
 
-        private (bool willExist, byte[] data) WillFileObjectExistAfterRestore(FileObject fileObject)
+        private (bool willExist, byte[] data) WillFileSystemObjectExistAfterRestore(FileSystemObject fileSystemObject)
         {
-            byte[] data = fileObject.InitData;
-            bool willExist = fileObject.StartMonitoringTime < _restoreTime;
+            byte[] data = fileSystemObject is FileObject fo ? fo.InitData : null;
+            bool willExist = fileSystemObject.StartMonitoringTime < _restoreTime;
 
-            foreach (var fileChangeDescription in fileObject.FileChangeDescriptions)
+            foreach (var fileChangeDescription in fileSystemObject.FileChangeDescriptions)
             {
                 if (fileChangeDescription.ChangeDateTime > _restoreTime)
                     break;
 
-                if (fileChangeDescription is DeleteFileSystemObjectDescription)
-                    willExist = false;
-
-                if (fileChangeDescription is CreateFileSystemObjectDescription)
-                    willExist = true;
+                willExist = fileChangeDescription.WillExistAfterRestore;
 
                 if (fileChangeDescription is DataChangeFileSystemObjectDescription description)
-                {
-                    willExist = true;
                     data = description.NewData;
-                }
             }
 
             return (willExist, data);
         }
 
-        private bool WillDirectoryExistAfterRestore(DirectoryObject directoryObject)
+        private void CreateRestoredFileSystemObject(FileSystemObject fileSystemObject, byte[] data)
         {
-            bool willExist = directoryObject.StartMonitoringTime < _restoreTime;
-
-            foreach (var fileChangeDescription in directoryObject.FileChangeDescriptions)
+            switch (fileSystemObject)
             {
-                if (fileChangeDescription.ChangeDateTime > _restoreTime)
+                case DirectoryObject directoryObject:
+                    Directory.CreateDirectory(GetRestoredFileSystemObjectName(directoryObject));
                     break;
-
-                if (fileChangeDescription is DeleteFileSystemObjectDescription)
-                    willExist = false;
-
-                if (fileChangeDescription is CreateFileSystemObjectDescription)
-                    willExist = true;
+                case FileObject fileObject:
+                    File.WriteAllBytes(GetRestoredFileSystemObjectName(fileObject), data);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fileSystemObject));
             }
-
-            return willExist;
         }
-
-        private void CreateRestoredDirection(DirectoryObject directoryObject) =>
-            Directory.CreateDirectory(GetRestoredFileSystemObjectName(directoryObject));
-
-        private void CreateRestoredFile(FileObject fileObject, byte[] data) =>
-            File.WriteAllBytes(GetRestoredFileSystemObjectName(fileObject), data);
 
         private string GetRestoredFileSystemObjectName(FileSystemObject fileSystemObject)
         {

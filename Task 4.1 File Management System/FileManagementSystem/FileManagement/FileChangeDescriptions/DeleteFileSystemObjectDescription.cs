@@ -13,5 +13,7 @@ namespace FileManagement.FileChangeDescriptions
         public DeleteFileSystemObjectDescription(DateTime changeDateTime) : base(changeDateTime)
         {
         }
+
+        public override bool WillExistAfterRestore => false;
     }
 }

@@ -14,6 +14,8 @@ namespace FileManagement.FileChangeDescriptions
             ChangeDateTime = changeDateTime;
         }
 
+        public abstract bool WillExistAfterRestore { get; }
+
         public DateTime ChangeDateTime { get; set; }
     }
 }

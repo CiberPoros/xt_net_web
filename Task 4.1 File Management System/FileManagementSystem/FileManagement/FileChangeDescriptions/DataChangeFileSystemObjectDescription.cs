@@ -16,5 +16,6 @@ namespace FileManagement.FileChangeDescriptions
         }
 
         public byte[] NewData { get; set; }
+        public override bool WillExistAfterRestore => true;
     }
 }
