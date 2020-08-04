@@ -11,9 +11,6 @@ namespace FileManagement.FilesRestorers
 {
     public class FilesRestorer : IFilesRestorer
     {
-        private static readonly string RestoreCatalogName = 
-            $"Restore_{DateTime.Now.ToString("G", CultureInfo.CreateSpecificCulture("de-DE")).Replace(':', '-')}";
-
         private string _restoreCatalog;
         private DirectoryObject _observableDirectoryObject;
         private string _restorableDirectoryName;
@@ -50,6 +47,9 @@ namespace FileManagement.FilesRestorers
 
             RestoreFileSystemObject(_observableDirectoryObject);
         }
+
+        private static string RestoreCatalogName =>
+            $"Restore_{DateTime.Now.ToString("G", CultureInfo.CreateSpecificCulture("de-DE")).Replace(':', '-')}";
 
         private static void ShowRestoreErrorMessageToConsole(string fullPath) =>
             Console.WriteLine($"Couldn't restore direction: {fullPath}");
