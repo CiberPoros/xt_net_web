@@ -9,17 +9,24 @@ namespace FileManagement
     {
         public const string InitialBackupFileName = "Backup.txt";
 
-        public static readonly string BackupDirectoryPath = $@"{Environment.CurrentDirectory}\BackupDirectory";
-
-        public static readonly Type[] UsableTypesForSerialization = new Type[]
+        static Utils()
         {
-            typeof(FileObject),
-            typeof(DataChangeFileSystemObjectDescription),
-            typeof(CreateFileSystemObjectDescription),
-            typeof(DeleteFileSystemObjectDescription)
-        };
+            BackupDirectoryPath = $@"{Environment.CurrentDirectory}\BackupDirectory";
+            BackupFileFullName = $@"{BackupDirectoryPath}\{InitialBackupFileName}";
 
-        public static string BackupFileFullName => $@"{Utils.BackupDirectoryPath}\{Utils.InitialBackupFileName}";
+            UsableTypesForSerialization = new[]
+            {
+                typeof(FileObject),
+                typeof(DataChangeFileSystemObjectDescription),
+                typeof(CreateFileSystemObjectDescription),
+                typeof(DeleteFileSystemObjectDescription)
+            };
+        }
+
+        public static readonly string BackupDirectoryPath;
+        public static readonly string BackupFileFullName;
+
+        public static readonly Type[] UsableTypesForSerialization;
 
         public static int GetHash(byte[] data)
         {
