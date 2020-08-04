@@ -9,8 +9,24 @@ namespace FileManagementUI
 {
     internal class Program
     {
+        private const int MaxCountOfEnumElements = 9;
+        private const char ExitSymbol = 'q';
+        private const ConsoleKey ExitConsoleKey = ConsoleKey.Q;
+
+        private const string LoggingHasStartedMessage = "Logging has started. To stop logging close the program.";
+        private const string LoggingProcessMessage = "Logging...";
+        private const string EnterDateMessage = "Enter date with format \"mm/dd/yy hh:mm:ss\":";
+        private const string ErrorInputMessage = "Error input. Try again...";
+        private const string NoneEnumTypeName = "NONE";
+        private const string EnteredFutureDateMessage = "Entered a future date. Last backup will be restored...";
+        private const string RestoringIsCompletedMessage = "Restoring is completed!";
+
         static Program()
         {
+            ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
+            PressToExitMessage = $"{ExitSymbol}. - Press to exit...";
+            IncorrectEnumFieldsCountErrorMessage = $"This method can't be used for enums with more than {MaxCountOfEnumElements}";
+
             KeysForReadEnumFromConsole = new Dictionary<ConsoleKey, int>()
             {
                 {ConsoleKey.D1, 1},
@@ -32,23 +48,7 @@ namespace FileManagementUI
                 {ConsoleKey.D9, 9},
                 {ConsoleKey.NumPad9, 9}
             };
-
-            ObservableDirectoryPath = $@"{Environment.CurrentDirectory}\ObservableDirectory";
-            PressToExitMessage = $"{ExitSymbol}. - Press to exit...";
-            IncorrectEnumFieldsCountErrorMessage = $"This method can't be used for enums with more than {MaxCountOfEnumElements}";
         }
-
-        private const int MaxCountOfEnumElements = 9;
-        private const char ExitSymbol = 'q';
-        private const ConsoleKey ExitConsoleKey = ConsoleKey.Q;
-
-        private const string LoggingHasStartedMessage = "Logging has started. To stop logging close the program.";
-        private const string LoggingProcessMessage = "Logging...";
-        private const string EnterDateMessage = "Enter date with format \"mm/dd/yy hh:mm:ss\":";
-        private const string ErrorInputMessage = "Error input. Try again...";
-        private const string NoneEnumTypeName = "NONE";
-        private const string EnteredFutureDateMessage = "Entered a future date. Last backup will be restored...";
-        private const string RestoringIsCompletedMessage = "Restoring is completed!";
 
         private static readonly string ObservableDirectoryPath;
         private static readonly string PressToExitMessage;
@@ -66,7 +66,6 @@ namespace FileManagementUI
         {
             while (true)
             {
-                var exit = false;
                 switch (ReadEnumValueFromConsole<WorkMode>())
                 {
                     case WorkMode.NONE:
@@ -78,14 +77,10 @@ namespace FileManagementUI
                         HandleRestore();
                         break;
                     case null:
-                        exit = true;
-                        break;
+                        return;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                if (exit)
-                    break;
             }
         }
 
