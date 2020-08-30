@@ -1,0 +1,65 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.registration-form-container {
+    width: 400px;
+    height: 270px;    
+    background: #0690cf;  
+    border: 3px solid #0075B2;  
+    font-family: sans-serif;
+    color: #ffffff;
+}
+
+.registration-head {
+	border-bottom: 1px solid #ffffff;
+	height: 40px;
+}
+
+.registration-text {
+	font-size: 22px;
+	margin: 20px; 
+}
+
+.registration-data {
+	font-size: 14px;
+    margin: 20px; 
+    margin-right: 40px;
+}
+
+.email-box {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+.password {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
+
+.password-box {
+	display: flex;
+	flex-direction: column;
+}
+
+.btn {
+    width: 82px;
+    height: 26px;
+    border: none;
+    font-size: 12px;
+    overflow: hidden;
+    background: #ffdf7f;
+}
+
+input[name="email-input"] {
+    width: 336px;
+    font-size: 20px;
+}
+
+input[name="password-input"] {
+	width: 150px;
+    height: 20px;
+}

@@ -1,0 +1,66 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: #4e6379;
+}
+
+.hosting-info-container {
+    background: #ffffff;
+    width: 700px;
+    padding: 15px;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 6px solid #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 50px 50px #303d4b, 0 50px 50px #303d4b;
+    text-align: center;
+    font-family: Arial;
+    font-weight: 700;
+}
+
+.virtual-hosting {
+    float: left;
+    width: 220px;
+    border-right: 1px solid #d9d9d9;
+}
+
+.cloud-hosting {
+    display: inline-block;
+    width: 220px;
+}
+
+.dedicated-server {
+    float: right;
+    width: 220px;
+    border-left: 1px solid #d9d9d9;
+}
+
+.hosting-type {
+    font-size: 18px;
+    color: #f5663d;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.hosting-price {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+img {
+    height: 40%;
+    width: 40%;
+}
+
+button {
+    font-size: 16px;
+    background-color: #f56332;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+}

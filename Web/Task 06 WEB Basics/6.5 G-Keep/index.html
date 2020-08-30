@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>G-Keep</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="search-window-container">
+            <div class="search-window">
+                <div>
+                    <img src="Resources/Loupe.png" />
+                </div>
+                <input type="search" placeholder="Поиск" />
+            </div>
+        </div>
+        <div class="note-container"></div>
+        <button class="add-note-button">+</button>
+        <div class="modal-note" , id="modal-note-id">
+            <div class="modal-note-window">
+                <div class="note-head">
+                    <input type="text" id="note-head-id" placeholder="Введите заголовок">
+                </div>
+                <div class="note-body">
+                    <textarea id="note-body-id" placeholder="Текст заметки"></textarea>
+                </div>
+                <div class="note-action-buttons">
+                    <button class="close-note-button">Закрыть</button>
+                    <button class="save-note-button">Сохранить</button>
+                </div>
+                <input type="hidden" id="hidden-id" />
+            </div>
+        </div>
+        <script src="scripts/storage.js"></script>
+        <script src="scripts/index.js"></script>
+    </div>
+</body>
+
+</html>
