@@ -1,14 +1,18 @@
-let str = `У попа была собака???!!!`;
-let separators = ' ?!:;,.';
+Run();
 
-let strings = splitString(str, separators);
-
-let repeatedChars = [];
-for (let i = 0; i < strings.length; i++) {
-    repeatedChars = repeatedChars.concat(getRepeatedWords(strings[i]));
+function Run () {
+	let str = `У попа была собака???!!!`;
+	let separators = ' ?!:;,.';
+	
+	let strings = splitString(str, separators);
+	
+	let repeatedChars = [];
+	for (let i = 0; i < strings.length; i++) {
+	repeatedChars = repeatedChars.concat(getRepeatedWords(strings[i]));
+	}
+	
+	console.log(removeChars(str, repeatedChars));
 }
-
-console.log(removeChars(str, repeatedChars));
 
 function splitString(strToSplit, separatorsString) {
     let splited = [];

@@ -1,6 +1,10 @@
-let expressionstring = '3.5 +4*10-5.3 /5 =';
+Run();
 
-console.log(calcExpression(expressionstring));
+function Run () {
+	let expressionstring = '3.5 +4*10-5.3 /5 =';
+	
+	console.log(calcExpression(expressionstring));
+}
 
 function calcExpression(expression) {
     let operators = ['+', '-', '*', '/', '='];

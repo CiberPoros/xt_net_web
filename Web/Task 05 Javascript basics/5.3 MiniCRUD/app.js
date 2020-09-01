@@ -71,49 +71,53 @@ function outGetAll(storage) {
     console.log('------------------');
 }
 
-let storage = new Service();
+function Run () {
+    let storage = new Service();
+    
+    let catId = storage.add({ 'name': 'mrCat', 'type': 'siberian' });
+    let cat2Id = storage.add({ 'name': 'vaska', 'type': 'mongrel' });
+    let pigId = storage.add({ 'name': 'nuff-nuff', 'sayString': 'HRUE-HRUE-HRUE' });
+    let numberId = storage.add(12345678);
+    
+    console.log('Map: ');
+    console.log(storage.map);
+    console.log('------------------');
+    
+    outGetAll(storage);
+    
+    console.log('Get by id cat vaska:');
+    console.log(storage.getById(cat2Id));
+    console.log('------------------');
+    
+    outGetAll(storage);
+    
+    console.log('Delete by id cat vaska:');
+    console.log(storage.deleteById(cat2Id));
+    console.log('------------------');
+    
+    outGetAll(storage);
+    
+    console.log('Update by id pig name:');
+    console.log(storage.updateById(pigId, { 'name': 'niff-niff' }));
+    console.log('------------------');
+    
+    outGetAll(storage);
+    
+    console.log('Replace by id number:');
+    console.log(storage.replaceById(numberId, { 'someText': 'Now i am an object' }));
+    console.log('------------------');
+    
+    outGetAll(storage);
+    
+    console.log('Try to call replace by id without parameters:')
+    console.log(storage.replaceById());
+    console.log('------------------');
+    
+    outGetAll(storage);
+    
+    console.log('Map: ');
+    console.log(storage.map);
+    console.log('------------------');
+}
 
-let catId = storage.add({ 'name': 'mrCat', 'type': 'siberian' });
-let cat2Id = storage.add({ 'name': 'vaska', 'type': 'mongrel' });
-let pigId = storage.add({ 'name': 'nuff-nuff', 'sayString': 'HRUE-HRUE-HRUE' });
-let numberId = storage.add(12345678);
-
-console.log('Map: ');
-console.log(storage.map);
-console.log('------------------');
-
-outGetAll(storage);
-
-console.log('Get by id cat vaska:');
-console.log(storage.getById(cat2Id));
-console.log('------------------');
-
-outGetAll(storage);
-
-console.log('Delete by id cat vaska:');
-console.log(storage.deleteById(cat2Id));
-console.log('------------------');
-
-outGetAll(storage);
-
-console.log('Update by id pig name:');
-console.log(storage.updateById(pigId, { 'name': 'niff-niff' }));
-console.log('------------------');
-
-outGetAll(storage);
-
-console.log('Replace by id number:');
-console.log(storage.replaceById(numberId, { 'someText': 'Now i am an object' }));
-console.log('------------------');
-
-outGetAll(storage);
-
-console.log('Try to call replace by id without parameters:')
-console.log(storage.replaceById());
-console.log('------------------');
-
-outGetAll(storage);
-
-console.log('Map: ');
-console.log(storage.map);
-console.log('------------------');
+Run();
