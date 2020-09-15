@@ -16,8 +16,8 @@ namespace ThreeLayer.DAL.Xml
 
         public UserAwardBondsDao(IUsersDao usersDao, IAwardsDao awardsDao)
         {
-            _usersDao = usersDao;
-            _awardsDao = awardsDao;
+            _usersDao = usersDao ?? throw new ArgumentNullException(nameof(usersDao));
+            _awardsDao = awardsDao ?? throw new ArgumentNullException(nameof(awardsDao));
 
             Subscribe();
 

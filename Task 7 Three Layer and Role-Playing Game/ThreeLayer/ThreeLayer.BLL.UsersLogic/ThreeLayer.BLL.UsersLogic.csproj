@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AwardsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserAwardBondsManager.cs" />
+    <Compile Include="UsersManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ThreeLayer.BLL.UsersLogicContracts\ThreeLayer.BLL.UsersLogicContracts.csproj">
@@ -51,6 +54,10 @@
     <ProjectReference Include="..\ThreeLayer.Common.Entities\ThreeLayer.Common.Entities.csproj">
       <Project>{3bddf7d4-5c32-48fe-a3de-b313c1772835}</Project>
       <Name>ThreeLayer.Common.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThreeLayer.DAL.Contracts\ThreeLayer.DAL.Contracts.csproj">
+      <Project>{0928E0B2-D92B-4A0B-9999-9D6A48A68D00}</Project>
+      <Name>ThreeLayer.DAL.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
