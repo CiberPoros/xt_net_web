@@ -6,7 +6,7 @@ namespace ThreeLayer.Common.Entities
     public class User
     {
         private int _age;
-        private IEnumerable<Award> _awards;
+        private ICollection<Award> _awards;
 
         public User(int id, string name, DateTime dateOfBirth, int age)
         {
@@ -26,7 +26,7 @@ namespace ThreeLayer.Common.Entities
             set => _age = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value), value, "Age can't be negative.");
         }
 
-        public IEnumerable<Award> Awards 
+        public ICollection<Award> Awards 
         { 
             get => _awards; 
             set => _awards = value ?? throw new ArgumentNullException(nameof(value), "Argument is null."); 
