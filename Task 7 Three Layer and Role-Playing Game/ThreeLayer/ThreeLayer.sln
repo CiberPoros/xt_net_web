@@ -3,9 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThreeLayer.BLL", "ThreeLayer.BLL", "{E282F2EA-F9AF-4002-8AEC-12F74D2AE3C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThreeLayer.DAL", "ThreeLayer.DAL", "{6E920731-3FF7-46FA-92C2-C038F4041AC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThreeLayer.PL", "ThreeLayer.PL", "{CEB78815-323E-4736-B2F3-E0F625E26B36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThreeLayer.Common", "ThreeLayer.Common", "{4703F132-D78C-4171-8472-E4D400EE5947}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeLayer.Common.Entities", "ThreeLayer.Common.Entities\ThreeLayer.Common.Entities.csproj", "{3BDDF7D4-5C32-48FE-A3DE-B313C1772835}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BDDF7D4-5C32-48FE-A3DE-B313C1772835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BDDF7D4-5C32-48FE-A3DE-B313C1772835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BDDF7D4-5C32-48FE-A3DE-B313C1772835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BDDF7D4-5C32-48FE-A3DE-B313C1772835}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3BDDF7D4-5C32-48FE-A3DE-B313C1772835} = {4703F132-D78C-4171-8472-E4D400EE5947}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4279F9E-108E-47C0-AAE1-1F5F3BB03BF2}
