@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C5DE4A9-DF38-407E-AF2F-CBDFABA382D1}</ProjectGuid>
+    <ProjectGuid>{6145AA85-A35E-42A0-896D-2D64EB1C956F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ThreeLayer.BLL.UsersLogic</RootNamespace>
-    <AssemblyName>ThreeLayer.BLL.UsersLogic</AssemblyName>
+    <RootNamespace>ThreeLayer.DAL.JSON</RootNamespace>
+    <AssemblyName>ThreeLayer.DAL.JSON</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,17 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AwardsDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ThreeLayer.BLL.UsersLogicContracts\ThreeLayer.BLL.UsersLogicContracts.csproj">
-      <Project>{4BEC0C7B-6201-4D16-BD70-0600D6DAD9FD}</Project>
-      <Name>ThreeLayer.BLL.UsersLogicContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ThreeLayer.Common.Entities\ThreeLayer.Common.Entities.csproj">
-      <Project>{3bddf7d4-5c32-48fe-a3de-b313c1772835}</Project>
-      <Name>ThreeLayer.Common.Entities</Name>
-    </ProjectReference>
+    <Compile Include="UsersDao.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
