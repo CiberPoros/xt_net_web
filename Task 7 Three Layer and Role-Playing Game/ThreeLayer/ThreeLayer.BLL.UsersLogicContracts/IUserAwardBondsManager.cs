@@ -7,10 +7,9 @@ using ThreeLayer.Common.Entities;
 
 namespace ThreeLayer.BLL.UsersLogicContracts
 {
-    public interface IUsersManager
+    public interface IUserAwardBondsManager
     {
-        void AddUser(User user);
-        void RemoveUserById(int id);
-        IEnumerable<User> GetAllUsers();
+        bool Bind(User user, Award award);
+        bool UnBind(User user, Award award);
     }
 }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4BEC0C7B-6201-4D16-BD70-0600D6DAD9FD}</ProjectGuid>
+    <ProjectGuid>{B268ADC4-F5A7-4A4B-930B-34ED93C03394}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ThreeLayer.BLL.UsersLogicContracts</RootNamespace>
-    <AssemblyName>ThreeLayer.BLL.UsersLogicContracts</AssemblyName>
+    <RootNamespace>ThreeLayers.DAL.Entities</RootNamespace>
+    <AssemblyName>ThreeLayers.DAL.Entities</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,16 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAwardsManager.cs" />
-    <Compile Include="IUserAwardBondsManager.cs" />
-    <Compile Include="IUsersManager.cs" />
+    <Compile Include="UserAwardBond.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ThreeLayer.Common.Entities\ThreeLayer.Common.Entities.csproj">
-      <Project>{3BDDF7D4-5C32-48FE-A3DE-B313C1772835}</Project>
-      <Name>ThreeLayer.Common.Entities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

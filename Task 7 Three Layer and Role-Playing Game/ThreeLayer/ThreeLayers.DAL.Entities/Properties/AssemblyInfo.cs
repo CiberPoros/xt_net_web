@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные со сборкой.
-[assembly: AssemblyTitle("ThreeLayer.DAL.JSON")]
+[assembly: AssemblyTitle("ThreeLayers.DAL.Entities")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ThreeLayer.DAL.JSON")]
+[assembly: AssemblyProduct("ThreeLayers.DAL.Entities")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("6145aa85-a35e-42a0-896d-2d64eb1c956f")]
+[assembly: Guid("b268adc4-f5a7-4a4b-930b-34ed93c03394")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //
