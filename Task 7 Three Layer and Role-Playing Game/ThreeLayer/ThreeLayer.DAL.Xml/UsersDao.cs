@@ -10,15 +10,6 @@ namespace ThreeLayer.DAL.Xml
 {
     public class UsersDao : EntityXmlDao<User>, IUsersDao
     {
-        public UsersDao()
-        {
-            StoragePathAppSettingsKey = "UsersStoragePath";
-            DefaultStoragePath = @"Storage\UsersList.xml";
-        }
-
-        protected override string StoragePathAppSettingsKey { get; }
-        protected override string DefaultStoragePath { get; }
-
         public event EventHandler<User> UserRemoved;
 
         public void AddUser(User user) => Add(user);
@@ -38,5 +29,7 @@ namespace ThreeLayer.DAL.Xml
 
             UserRemoved(this, match.FromXElement<User>());
         }
+
+        protected override string GetEntityName() => nameof(User);
     }
 }

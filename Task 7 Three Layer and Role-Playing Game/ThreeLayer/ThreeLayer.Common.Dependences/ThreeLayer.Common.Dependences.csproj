@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>ThreeLayer.PL.Console</RootNamespace>
-    <AssemblyName>ThreeLayer.PL.Console</AssemblyName>
+    <ProjectGuid>{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ThreeLayer.Common.Dependences</RootNamespace>
+    <AssemblyName>ThreeLayer.Common.Dependences</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -46,12 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="NinjectRegistrationsBLL.cs" />
+    <Compile Include="NinjectRegistrationsDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIActionType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -59,14 +56,19 @@
       <Project>{4bec0c7b-6201-4d16-bd70-0600d6dad9fd}</Project>
       <Name>ThreeLayer.BLL.UsersLogicContracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ThreeLayer.Common.Dependences\ThreeLayer.Common.Dependences.csproj">
-      <Project>{b9bfa0c7-11c3-49b7-a6c7-5206d12a5b86}</Project>
-      <Name>ThreeLayer.Common.Dependences</Name>
+    <ProjectReference Include="..\ThreeLayer.BLL.UsersLogic\ThreeLayer.BLL.UsersLogic.csproj">
+      <Project>{2c5de4a9-df38-407e-af2f-cbdfaba382d1}</Project>
+      <Name>ThreeLayer.BLL.UsersLogic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ThreeLayer.Common.Entities\ThreeLayer.Common.Entities.csproj">
-      <Project>{3bddf7d4-5c32-48fe-a3de-b313c1772835}</Project>
-      <Name>ThreeLayer.Common.Entities</Name>
+    <ProjectReference Include="..\ThreeLayer.DAL.Contracts\ThreeLayer.DAL.Contracts.csproj">
+      <Project>{0928e0b2-d92b-4a0b-9999-9d6a48a68d00}</Project>
+      <Name>ThreeLayer.DAL.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThreeLayer.DAL.Xml\ThreeLayer.DAL.Xml.csproj">
+      <Project>{4f677b6f-feaf-459d-bfba-7fb9465aa4dd}</Project>
+      <Name>ThreeLayer.DAL.Xml</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

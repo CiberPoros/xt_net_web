@@ -10,16 +10,6 @@ namespace ThreeLayer.DAL.Xml
 {
     public class AwardsDao : EntityXmlDao<Award>, IAwardsDao
     {
-        public AwardsDao()
-        {
-            StoragePathAppSettingsKey = "AwardsStoragePath";
-            DefaultStoragePath = @"Storage\AwardsList.xml";
-        }
-
-        protected override string StoragePathAppSettingsKey { get; }
-        protected override string DefaultStoragePath { get; }
-
-
         public event EventHandler<Award> AwardRemoved;
 
         public void AddAward(Award award) => Add(award);
@@ -39,5 +29,7 @@ namespace ThreeLayer.DAL.Xml
 
             AwardRemoved(this, match.FromXElement<Award>());
         }
+
+        protected override string GetEntityName() => nameof(Award);
     }
 }

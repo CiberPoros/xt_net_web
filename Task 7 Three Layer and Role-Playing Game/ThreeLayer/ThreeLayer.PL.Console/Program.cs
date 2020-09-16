@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ninject;
+using ThreeLayer.BLL.UsersLogicContracts;
+using ThreeLayer.Common.Dependences;
+using ThreeLayer.Common.Entities;
 
 namespace ThreeLayer.PL.Console
 {
     class Program
     {
+        private static IKernel _resolver = new StandardKernel(new NinjectRegistrationsBLL(), new NinjectRegistrationsDAL());
+
         private static readonly Dictionary<UIActionType, string> _discriprionsOfActions = new Dictionary<UIActionType, string>
         {
             { UIActionType.ADD_USER, "Добавить пользователя;" },
@@ -25,6 +32,10 @@ namespace ThreeLayer.PL.Console
             OutActionTypes();
             var at = ReadActionType();
             System.Console.WriteLine(at);
+
+            var userManager = _resolver.Get<IUsersManager>();
+            userManager.AddUser(new User { Id = 1, Age = 23, DateOfBirth = DateTime.Now.AddYears(-23), Name = "Maxim" });
+            System.Console.WriteLine("end..");
         }
 
         public static void OutActionTypes()
@@ -52,6 +63,7 @@ namespace ThreeLayer.PL.Console
                     ClearLastSymbolInConsole();
             }
 
+            System.Console.WriteLine();
             return res;
         }
 

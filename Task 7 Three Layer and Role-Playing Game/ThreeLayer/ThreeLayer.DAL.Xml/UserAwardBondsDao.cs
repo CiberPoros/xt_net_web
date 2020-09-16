@@ -20,13 +20,7 @@ namespace ThreeLayer.DAL.Xml
             _awardsDao = awardsDao ?? throw new ArgumentNullException(nameof(awardsDao));
 
             Subscribe();
-
-            StoragePathAppSettingsKey = "UserAwardBondsStoragePath";
-            DefaultStoragePath = @"Storage\UserAwardBondsList.xml";
         }
-
-        protected override string StoragePathAppSettingsKey { get; }
-        protected override string DefaultStoragePath { get; }
 
         public bool Bind(int userId, int awardId)
         {
@@ -125,5 +119,7 @@ namespace ThreeLayer.DAL.Xml
             _usersDao.UserRemoved -= OnUserRemoved;
             _awardsDao.AwardRemoved -= OnAwardRemoved;
         }
+
+        protected override string GetEntityName() => nameof(UserAwardBond);
     }
 }

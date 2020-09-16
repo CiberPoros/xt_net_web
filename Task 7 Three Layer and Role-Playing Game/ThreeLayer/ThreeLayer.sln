@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{9380
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeLayer.PL.Console", "ThreeLayer.PL.Console\ThreeLayer.PL.Console.csproj", "{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeLayer.Common.Dependences", "ThreeLayer.Common.Dependences\ThreeLayer.Common.Dependences.csproj", "{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{B268ADC4-F5A7-4A4B-930B-34ED93C03394} = {6E920731-3FF7-46FA-92C2-C038F4041AC2}
 		{93800325-8B1A-49AE-B67D-E37C1667E446} = {CEB78815-323E-4736-B2F3-E0F625E26B36}
 		{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051} = {93800325-8B1A-49AE-B67D-E37C1667E446}
+		{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86} = {4703F132-D78C-4171-8472-E4D400EE5947}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4279F9E-108E-47C0-AAE1-1F5F3BB03BF2}

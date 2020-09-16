@@ -13,11 +13,17 @@ namespace ThreeLayer.DAL.Xml
 
         public EntityXmlDao()
         {
+            StoragePathAppSettingsKey = $@"{GetEntityName()}Path";
+            DefaultStoragePath = $@"Storage\{GetEntityName()}List.xml";
             _storageFileInfo = new FileInfo(ConfigurationManager.AppSettings[StoragePathAppSettingsKey] ?? DefaultStoragePath);
-            XmlStorageRootName = nameof(T);
+            XmlStorageRootName = GetEntityName();
 
             if (!_storageFileInfo.Exists)
             {
+                var directoryInfo = new DirectoryInfo(_storageFileInfo.DirectoryName);
+                if (!directoryInfo.Exists)
+                    directoryInfo.Create();
+
                 using (var stream = _storageFileInfo.Create())
                 {
                     var root = new XElement(XmlStorageRootName);
@@ -29,9 +35,10 @@ namespace ThreeLayer.DAL.Xml
             }
         }
 
-        protected abstract string StoragePathAppSettingsKey { get; }
-        protected abstract string DefaultStoragePath { get; }
+        protected abstract string GetEntityName();
 
+        protected string StoragePathAppSettingsKey { get; }
+        protected string DefaultStoragePath { get; }
         protected string XmlStorageRootName { get; }
 
         public void Add(T obj) => 
