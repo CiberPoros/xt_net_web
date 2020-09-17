@@ -2,7 +2,7 @@
 
 namespace ThreeLayer.Common.Entities
 {
-    public class Award
+    public class Award : IEntityWithId
     {
         private string _title;
 

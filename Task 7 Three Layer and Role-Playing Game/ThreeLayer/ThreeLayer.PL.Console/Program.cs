@@ -13,7 +13,7 @@ namespace ThreeLayer.PL.Console
 {
     class Program
     {
-        private static IKernel _resolver = new StandardKernel(new NinjectRegistrationsBLL(), new NinjectRegistrationsDAL());
+        private static readonly IKernel _resolver = new StandardKernel(new NinjectRegistrationsBLL(), new NinjectRegistrationsDAL());
 
         private static readonly Dictionary<UIActionType, string> _discriprionsOfActions = new Dictionary<UIActionType, string>
         {
@@ -31,10 +31,16 @@ namespace ThreeLayer.PL.Console
         {
             OutActionTypes();
             var at = ReadActionType();
-            System.Console.WriteLine(at);
 
             var userManager = _resolver.Get<IUsersManager>();
             userManager.AddUser(new User { Id = 1, Age = 23, DateOfBirth = DateTime.Now.AddYears(-23), Name = "Maxim" });
+            userManager.AddUser(new User { Id = 2, Age = 21, DateOfBirth = DateTime.Now.AddYears(-10), Name = "Masa" });
+
+            var users = userManager.GetAllUsers();
+
+            foreach (var user in users)
+                System.Console.WriteLine(user);
+
             System.Console.WriteLine("end..");
         }
 

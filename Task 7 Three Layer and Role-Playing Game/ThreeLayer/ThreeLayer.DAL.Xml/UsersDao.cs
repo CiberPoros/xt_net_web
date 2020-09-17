@@ -4,15 +4,17 @@ using System.Linq;
 using System.Xml.Linq;
 using ThreeLayer.Common.Entities;
 using ThreeLayer.DAL.Contracts;
+using ThreeLayer.DAL.Xml.Abstract;
 using ThreeLayer.DAL.Xml.Extensions;
 
 namespace ThreeLayer.DAL.Xml
 {
-    public class UsersDao : EntityXmlDao<User>, IUsersDao
+    public class UsersDao : EntityWithIdXmlDao<User>, IUsersDao
     {
         public event EventHandler<User> UserRemoved;
 
         public void AddUser(User user) => Add(user);
+
         public IEnumerable<User> GetAllUsers() => GetAll();
 
         public void RemoveUserById(int id)

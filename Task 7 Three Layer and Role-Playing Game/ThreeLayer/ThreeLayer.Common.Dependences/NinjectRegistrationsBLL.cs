@@ -8,9 +8,9 @@ namespace ThreeLayer.Common.Dependences
     {
         public override void Load()
         {
-            Bind<IAwardsManager>().To<AwardsManager>();
-            Bind<IUsersManager>().To<UsersManager>();
-            Bind<IUserAwardBondsManager>().To<UserAwardBondsManager>();
+            Bind<IAwardsManager>().To<AwardsManager>().InSingletonScope();
+            Bind<IUsersManager>().To<UsersManager>().InSingletonScope();
+            Bind<IUserAwardBondsManager>().To<UserAwardBondsManager>().InSingletonScope();
         }
     }
 }

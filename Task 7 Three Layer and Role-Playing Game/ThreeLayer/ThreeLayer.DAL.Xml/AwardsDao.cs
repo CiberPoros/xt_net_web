@@ -5,14 +5,16 @@ using ThreeLayer.DAL.Contracts;
 using ThreeLayer.Common.Entities;
 using System.Xml.Linq;
 using ThreeLayer.DAL.Xml.Extensions;
+using ThreeLayer.DAL.Xml.Abstract;
 
 namespace ThreeLayer.DAL.Xml
 {
-    public class AwardsDao : EntityXmlDao<Award>, IAwardsDao
+    public class AwardsDao : EntityWithIdXmlDao<Award>, IAwardsDao
     {
         public event EventHandler<Award> AwardRemoved;
 
         public void AddAward(Award award) => Add(award);
+
         public IEnumerable<Award> GetAllAwards() => GetAll();
 
         public void RemoveAwardById(int id)

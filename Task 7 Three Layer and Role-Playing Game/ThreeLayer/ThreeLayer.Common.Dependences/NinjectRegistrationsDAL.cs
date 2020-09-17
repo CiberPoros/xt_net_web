@@ -8,9 +8,9 @@ namespace ThreeLayer.Common.Dependences
     {
         public override void Load()
         {
-            Bind<IUsersDao>().To<UsersDao>();
-            Bind<IAwardsDao>().To<AwardsDao>();
-            Bind<IUserAwardBondsDao>().To<UserAwardBondsDao>();
+            Bind<IUsersDao>().To<UsersDao>().InSingletonScope();
+            Bind<IAwardsDao>().To<AwardsDao>().InSingletonScope();
+            Bind<IUserAwardBondsDao>().To<UserAwardBondsDao>().InSingletonScope();
         }
     }
 }

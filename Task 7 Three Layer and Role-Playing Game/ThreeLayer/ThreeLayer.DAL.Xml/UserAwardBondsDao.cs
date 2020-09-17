@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using ThreeLayer.Common.Entities;
 using ThreeLayer.DAL.Contracts;
+using ThreeLayer.DAL.Xml.Abstract;
 using ThreeLayer.DAL.Xml.Extensions;
 using ThreeLayers.DAL.Entities;
 

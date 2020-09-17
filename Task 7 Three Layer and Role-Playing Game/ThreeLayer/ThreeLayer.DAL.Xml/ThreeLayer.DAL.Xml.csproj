@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\EntityWithIdXmlDao.cs" />
     <Compile Include="AwardsDao.cs" />
-    <Compile Include="EntityXmlDao.cs" />
+    <Compile Include="EntityIdManager.cs" />
+    <Compile Include="Abstract\EntityXmlDao.cs" />
     <Compile Include="Extensions\ObjectSerializationExtensions.cs" />
     <Compile Include="Extensions\XDocumentExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

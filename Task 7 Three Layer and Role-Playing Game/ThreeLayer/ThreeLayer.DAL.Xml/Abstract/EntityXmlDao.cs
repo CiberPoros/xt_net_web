@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using ThreeLayer.DAL.Xml.Extensions;
 
-namespace ThreeLayer.DAL.Xml
+namespace ThreeLayer.DAL.Xml.Abstract
 {
     public abstract class EntityXmlDao<T> where T : class
     {
@@ -41,12 +41,12 @@ namespace ThreeLayer.DAL.Xml
         protected string DefaultStoragePath { get; }
         protected string XmlStorageRootName { get; }
 
-        public void Add(T obj) => 
+        public virtual void Add(T obj) =>
             XDocument.Load(_storageFileInfo.FullName)
                      .AddToRoot(obj.ToXElement())
                      .Save(_storageFileInfo.FullName);
 
-        public IEnumerable<T> GetAll() => 
+        public IEnumerable<T> GetAll() =>
             XDocument.Load(_storageFileInfo.FullName).Root
                      .Elements()
                      .Select(xElement => xElement.FromXElement<T>());
