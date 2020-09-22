@@ -46,9 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="ActionManagers\AwardsActionsManager.cs" />
+    <Compile Include="Dependences\NinjectRegistrationsPL.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="StartedMenuManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIActionType.cs" />
+    <Compile Include="ActionManagers\UsersActionsManager.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

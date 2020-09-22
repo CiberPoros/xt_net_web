@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAwardsManager.cs" />
-    <Compile Include="IUserAwardBondsManager.cs" />
     <Compile Include="IUsersManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

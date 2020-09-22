@@ -41,10 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssociationsInfo.cs" />
     <Compile Include="Award.cs" />
     <Compile Include="IEntityWithId.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThreeLayer.Common.Utils\ThreeLayer.Common.Utils.csproj">
+      <Project>{9bd85288-220b-4c21-89ec-444e4d61bfd0}</Project>
+      <Name>ThreeLayer.Common.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

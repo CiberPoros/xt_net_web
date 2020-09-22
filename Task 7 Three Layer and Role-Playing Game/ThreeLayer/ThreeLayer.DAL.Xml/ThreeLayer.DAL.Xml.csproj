@@ -43,28 +43,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\EntityWithIdXmlDao.cs" />
-    <Compile Include="AwardsDao.cs" />
+    <Compile Include="AssociationsDao.cs" />
     <Compile Include="EntityIdManager.cs" />
     <Compile Include="Abstract\EntityXmlDao.cs" />
+    <Compile Include="EntityWithIdXmlDao.cs" />
     <Compile Include="Extensions\ObjectSerializationExtensions.cs" />
     <Compile Include="Extensions\XDocumentExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserAwardBondsDao.cs" />
-    <Compile Include="UsersDao.cs" />
+    <Compile Include="XmlAssociationEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ThreeLayer.Common.Entities\ThreeLayer.Common.Entities.csproj">
       <Project>{3bddf7d4-5c32-48fe-a3de-b313c1772835}</Project>
       <Name>ThreeLayer.Common.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThreeLayer.Common.Utils\ThreeLayer.Common.Utils.csproj">
+      <Project>{9bd85288-220b-4c21-89ec-444e4d61bfd0}</Project>
+      <Name>ThreeLayer.Common.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ThreeLayer.DAL.Contracts\ThreeLayer.DAL.Contracts.csproj">
       <Project>{0928E0B2-D92B-4A0B-9999-9D6A48A68D00}</Project>
       <Name>ThreeLayer.DAL.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ThreeLayers.DAL.Entities\ThreeLayers.DAL.Entities.csproj">
-      <Project>{B268ADC4-F5A7-4A4B-930B-34ED93C03394}</Project>
-      <Name>ThreeLayers.DAL.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

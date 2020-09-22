@@ -1,22 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
-using ThreeLayer.DAL.Xml.Extensions;
 
 namespace ThreeLayer.DAL.Xml.Abstract
 {
-    public abstract class EntityXmlDao<T> where T : class
+    public abstract class EntityXmlDao<T>
     {
         protected readonly FileInfo _storageFileInfo;
 
         public EntityXmlDao()
         {
-            StoragePathAppSettingsKey = $@"{GetEntityName()}Path";
-            DefaultStoragePath = $@"Storage\{GetEntityName()}List.xml";
+            StoragePathAppSettingsKey = $@"{typeof(T).Name}Path";
+            DefaultStoragePath = $@"Storage\{typeof(T).Name}List.xml";
             _storageFileInfo = new FileInfo(ConfigurationManager.AppSettings[StoragePathAppSettingsKey] ?? DefaultStoragePath);
-            XmlStorageRootName = GetEntityName();
+            XmlStorageRootName = $"{typeof(T).Name}List";
 
             if (!_storageFileInfo.Exists)
             {
@@ -35,20 +32,8 @@ namespace ThreeLayer.DAL.Xml.Abstract
             }
         }
 
-        protected abstract string GetEntityName();
-
         protected string StoragePathAppSettingsKey { get; }
         protected string DefaultStoragePath { get; }
         protected string XmlStorageRootName { get; }
-
-        public virtual void Add(T obj) =>
-            XDocument.Load(_storageFileInfo.FullName)
-                     .AddToRoot(obj.ToXElement())
-                     .Save(_storageFileInfo.FullName);
-
-        public IEnumerable<T> GetAll() =>
-            XDocument.Load(_storageFileInfo.FullName).Root
-                     .Elements()
-                     .Select(xElement => xElement.FromXElement<T>());
     }
 }

@@ -7,7 +7,7 @@ namespace ThreeLayer.DAL.Xml.Extensions
 {
     internal static class ObjectSerializationExtensions
     {
-        public static XElement ToXElement<T>(this T obj) where T : class
+        public static XElement ToXElement<T>(this T obj) 
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -20,7 +20,7 @@ namespace ThreeLayer.DAL.Xml.Extensions
             }
         }
 
-        public static T FromXElement<T>(this XElement xElement) where T : class
+        public static T FromXElement<T>(this XElement xElement)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
             return (T)xmlSerializer.Deserialize(xElement.CreateReader());

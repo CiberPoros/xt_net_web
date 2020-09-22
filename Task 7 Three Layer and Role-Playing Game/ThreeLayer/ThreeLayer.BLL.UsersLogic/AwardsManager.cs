@@ -8,11 +8,13 @@ namespace ThreeLayer.BLL.UsersLogic
 {
     public class AwardsManager : IAwardsManager
     {
-        private readonly IAwardsDao _awardsDao;
+        private readonly IEntityWithIdDao<Award> _awardsDao;
+        private readonly IAssociationsDao<Award, User> _associationsDao;
 
-        public AwardsManager(IAwardsDao awardsDao)
+        public AwardsManager(IEntityWithIdDao<Award> awardsDao, IAssociationsDao<Award, User> associationsDao)
         {
             _awardsDao = awardsDao ?? throw new ArgumentNullException(nameof(awardsDao));
+            _associationsDao = associationsDao ?? throw new ArgumentNullException(nameof(associationsDao));
         }
 
         public void AddAward(Award award)
@@ -20,10 +22,16 @@ namespace ThreeLayer.BLL.UsersLogic
             if (award is null)
                 throw new ArgumentNullException(nameof(award));
 
-            _awardsDao.AddAward(award);
+            _awardsDao.Add(award);
         }
 
-        public IEnumerable<Award> GetAllAwards() => _awardsDao.GetAllAwards();
-        public void RemoveAwardById(int id) => _awardsDao.RemoveAwardById(id);
+        public bool BindToUser(int awardId, int userId) => _associationsDao.Bind(awardId, userId);
+
+        public IEnumerable<Award> GetAllAwards() => _awardsDao.GetAll();
+
+        public IEnumerable<User> GetUsers(int awardId) => _associationsDao.GetAssociatedEntities(awardId);
+
+        public bool RemoveAwardById(int id) => _awardsDao.RemoveById(id);
+        public bool UnBindFromUser(int awardId, int userId) => _associationsDao.UnBind(awardId, userId);
     }
 }

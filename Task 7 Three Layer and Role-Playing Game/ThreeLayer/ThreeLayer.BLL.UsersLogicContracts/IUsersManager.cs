@@ -6,7 +6,10 @@ namespace ThreeLayer.BLL.UsersLogicContracts
     public interface IUsersManager
     {
         void AddUser(User user);
-        void RemoveUserById(int id);
+        bool RemoveUserById(int id);
         IEnumerable<User> GetAllUsers();
+        bool BindToAward(int userId, int awardId);
+        bool UnBindFromAward(int userId, int awardId);
+        IEnumerable<Award> GetAwards(int userId);
     }
 }
