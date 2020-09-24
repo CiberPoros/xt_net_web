@@ -1,5 +1,4 @@
 ﻿@using Ninject;
-@using ThreeLayer.PL.WebPages;
 @using ThreeLayer.BLL.UsersLogicContracts;
 
 @{
@@ -10,7 +9,7 @@
     <script src="~/Scripts/jquery-3.0.0.min.js"></script>
     <div class="row text-center">
         @{
-            var usersManager = DependencesContainer.Resolver.Get<IUsersManager>();
+            var usersManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<IUsersManager>();
 
             var users = usersManager.GetAllUsers();
 

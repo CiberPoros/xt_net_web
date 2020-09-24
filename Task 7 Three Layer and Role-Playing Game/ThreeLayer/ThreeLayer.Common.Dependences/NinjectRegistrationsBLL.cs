@@ -10,6 +10,8 @@ namespace ThreeLayer.Common.Dependences
         {
             Bind<IAwardsManager>().To<AwardsManager>().InSingletonScope();
             Bind<IUsersManager>().To<UsersManager>().InSingletonScope();
+            Bind<IAuthManager>().To<AuthManager>().InSingletonScope();
+            Bind<IRolesManager>().To<RolesManager>().InSingletonScope();
         }
     }
 }

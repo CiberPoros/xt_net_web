@@ -1,11 +1,22 @@
-﻿@{
+﻿@using Ninject; 
+
+@{
     Layout = null;
 
     FormsAuthentication.SignOut();
 
+    var authManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IAuthManager>();
+
     if (IsPost)
     {
-        FormsAuthentication.SetAuthCookie(Request["login"], createPersistentCookie: true);
+        var userName = Request["login"];
+        var password = Request["password"];
+
+        if (authManager.SignIn(userName, password))
+        {
+            FormsAuthentication.SetAuthCookie(userName, createPersistentCookie: true);
+        }
+
         Response.Redirect("~");
     }
 }

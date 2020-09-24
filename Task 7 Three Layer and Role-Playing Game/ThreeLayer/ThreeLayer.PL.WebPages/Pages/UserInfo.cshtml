@@ -8,7 +8,7 @@
 @{
     @RenderPage("~/PartialPages/_usersList.cshtml")
     var userId = Convert.ToInt32(Request.Params["userId"]);
-    var userManager = ThreeLayer.PL.WebPages.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IUsersManager>();
+    var userManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IUsersManager>();
     // TODO: get user by ID
     var user = userManager.GetAllUsers().FirstOrDefault(item => item.Id == userId);
 }
@@ -27,7 +27,11 @@
                     <p>Age: @user.Age</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Change</button>
+                    }
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     @*<button type="button" class="btn btn-primary">Сохранить изменения</button>*@
                 </div>
             </div>

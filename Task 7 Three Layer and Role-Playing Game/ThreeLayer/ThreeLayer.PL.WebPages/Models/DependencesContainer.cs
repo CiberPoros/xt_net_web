@@ -1,7 +1,7 @@
 ﻿using Ninject;
 using ThreeLayer.Common.Dependences;
 
-namespace ThreeLayer.PL.WebPages
+namespace ThreeLayer.PL.WebPages.Models
 {
     public static class DependencesContainer
     {

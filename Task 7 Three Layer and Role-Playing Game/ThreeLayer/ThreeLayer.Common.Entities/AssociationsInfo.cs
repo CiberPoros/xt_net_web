@@ -12,7 +12,8 @@ namespace ThreeLayer.Common.Entities
         {
             Associations = new HashSet<(Type, Type)>
             {
-                { Utilites.SortTypesByName(typeof(User), typeof(Award)) }
+                { Utilites.SortTypesByName(typeof(User), typeof(Award)) },
+                { Utilites.SortTypesByName(typeof(User), typeof(Role)) }
             };
         }
 

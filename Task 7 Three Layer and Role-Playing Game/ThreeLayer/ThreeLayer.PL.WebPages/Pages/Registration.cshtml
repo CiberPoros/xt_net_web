@@ -7,29 +7,31 @@
 
     FormsAuthentication.SignOut();
 
-    var resolver = ThreeLayer.PL.WebPages.DependencesContainer.Resolver;
-    var usersManager = resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IUsersManager>();
+    var resolver = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver;
+    var authManager = resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IAuthManager>();
+    var rolesManager = resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IRolesManager>();
 
     if (IsPost)
     {
-        var userName = Request["login"];
-
         if (DateTime.TryParse(Request["birthDay"], out DateTime dateOfBirth))
         {
-            if (!usersManager.GetAllUsers().Any(item => item.Name == userName))
+            var role = rolesManager.GetRoleByTitle("user");
+            var userName = Request["login"];
+
+            if (authManager.Register(new User { Name = userName, DateOfBirth = dateOfBirth }, Request["password"], role))
             {
-                var user = new User { Name = userName, DateOfBirth = dateOfBirth };
-                usersManager.AddUser(user);
                 FormsAuthentication.SetAuthCookie(userName, createPersistentCookie: true);
                 Response.Redirect("~");
             }
             else
             {
+                // TODO: user already exists
                 Response.Redirect("~/Pages/Registration.cshtml");
             }
         }
         else
         {
+            // TODO: incorrect data format
             Response.Redirect("~/Pages/Registration.cshtml");
         }
     }

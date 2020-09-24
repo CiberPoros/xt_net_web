@@ -5,6 +5,7 @@ namespace ThreeLayer.Common.Entities
     public class User : IEntityWithId
     {
         public int Id { get; set; }
+        public int AuthUserDataId { get; set; }
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
 
