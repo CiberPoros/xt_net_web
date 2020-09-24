@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeLayer.Common.Dependenc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeLayer.Common.Utils", "ThreeLayer.Common.Utils\ThreeLayer.Common.Utils.csproj", "{9BD85288-220B-4C21-89EC-444E4D61BFD0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebPages", "WebPages", "{39B0BCF5-70FE-4BD6-8459-93D5097CF09A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeLayer.PL.WebPages", "ThreeLayer.PL.WebPages\ThreeLayer.PL.WebPages.csproj", "{DAF3E9A3-61F4-472F-A752-584E14A0A756}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +71,10 @@ Global
 		{9BD85288-220B-4C21-89EC-444E4D61BFD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BD85288-220B-4C21-89EC-444E4D61BFD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BD85288-220B-4C21-89EC-444E4D61BFD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAF3E9A3-61F4-472F-A752-584E14A0A756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAF3E9A3-61F4-472F-A752-584E14A0A756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAF3E9A3-61F4-472F-A752-584E14A0A756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAF3E9A3-61F4-472F-A752-584E14A0A756}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +89,8 @@ Global
 		{C4E9DAB9-3B4E-411B-BD43-8DCD04AC5051} = {93800325-8B1A-49AE-B67D-E37C1667E446}
 		{B9BFA0C7-11C3-49B7-A6C7-5206D12A5B86} = {4703F132-D78C-4171-8472-E4D400EE5947}
 		{9BD85288-220B-4C21-89EC-444E4D61BFD0} = {4703F132-D78C-4171-8472-E4D400EE5947}
+		{39B0BCF5-70FE-4BD6-8459-93D5097CF09A} = {CEB78815-323E-4736-B2F3-E0F625E26B36}
+		{DAF3E9A3-61F4-472F-A752-584E14A0A756} = {39B0BCF5-70FE-4BD6-8459-93D5097CF09A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4279F9E-108E-47C0-AAE1-1F5F3BB03BF2}

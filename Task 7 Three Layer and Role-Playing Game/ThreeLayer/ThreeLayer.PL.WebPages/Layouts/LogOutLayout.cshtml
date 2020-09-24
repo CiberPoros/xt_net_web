@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("~/Pages/Auth.cshtml");
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Styles/Common.css" rel="stylesheet" />
+    <title></title>
+</head>
+<body>
+    <div class="auth-header">
+        <label>@User.Identity.Name</label>
+        <a href="~/Pages/Auth.cshtml" class="auth-link">LogOut</a>
+    </div>
+    <div>@RenderBody()</div>
+</body>
+</html>

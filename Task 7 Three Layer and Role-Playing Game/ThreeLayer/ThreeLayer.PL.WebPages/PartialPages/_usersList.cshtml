@@ -1,0 +1,36 @@
+﻿@using Ninject;
+@using ThreeLayer.PL.WebPages;
+@using ThreeLayer.BLL.UsersLogicContracts;
+
+@{
+    Layout = null;
+}
+
+<div class="container horizontal-scrollable">
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <div class="row text-center">
+        @{
+            var usersManager = DependencesContainer.Resolver.Get<IUsersManager>();
+
+            var users = usersManager.GetAllUsers();
+
+            foreach (var user in users)
+            {
+                var id = "userModal" + user.Id.ToString();
+
+                <div class="col-xs-4">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Name: @user.Name</h6>
+                            <img src="~/Images/user.png" width="40" height="40">
+                            <p class="card-text">Age: @user.Age</p>
+                            <a href="~/Pages/UserInfo.cshtml?userId=@user.Id" class="more-info">More info...</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+

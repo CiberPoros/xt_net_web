@@ -1,0 +1,58 @@
+﻿@using Ninject;
+@using ThreeLayer.Common.Entities;
+@using System.Linq;
+
+@{
+    Layout = null;
+
+    FormsAuthentication.SignOut();
+
+    var resolver = ThreeLayer.PL.WebPages.DependencesContainer.Resolver;
+    var usersManager = resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IUsersManager>();
+
+    if (IsPost)
+    {
+        var userName = Request["login"];
+
+        if (DateTime.TryParse(Request["birthDay"], out DateTime dateOfBirth))
+        {
+            if (!usersManager.GetAllUsers().Any(item => item.Name == userName))
+            {
+                var user = new User { Name = userName, DateOfBirth = dateOfBirth };
+                usersManager.AddUser(user);
+                FormsAuthentication.SetAuthCookie(userName, createPersistentCookie: true);
+                Response.Redirect("~");
+            }
+            else
+            {
+                Response.Redirect("~/Pages/Registration.cshtml");
+            }
+        }
+        else
+        {
+            Response.Redirect("~/Pages/Registration.cshtml");
+        }
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link rel="stylesheet" href="~/Styles/Common.css">
+    <link rel="stylesheet" href="~/Styles/Auth.css">
+</head>
+<body>
+    <div>
+        <form class="box" action="~/Pages/Registration.cshtml" method="post">
+            <h1>Registration</h1>
+            <input type="text" placeholder="Username" maxlength="20" name="login" required>
+            <input type="password" placeholder="Password" maxlength="20" name="password" required>
+            <input type="text" placeholder="BirthDay" name="birthDay" required>
+            <input type="submit" value="Registration" name="registration">
+        </form>
+    </div>
+</body>
+</html>
