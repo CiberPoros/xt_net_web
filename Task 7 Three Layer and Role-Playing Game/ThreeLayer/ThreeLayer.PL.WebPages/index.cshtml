@@ -1,25 +1,9 @@
-﻿@using Ninject; 
-
-@{
+﻿@{
     Layout = "~/Layouts/LogOutLayout.cshtml";
 }
 
-@{ 
-    var rolesManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IRolesManager>();
-    var authManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IAuthManager>();
-    var roleNames = new string[] { "guest", "user", "admin" }; // TODO: заглушка
-
-    foreach (var roleName in roleNames)
-    {
-        var role = new ThreeLayer.Common.Entities.Role() { Title = roleName };
-        rolesManager.AddNewRole(role);
-    }
-
-    var admin = new ThreeLayer.Common.Entities.User { Name = "admin", DateOfBirth = DateTime.MinValue };
-    authManager.Register(admin, "admin", rolesManager.GetRoleByTitle("admin"));
-}
-
 @{
+
     @RenderPage("~/PartialPages/_usersList.cshtml")
 }
 

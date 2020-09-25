@@ -1,0 +1,99 @@
+﻿@using Ninject;
+@using ThreeLayer.Common.Entities;
+
+@{
+    Layout = "~/Layouts/LogOutLayout.cshtml";
+}
+
+@{
+    if (!User.IsInRole("admin"))
+    {
+        Response.Redirect("~");
+    }
+
+    @RenderPage("~/PartialPages/_usersList.cshtml")
+
+    var userId = Convert.ToInt32(Request.Params["userId"]);
+    var userManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IUsersManager>();
+    var awardsManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IAwardsManager>();
+
+    var user = userManager.GetAllUsers().FirstOrDefault(item => item.Id == userId);
+    var awards = userManager.GetAwards(user.Id);
+    var allAwards = awardsManager.GetAllAwards();
+
+    if (IsPost)
+    {
+        if (!DateTime.TryParse(Request["birthday"], out var birthDay))
+        {
+            Response.Redirect("~/Pages/ChangeUserWindow.cshtml");
+        }
+
+        user.DateOfBirth = birthDay;
+
+        foreach (var award in allAwards)
+        {
+            if (Request.Form[$"award{award.Id}"] != null)
+            {
+                userManager.BindToAward(user.Id, award.Id);
+            }
+            else
+            {
+                userManager.UnBindFromAward(user.Id, award.Id);
+            }
+        }
+
+        userManager.UpDate(user);
+
+        Response.Redirect("~");
+    }
+}
+
+<div>
+    <div id="modalUserBox" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@user.Name</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="~/Pages/ChangeUserWindow.cshtml?userId=@user.Id" method="post">
+                        <h6 class="card-subtitle mb-2 text-muted mx-auto">Name: @user.Name</h6>
+                        <div><img class="mx-auto shadow-lg" src="~/Images/user.png" width="40" height="40"></div>
+                        <p></p>
+                        <input type="text" class="modal-content mx-auto" name="birthday" value=@user.DateOfBirth.ToString("MM/dd/yyyy") />
+                        <div mx-auto>
+                            <div class="form-group">
+                                <h5>Awards (just select it):</h5>
+                                @foreach (var award in allAwards)
+                                {
+                                    <div class="custom-control custom-checkbox">
+                                        @if (awards.Contains(award))
+                                        {
+                                        <input type="checkbox" class="custom-control-input" id=@($"award{award.Id}") name=@($"award{award.Id}") checked>
+                                        }
+                                        else
+                                        {
+                                        <input type="checkbox" class="custom-control-input" id=@($"award{award.Id}") name=@($"award{award.Id}")>
+                                        }
+                                        <label class="custom-control-label" for=@($"award{award.Id}")>@award.Title</label>
+                                    </div>
+                                }
+                            </div>
+                            <input type="submit" value="Save changes" name="sign-in">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#modalUserBox").modal('show');
+        });
+    </script>
+</div>

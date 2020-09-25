@@ -1,0 +1,77 @@
+﻿@using Ninject;
+@using ThreeLayer.BLL.UsersLogicContracts;
+
+@{
+    Layout = "~/Layouts/LogOutLayout.cshtml";
+
+    var awardsmanager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<IAwardsManager>();
+    var awards = awardsmanager.GetAllAwards();
+
+    if (IsPost)
+    {
+        if (!User.IsInRole("admin"))
+        {
+            Response.Redirect("~/Pages/Awards.cshtml");
+        }
+
+        if (int.TryParse(Request.Params["awardId"], out int awardId))
+        {
+            if (Request.Form["changeAward"] != null)
+            {
+                var newTitle = Request["newAwardTitle"];
+                var award = awardsmanager.GetAllAwards().FirstOrDefault(item => item.Id == awardId);
+
+                award.Title = newTitle;
+
+                awardsmanager.Update(award);
+            }
+            else if (Request.Form["deleteAward"] != null)
+            {
+                awardsmanager.RemoveAwardById(awardId);
+            }
+        }
+
+        Response.Redirect("~/Pages/Awards.cshtml");
+    }
+
+    if (Request.Params["addNew"] == "true")
+    {
+        awardsmanager.AddAward(new ThreeLayer.Common.Entities.Award { Title = "NewAward" });
+        Response.Redirect("~/Pages/Awards.cshtml");
+    }
+}
+
+<div class="container horizontal-scrollable">
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <div class="row text-center">
+        @foreach (var award in awards)
+        {
+            <div class="col-xs-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <form class="mx-auto my-2 my-sm-3 my-lg-4 p-3" action="~/Pages/Awards.cshtml?awardId=@award.Id" method="post">
+                            <h6 class="card-subtitle mb-2 text-muted">Title: @award.Title</h6>
+                            <div><img class="mb-2" src="~/Images/award.png" width="40" height="40"></div>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <div><input class="mb-2" type="text" name="newAwardTitle" required placeholder="new award value" value="" /></div>
+                                <div><input class="mb-2" type="submit" name="changeAward" value="change" /></div>
+                                <div><input class="mb-2" type="submit" name="deleteAward" formnovalidate value="delete" /></div>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (User.IsInRole("admin"))
+        {
+            <div class="col-xs-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <a href="~/Pages/Awards.cshtml?addNew=true">Add new</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

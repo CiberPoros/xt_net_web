@@ -1,10 +1,15 @@
-﻿@{
+﻿@using Ninject;
+
+@{
     Layout = null;
 
     if (!User.Identity.IsAuthenticated)
     {
         Response.Redirect("~/Pages/Auth.cshtml");
     }
+
+    var awardsManager = ThreeLayer.PL.WebPages.Models.DependencesContainer.Resolver.Get<ThreeLayer.BLL.UsersLogicContracts.IAwardsManager>();
+    var awards = awardsManager.GetAllAwards();
 }
 
 <!DOCTYPE html>
@@ -18,6 +23,7 @@
 </head>
 <body>
     <div class="auth-header">
+        <a href="~/Pages/Awards.cshtml" class="auth-link">Awards</a>
         <label>@User.Identity.Name</label>
         <a href="~/Pages/Auth.cshtml" class="auth-link">LogOut</a>
     </div>

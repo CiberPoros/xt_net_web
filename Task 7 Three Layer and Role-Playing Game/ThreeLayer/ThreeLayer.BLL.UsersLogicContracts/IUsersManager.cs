@@ -11,5 +11,6 @@ namespace ThreeLayer.BLL.UsersLogicContracts
         bool BindToAward(int userId, int awardId);
         bool UnBindFromAward(int userId, int awardId);
         IEnumerable<Award> GetAwards(int userId);
+        void UpDate(User user);
     }
 }

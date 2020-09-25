@@ -33,5 +33,6 @@ namespace ThreeLayer.BLL.UsersLogic
 
         public bool RemoveUserById(int id) => _usersDao.RemoveById(id);
         public bool UnBindFromAward(int userId, int awardId) => _associationsDao.UnBind(userId, awardId);
+        public void UpDate(User user) => _usersDao.Update(user);
     }
 }

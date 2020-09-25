@@ -99,7 +99,11 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Images\award.png" />
     <Content Include="Pages\UserInfo.cshtml" />
+    <Content Include="Pages\ChangeUserWindow.cshtml" />
+    <Content Include="PartialPages\_addAwardToUserPartial.cshtml" />
+    <Content Include="Pages\Awards.cshtml" />
     <None Include="Resources\user.png" />
     <Content Include="Images\user.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
